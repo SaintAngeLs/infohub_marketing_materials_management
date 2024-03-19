@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Add remember_token column of type string, nullable
-            // $table->rememberToken();
+        Schema::create('user_authentication', function (Blueprint $table) {
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->unsignedInteger('ip')->nullable();
+            $table->timestamp('fingerprint')->useCurrent();
         });
     }
 
@@ -22,9 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Remove the column if the migration is rolled back
-            // $table->dropColumn('remember_token');
-        });
+        Schema::dropIfExists('user_authentication');
     }
 };
