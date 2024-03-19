@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Add remember_token column of type string, nullable
-            // $table->rememberToken();
+        Schema::create('users_groups', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
         });
     }
 
@@ -22,9 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // Remove the column if the migration is rolled back
-            // $table->dropColumn('remember_token');
-        });
+        Schema::dropIfExists('users_groups');
     }
 };
