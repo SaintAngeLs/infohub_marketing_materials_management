@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class PasswordResetLinkController extends Controller
 {
@@ -29,16 +30,34 @@ class PasswordResetLinkController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        try {
+            // Attempt to send the password reset link
+            $status = Password::sendResetLink(
+                $request->only('email')
+            );
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
+            // Log detailed information about the email attempt
+            Log::info("Password reset link attempt for email: {$request->email}");
+            Log::info('Password reset link status: ' . $status);
+
+            // Check the response status and log detailed information
+            if ($status == Password::RESET_LINK_SENT) {
+                Log::info("Password reset link sent successfully to {$request->email}");
+            } else {
+                Log::error("Failed to send password reset link to {$request->email}");
+            }
+
+            return $status == Password::RESET_LINK_SENT
+                        ? back()->with('status', __($status))
+                        : back()->withInput($request->only('email'))
+                                ->withErrors(['email' => __($status)]);
+        } catch (\Exception $e) {
+            // Log any exceptions that occur during the process
+            Log::error("An error occurred while attempting to send a password reset link to {$request->email}: " . $e->getMessage());
+
+            // Return an error response to the user
+            return back()->withInput($request->only('email'))
+                         ->withErrors(['email' => 'An unexpected error occurred. Please try again later.']);
+        }
     }
 }
