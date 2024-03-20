@@ -4,6 +4,7 @@
 use App\Http\Controllers\Admin\AutosController;
 use App\Http\Controllers\Admin\ConsentionController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
@@ -22,6 +23,15 @@ Route::get('/users', [UsersController::class, 'index'])->name('users');
 Route::get('/autos', [AutosController::class, 'index'])->name('autos');
 
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
+Route::get('/menu/create', [MenuController::class, 'create'])->name('menu.create');
+
+
+Route::get('/get-menu-items', [MenuController::class, 'getMenuItems']);
+
+Route::post('/menu-items', [MenuItemController::class, 'store'])->name('menu-items.store');
+Route::patch('/menu-items/{menuItem}', [MenuItemController::class, 'update'])->name('menu-items.update');
+Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
+
 
 Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
 
