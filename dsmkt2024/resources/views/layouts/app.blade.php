@@ -19,7 +19,7 @@
         min-width: 960px;
         height: 162px;
         margin: 0 auto;
-        background: url('{{ asset("/img/banners/banner.png") }}') no-repeat center; 
+        background: url('{{ asset("/img/banners/banner.png") }}') no-repeat center;
         display: block;
         background-color:#1c1616;
     }
@@ -36,7 +36,11 @@
         <div id="content">
             <div class="clearfix"></div>
             <div class="left-col">
-                @include('partials.user_menu')
+                @if(Auth::user()->isAdmin() && request()->routeIs('menu'))
+                    @include('partials.admin_menu')
+                @else
+                    @include('partials.user_menu') 
+                @endif
             </div>
             <div class="right-col">
                 @yield('content')
