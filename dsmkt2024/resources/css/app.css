@@ -175,7 +175,7 @@ h2, h2 a{
 }
 
 h2 a:hover{
-	color: #cf2128;
+	color: #9D8C83;
 }
 
 h3{
@@ -319,8 +319,8 @@ h3{
     background-color: #1A1B1B;
 }
 #top{
-    width: 960px;
-	margin: 0 auto;
+    /* width: 960px; */
+	margin: 0 5rem;
     background-color: #1A1B1B;
 }
 
@@ -344,9 +344,69 @@ h3{
 	margin-right: 10px;
 }
 
+
 #user-panel p span{
 	color: #cf2128;
 }
+
+.navigation {
+    /* display: flex; */
+
+    justify-content: space-between;
+    /* padding: 1rem; */
+    background-color: #1A1B1B; /* Adjust to match your design */
+}
+
+.navigation-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 2rem 2rem
+}
+
+#logo {
+    margin-right: 2rem;
+    /* Logo styles */
+}
+
+.user-info {
+    margin-left: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    color: #E2E3E3;
+    font-size: 0.875rem;
+}
+.user-info p span {
+    color: #9D8C83;
+}
+.user-info a, .user-info p {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+}
+
+.user-info a {
+    color: #E2E3E3;
+    text-decoration: none;
+    font-weight: bold; /* Makes text bold */
+}
+
+.user-info a:hover {
+    color: #9D8C83; /* Change color on hover */
+}
+
+.user-info a.active {
+    color: #9D8C83; /* Active link color */
+}
+
+#logout-form {
+    display: none;
+}
+
+/* Additional styles for content and forms can be added below */
+
 
 p#log-out, p#my-account, p#admin-panel{
 	margin-left: 10px;
@@ -513,7 +573,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 /* content */
 
 #content{
-	width: 960px;
+	width: 1700px;
 	margin: 0 auto;
 	padding-bottom: 70px;
 }
@@ -544,7 +604,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 }
 
 #menu p a:hover, #menu p a.active{
-	color: #cf2128;
+	color: #9D8C83;
 }
 
 /* columns */
@@ -557,7 +617,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 }
 
 #content .right-col{
-	width: 660px;
+	width: 1400px;
 	float: right;
 	margin-top: 25px;
 }
@@ -1257,7 +1317,7 @@ input[type="submit"].table-button, input[type="submit"].table-button-2{
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	font-size: 16px;
-	color: #cf2128;
+	color: #9D8C83;
 	background: #fff;
 	border: 1px solid #594A41;
 	font-family: 'CitroenLight', 'Arial', sans-serif;
@@ -1300,7 +1360,7 @@ input[type="submit"].table-button-2{
 .table-button a, .table-button-2 a{
 	text-transform: uppercase;
 	font-size: 16px;
-	color: #cf2128;
+	color: #9D8C83;
 	height: 26px;
 	line-height: 26px;
 	padding: 0 16px 0 16px;
@@ -1312,7 +1372,7 @@ input[type="submit"].table-button-2{
 
 .table-button a:hover, .table-button-2 a:hover, input[type="submit"].table-button:hover, input[type="submit"].table-button-2:hover{
 	color: #fff;
-	background: #cf2128;
+	background: #9D8C83;
 	border: 1px solid #cfcfcf;
 }
 
@@ -1499,6 +1559,7 @@ input[type="submit"].table-button-2{
 #menu-tree .jstree-node {
     border-bottom: 1px solid #e3e3e3;
     background-color: #fafafa;
+    min-height: 60px;
 }
 
 #menu-tree .jstree-anchor {
@@ -1506,6 +1567,7 @@ input[type="submit"].table-button-2{
     display: flex;
     align-items: center;
     gap: 10px;
+    height: 60px
 }
 
 /* Node content styling */
@@ -1513,6 +1575,7 @@ input[type="submit"].table-button-2{
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 10px;
+    height: 60px;
     align-items: center;
     width: 100%;
 }
@@ -1532,6 +1595,9 @@ input[type="submit"].table-button-2{
 /* Hover and selected node styling */
 #menu-tree .jstree-hovered {
     background-color: #f0f0f0;
+}
+#menu-tree .jstree-icon {
+    display: none !important;
 }
 
 #menu-tree .jstree-clicked {

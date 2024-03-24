@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ExtendedUser;
 use App\Models\MenuItems\MenuItem;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -16,15 +19,48 @@ class MenuController extends Controller
 
     public function create()
     {
-        $menuItems_to_select = MenuItem::all();
-        return view('admin.menu.create', compact('menuItems_to_select'));
+        $menuItemsToSelect = MenuItem::all();
+        $users = User::all();
+        return view('admin.menu.create', compact('menuItemsToSelect', 'users'));
     }
 
     public function edit(MenuItem $menuItem)
     {
-        $menuItems_to_select = MenuItem::all();
-        return view('admin.menu.edit', compact('menuItems_to_select'));
+        $menuItemsToSelect = MenuItem::all()->except($menuItem->id);
+        $users = User::all();
+        Log::debug('An informational message.', [$users]);
+        return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users'));
     }
+
+    public function update(Request $request, MenuItem $menuItem)
+    {
+        $validatedData = $request->validate([
+            'type' => 'required|string',
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|exists:menu_items,id',
+            'owners' => 'nullable|array',
+            'owners.*' => 'exists:users,id',
+            'visibility_start' => 'nullable|date',
+            'visibility_end' => 'nullable|date',
+            'banner' => 'required|string',
+        ]);
+
+        $menuItem->update([
+            'type' => $validatedData['type'],
+            'name' => $validatedData['name'],
+            'parent_id' => $validatedData['parent_id'],
+            'visibility_start' => $validatedData['visibility_start'],
+            'visibility_end' => $validatedData['visibility_end'],
+            'banner' => $validatedData['banner'],
+        ]);
+
+        if (isset($validatedData['owners'])) {
+            $menuItem->owners()->sync($validatedData['owners']);
+        }
+
+        return redirect()->route('menu.structure')->with('success', 'Menu item updated successfully.');
+    }
+
 
     public function toggleStatus(Request $request, $menuItem)
     {
@@ -33,7 +69,6 @@ class MenuController extends Controller
             return response()->json(['error' => 'Menu item not found.'], 404);
         }
 
-        // Toggle the status
         $menuItem->status = !$menuItem->status;
         $menuItem->save();
 

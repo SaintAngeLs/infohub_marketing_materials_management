@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AutosController;
 use App\Http\Controllers\Admin\ConsentionController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
@@ -25,6 +26,7 @@ Route::middleware('admin')->group(function () {
         Route::get('/users', [UsersController::class, 'index'])->name('users');
         Route::get('/structure', [MenuController::class, 'index'])->name('structure');
         Route::get('/autos', [AutosController::class, 'index'])->name('autos');
+        Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
 
         Route::get('/files', function () {
             return view('admin.files.index');
@@ -39,6 +41,7 @@ Route::middleware('admin')->group(function () {
         Route::post('/menu-items', [MenuItemController::class, 'store'])->name('menu-items.store');
         Route::get('/get-menu-items', [MenuController::class, 'getMenuItems']);
 
+        Route::patch('/menu-items/{menuItem}', [MenuItemController::class, 'update'])->name('menu-items.update');
         Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
     });
 });

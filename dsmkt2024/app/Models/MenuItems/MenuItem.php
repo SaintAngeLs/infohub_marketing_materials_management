@@ -38,4 +38,12 @@ class MenuItem extends Model
         return new Base(true);
     }
 
+    public function owners()
+    {
+        return $this->belongsToMany(\App\Models\User::class,
+                                    'menu_item_user',
+                                    'menu_item_id',
+                                    'user_id');
+    }
+
 }

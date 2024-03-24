@@ -20,6 +20,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'users_groups_id',
+        'branch_id',
+        'surname',
+        'phone',
+        'password_valid',
+        'password_last_changed',
+        'token',
+        'token_time',
+        'last_login',
+        'active'
     ];
 
     /**
@@ -53,5 +63,26 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->users_groups_id == 1;
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function usersGroup()
+    {
+        return $this->belongsTo(UsersGroup::class, 'users_groups_id');
+    }
+
+
+    /**
+     * Determine if the user is active.
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active == 1;
     }
 }
