@@ -79,12 +79,70 @@ class MenuItemController extends Controller
         if ($request->has('parent_id') && !empty($request->input('parent_id'))) {
             $parentItem = MenuItem::find($request->input('parent_id'));
             if ($parentItem && $menuItem->parent_id !== $parentItem->id) {
-                $menuItem->appendToNode($parentItem)->save();
+                $menuItem->appendTo($parentItem)->save();
             }
         }
 
         return redirect()->route('menu');
     }
+
+    public function updateOrder(Request $request)
+    {
+        $menuItem = MenuItem::find($request->item_id);
+        $newParentId = $request->parent_id; // Can be null if moved to root
+
+        if ($newParentId) {
+            $parentItem = MenuItem::find($newParentId);
+            $menuItem->appendTo($parentItem)->save();
+        } else {
+            // If moved to root
+            $menuItem->makeRoot()->save();
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function updateType(Request $request)
+    {
+        $menuItem = MenuItem::find($request->item_id);
+
+        $menuItem->type = $request->type; // 'main' or 'sub'
+        $menuItem->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function updateTreeStructure(Request $request)
+    {
+        $id = $request->id;
+        $newParentId = $request->parent_id;
+        $newPosition = $request->position;
+
+        // Find the moved menu item
+        $menuItem = MenuItem::find($id);
+
+        if (!$menuItem) {
+            return response()->json(['error' => 'Menu item not found'], 404);
+        }
+
+        // Move to a new parent if provided
+        if ($newParentId) {
+            $newParent = MenuItem::find($newParentId);
+            if (!$newParent) {
+                return response()->json(['error' => 'New parent item not found'], 404);
+            }
+            $menuItem->appendTo($newParent)->save();
+        } else {
+            // Or make it a root item
+            $menuItem->makeRoot()->save();
+        }
+
+        // Optionally, handle newPosition to reorder among siblings
+
+        return response()->json(['success' => true]);
+    }
+
+
 
     /**
      * Remove the specified menuItem
