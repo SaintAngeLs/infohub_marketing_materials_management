@@ -9,6 +9,6 @@ class StatisticsController extends Controller
 {
     public function index()
     {
-        return view('statistics.index');
+        return view('admin.statistics.index');
     }
 }

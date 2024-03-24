@@ -137,7 +137,7 @@ a:active, a:focus{
 }
 
 #main-wrapper{
-	color: #1c1616;
+	color: #1A1B1B;
 }
 
 /* headers and buttons and inputs */
@@ -186,21 +186,47 @@ h3{
 
 /* login box */
 
-.login-box{
-	width: 640px;
-	min-height: 176px;
-	margin: 0 auto;
-	margin-top: 15px;
-	background: url('../images/login-bg.png') repeat-x center top #f6f6f6;
-	display: block;
-	border: 1px solid #594A41;
-	padding: 20px 0 20px 0;
+.login-box {
+    width: 400px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.login-box table{
+.login-box {
 	margin: 0 auto;
 	color: #594A41;
 }
+
+.login-block  h2 {
+    text-transform: none;
+    border-top: none;
+}
+
+.login-button {
+    /* Style your button to match the Figma design */
+    background-color: #000; /* Example: black background */
+    color: #fff; /* Example: white text */
+    border: none;
+    padding: 10px 40px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+    /* Add other styles such as border-radius or box-shadow as needed */
+}
+
+.login-button:hover {
+    background-color: #555;
+}
+
+.additional-info {
+    margin-top: 4rem;
+    color: #000;
+    font-size: 0.875rem;
+    /* max-width: 400px;  */
+    text-align: center;
+}
+
 
 .login-box table a{
 	color: #594A41;
@@ -254,6 +280,8 @@ h3{
 	background: transparent;
 }
 
+
+
 @-moz-document url-prefix() {
 	.login-box table input[type=submit] { /* hack for firefox */
 		padding-bottom: 4px;
@@ -269,7 +297,7 @@ h3{
 .login-box p{
 	margin: 0 auto;
 	text-align: center;
-	padding: 40px 0 10px 0;
+	padding: 20px 0 10px 0;
 	font-size: 13px;
 	color: #594A41;
 	line-height: 130%;
@@ -286,14 +314,14 @@ h3{
 
 /* top */
 #top-wrapper{
-        min-height: 300px;
-        width: 100%;
-        background-color: #1c1616;
+    height: 151px;
+    width: 100%;
+    background-color: #1A1B1B;
 }
 #top{
-        width: 960px;
+    width: 960px;
 	margin: 0 auto;
-        background-color: #1c1616;
+    background-color: #1A1B1B;
 }
 
 #top h1{
@@ -440,11 +468,11 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 
 #logo, #logo-start{
 	width: 105px;
-        height: 90px;
-        padding-top: 0;
-        margin-right: 25px;
-        margin-top: 25px;
-        float: left;
+    height: 90px;
+    padding-top: 0;
+    margin-right: 25px;
+    /* margin-top: 25px; */
+    float: left;
 }
 
 #logo-start{
@@ -461,6 +489,23 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 	height: 110px;
 	background: url('/public/img/logo/logo.png') no-repeat;
 	display: block;
+}
+
+.center-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#logo-center a {
+
+    display: block;
+    width: 145px;
+    height: 110px;
+    background: url('/public/img/logo/logo.png') no-repeat center center;
+    background-size: contain;
+    margin-top: 25px;
 }
 
 /* banner */
@@ -1344,22 +1389,25 @@ input[type="submit"].table-button-2{
 	width: 100%;
 	min-width: 960px;
 	margin: 0 auto;
-	background: url('../images/footer-bg.png') repeat-x center bottom #fff;
+	background: url('../images/footer-bg.png') repeat-x center bottom #E9E7E1;
 	display: block;
+    color: #000;
 	font-family: 'CitroenRegular', 'Arial', sans-serif;
 }
 
 #footer-content{
-	width: 960px;
+
 	min-height: 30px;
 	margin: 0 auto;
+    margin-left: 2rem;
+    margin-right: 2rem;
 }
 
 #footer-content p{
 	text-align: right;
-	color: #bbbbbb;
+	color: #000;
 	font-size: 11px;
-	padding-top: 40px;
+	padding-top: 25px;
 	padding-right: 10px;
 }
 .mandatory-field {
@@ -1375,7 +1423,17 @@ input[type="submit"].table-button-2{
 	width:50%;
 	float:left;
 	text-align:left !important;
-	padding-top: 36px !important;
+	padding-top: 25px !important;
+}
+.social a {
+    margin: 0 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.social a img {
+    height: 20px; /* Adjust if necessary */
+    width: auto;
 }
 
 #social-icon-1 a{
@@ -1386,7 +1444,7 @@ input[type="submit"].table-button-2{
 
 #social-icon-2 a {
     background: url("../images/social-icons.png") no-repeat scroll -54px 0 rgba(0, 0, 0, 0);
-    display: inline-block;
+
     margin-right: 10px;
 }
 
@@ -1431,4 +1489,194 @@ input[type="submit"].table-button-2{
     height: 20px;
     width: 55px;
 }
+/* Base styling for jsTree */
+#menu-tree {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* Node styling */
+#menu-tree .jstree-node {
+    border-bottom: 1px solid #e3e3e3;
+    background-color: #fafafa;
+}
+
+#menu-tree .jstree-anchor {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Node content styling */
+.js-tree-node-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+.node-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.node-details-status,
+.node-details-ownerName,
+.node-details-visibilityTime {
+    color: #555;
+    text-align: left;
+}
+
+/* Hover and selected node styling */
+#menu-tree .jstree-hovered {
+    background-color: #f0f0f0;
+}
+
+#menu-tree .jstree-clicked {
+    background-color: #e0e0e0;
+}
+
+/* Increase the height of whole row */
+.jstree-default .jstree-wholerow {
+    height: 48px !important;
+}
+
+
+#create-menu-item-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+#create-menu-item-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+#create-menu-item-form input[type="text"],
+#create-menu-item-form input[type="date"],
+#create-menu-item-form select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#create-menu-item-form select[multiple] {
+    height: auto;
+    min-height: 80px;
+}
+
+#create-menu-item-form button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+#create-menu-item-form button:hover {
+    background-color: #45a049;
+}
+
+/* Utility Classes */
+.text-gray-800 {
+    color: #2d3748;
+}
+
+.text-gray-900 {
+    color: #1a202c;
+}
+
+.bg-white {
+    background-color: #ffffff;
+}
+
+.dark\:bg-gray-100 {
+    background-color: #f7fafc;
+}
+
+.dark\:text-gray-900 {
+    color: #1a202c;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.leading-tight {
+    line-height: 1.25;
+}
+
+.py-12 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.max-w-7xl {
+    max-width: 80rem;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sm\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.lg\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.sm\:rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+#create-menu-item-form .btn-reset {
+    background-color: #f44336; /* Red color for the reset button */
+    color: white;
+}
+
+#create-menu-item-form .btn-reset:hover {
+    background-color: #d32f2f; /* Darker shade of red on hover */
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between; /* Adjust this as per your layout */
+}
+
 

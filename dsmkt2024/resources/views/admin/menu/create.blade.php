@@ -7,12 +7,12 @@
                     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                         {{ __('Dodanie nowej zakładki menu') }}
                     </h2>
-                    <form id="create-menu-item-form" method="POST" action="{{ route('menu-items.store') }}">
+                    {{-- <form id="create-menu-item-form" method="POST" action="{{ route('menu.menu-items.store') }}">
                         @csrf
 
                         <div>
                             <label for="type">Typ zakłądki:</label>
-                            <select id="type" name="type" required>
+                            <select class= id="type" name="type" required>
                                 <option value="main">Główna</option>
                                 <option value="sub">Podrzędna</option>
                             </select>
@@ -60,8 +60,12 @@
                             </select>
                         </div>
 
-                        <button class="btn btn-link" type="submit">Zapisz element menu</button>
-                    </form>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-submit">Zapisz element menu</button>
+                            <button type="reset" class="btn btn-reset">Wyczyść formularz</button>
+                        </div>
+                    </form> --}}
+                    @include('components.menu-form-component.menu-form-component', ['menuItems_to_select' => $menuItems_to_select])
                 </div>
             </div>
         </div>

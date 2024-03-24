@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\MenuItems\MenuItem;
 use Illuminate\Http\Request;
 
@@ -34,33 +35,33 @@ class MenuItemController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'parent_id' => 'nullable|exists:menu_items,id'
+            'parent_id' => 'nullable'
         ]);
 
-        $menuItem = new MenuItem($validated);
+        // If 'parent_id' is not provided or explicitly set to 'null', create a new root menu item
+        if (empty($validated['parent_id']) || $validated['parent_id'] === 'null') {
+            $menuItem = new MenuItem(['name' => $validated['name']]);
+            $menuItem->saveAsRoot();  // This ensures a new tree is started with this item as the root
 
-        if ($request->filled('parent_id')) {
-
-            $parentItem = MenuItem::find($request->input('parent_id'));
-
-            if ($parentItem) {
-                $menuItem->appendTo($parentItem)->save();
-            } else {
-                return back()->withErrors(['parent_id' => 'Parent item not found.'])->withInput();
-            }
+            session()->flash('success', 'New root menu item created successfully.');
         } else {
+            // If 'parent_id' is provided, attempt to find the parent and append this item as a child
+            $parentItem = MenuItem::find($validated['parent_id']);
+            if ($parentItem) {
+                $menuItem = new MenuItem($validated);
+                $menuItem->appendToNode($parentItem)->save();  // Append this item to the found parent
 
-            $rootExists = MenuItem::whereIsRoot()->exists();
-
-            if (!$rootExists) {
-                $menuItem->saveAsRoot();
+                session()->flash('success', 'New child menu item created successfully and appended to the parent.');
             } else {
-                return back()->withErrors(['root' => 'A root menu item already exists. Please specify a parent or use the existing root.'])->withInput();
+                session()->flash('error', 'Parent item not found.');
+                return back()->withInput();
             }
         }
 
-        return redirect()->route('menu'); 
+        return redirect()->route('menu');  // Adjust the route as necessary
     }
+
+
 
 
 
@@ -85,7 +86,7 @@ class MenuItemController extends Controller
             }
         }
 
-        return redirect()->route('menu.index');
+        return redirect()->route('admin.menu.index');
     }
 
     /**
@@ -96,7 +97,7 @@ class MenuItemController extends Controller
     {
         $menuItem->delete();
 
-        return redirect()->route('menu.index');
+        return redirect()->route('admin.menu.index');
     }
 
     // Additional methods for reordering, etc.

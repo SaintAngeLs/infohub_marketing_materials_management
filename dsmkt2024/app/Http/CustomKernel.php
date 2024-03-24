@@ -14,7 +14,7 @@ class CustomKernel extends HttpKernel
     ];
 
     /**
-     *  Web and api middleware groups...
+     *  Web and api middleware...
      */
     protected $middlewareGroups = [
         'web' => [
