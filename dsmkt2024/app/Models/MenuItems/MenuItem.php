@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Models\MenuItems;
-
+use Fureev\Trees\Config\Base;
+use Fureev\Trees\Contracts\TreeConfigurable;
 use Illuminate\Database\Eloquent\Model;
 use Fureev\Trees\NestedSetTrait;
 
@@ -31,5 +32,10 @@ class MenuItem extends Model
         'right'  => 'right_edge',
         'depth'  => 'depth_column',
     ];
+
+    protected static function buildTreeConfig(): Base
+    {
+        return new Base(true);
+    }
 
 }

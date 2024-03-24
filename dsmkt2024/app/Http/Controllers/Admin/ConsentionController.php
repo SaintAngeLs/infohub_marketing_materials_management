@@ -9,6 +9,6 @@ class ConsentionController extends Controller
 {
     public function index()
     {
-        return view('consentions.index');
+        return view('admin.consentions.index');
     }
 }

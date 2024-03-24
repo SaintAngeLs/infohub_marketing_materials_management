@@ -17,11 +17,13 @@
     #banner {
         width: 100%;
         min-width: 960px;
-        height: 162px;
+        height: 200px;
         margin: 0 auto;
-        background: url('{{ asset("/img/banners/banner.png") }}') no-repeat center;
+        background: url('{{ asset("/img/banners/banner_original.jpeg") }}') no-repeat center;
         display: block;
-        background-color:#1c1616;
+        background-color:#1A1B1B;
+        background-size: cover;
+        background-position: center calc(80%);
     }
     </style>
 </head>
@@ -36,10 +38,15 @@
         <div id="content">
             <div class="clearfix"></div>
             <div class="left-col">
-                @if(Auth::user()->isAdmin() && request()->routeIs('menu'))
+                @php
+                    use Illuminate\Support\Str;
+                @endphp
+                @if(Auth::user()->isAdmin() &&
+                    (Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'menu.') ||
+                    request()->routeIs('menu')))
                     @include('partials.admin_menu')
                 @else
-                    @include('partials.user_menu') 
+                    @include('partials.user_menu')
                 @endif
             </div>
             <div class="right-col">

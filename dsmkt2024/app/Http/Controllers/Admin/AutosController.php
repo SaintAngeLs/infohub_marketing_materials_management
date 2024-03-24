@@ -9,6 +9,6 @@ class AutosController extends Controller
 {
     public function index()
     {
-        return view('autos.index');
+        return view('admin.autos.index');
     }
 }
