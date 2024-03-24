@@ -27,7 +27,7 @@ $(document).ready(function() {
         $(selector).each(function() {
             var depth = instance.get_node($(this).closest('.jstree-node')).parents.length;
              // Base padding + 5px for each level
-            var paddingLeft = 10 + depth * 5;
+            var paddingLeft = 5 + depth * 3;
             $(this).css('padding-left', paddingLeft + 'px');
         });
     }

@@ -7,7 +7,7 @@
                     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                         {{ __('Dodanie nowej zakładki menu') }}
                     </h2>
-                    @include('components.menu-form-component.menu-form-component', ['menuItems_to_select' => $menuItems_to_select])
+                    @include('components.menu-form-component.menu-form-component', ['menuItemsToSelect' => $menuItemsToSelect])
                 </div>
             </div>
         </div>

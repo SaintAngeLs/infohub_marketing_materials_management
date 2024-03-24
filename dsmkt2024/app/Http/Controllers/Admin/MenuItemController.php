@@ -58,11 +58,8 @@ class MenuItemController extends Controller
             }
         }
 
-        return redirect()->route('menu');  // Adjust the route as necessary
+        return redirect()->route('menu');
     }
-
-
-
 
 
     /**
@@ -86,7 +83,7 @@ class MenuItemController extends Controller
             }
         }
 
-        return redirect()->route('admin.menu.index');
+        return redirect()->route('menu');
     }
 
     /**
@@ -97,8 +94,7 @@ class MenuItemController extends Controller
     {
         $menuItem->delete();
 
-        return redirect()->route('admin.menu.index');
+        return redirect()->route('menu');
     }
 
-    // Additional methods for reordering, etc.
 }

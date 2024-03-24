@@ -65,7 +65,7 @@
                             <button type="reset" class="btn btn-reset">Wyczyść formularz</button>
                         </div>
                     </form> --}}
-                    @include('components.menu-form-component.menu-form-component', ['menuItems_to_select' => $menuItems_to_select])
+                    @include('components.menu-form-component.menu-form-component', ['menuItemsToSelect' => $menuItemsToSelect])
                 </div>
             </div>
         </div>
