@@ -378,6 +378,10 @@ h3{
     color: #E2E3E3;
     font-size: 0.875rem;
 }
+.user-info p {
+    padding-top: 18px;
+    font-weight: bold	;
+}
 .user-info p span {
     color: #9D8C83;
 }
@@ -1569,7 +1573,49 @@ input[type="submit"].table-button-2{
     gap: 10px;
     height: 60px
 }
+/* Hover and selected node styling */
+#menu-tree .jstree-hovered {
+    background-color: #f0f0f0;
+}
+#menu-tree .jstree-icon {
+    display: none !important;
+}
 
+#menu-tree .jstree-clicked {
+    background-color: #e0e0e0;
+}
+
+
+#menu-tree-files {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* Node styling */
+#menu-tree-files .jstree-node {
+    border-bottom: 1px solid #e3e3e3;
+    background-color: #fafafa;
+    min-height: 60px;
+}
+
+#menu-tree-files .jstree-anchor {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 60px
+}
+/* Hover and selected node styling */
+#menu-tree-files .jstree-hovered {
+    background-color: #f0f0f0;
+}
+#menu-tree-files .jstree-icon {
+    display: none !important;
+}
+
+#menu-tree-files .jstree-clicked {
+    background-color: #e0e0e0;
+}
 /* Node content styling */
 .js-tree-node-content {
     display: grid;
@@ -1579,6 +1625,16 @@ input[type="submit"].table-button-2{
     align-items: center;
     width: 100%;
 }
+
+#menu-tree-files .js-tree-node-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    height: 60px;
+    align-items: center;
+    width: 100%;
+}
+
 
 .node-name {
     font-weight: bold;
@@ -1592,17 +1648,7 @@ input[type="submit"].table-button-2{
     text-align: left;
 }
 
-/* Hover and selected node styling */
-#menu-tree .jstree-hovered {
-    background-color: #f0f0f0;
-}
-#menu-tree .jstree-icon {
-    display: none !important;
-}
 
-#menu-tree .jstree-clicked {
-    background-color: #e0e0e0;
-}
 
 /* Increase the height of whole row */
 .jstree-default .jstree-wholerow {
@@ -1611,7 +1657,7 @@ input[type="submit"].table-button-2{
 
 
 #create-menu-item-form {
-    max-width: 600px;
+    /* max-width: 600px; */
     margin: 0 auto;
     padding: 1rem;
     background-color: #f9f9f9;

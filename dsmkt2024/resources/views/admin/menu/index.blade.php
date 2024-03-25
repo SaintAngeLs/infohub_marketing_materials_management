@@ -9,10 +9,10 @@
                         {{ __('Struktura menu') }}
                     </h2>
                     <p  class="table-button">
-                        <a href="{{ route('menu.create') }}" class="btn btn-primary">Dodaj nową zakładkę</a>
+                        <a href="{{ route('menu.create') }}" class="btn">Dodaj nową zakładkę</a>
                     </p>
 
-                    <div id="menu-tree"></div>
+                    <div class="menu-tree-component" id="menu-tree"></div>
                 </div>
             </div>
         </div>
