@@ -2,10 +2,10 @@
 // import $ from 'jquery';
 
 $(document).ready(function() {
-    $('#menu-tree').jstree({
+    $('#menu-tree-files').jstree({
         'core': {
             'data': {
-                'url': '/menu/get-menu-items',
+                'url': '/menu/get-menu-items-with-files',
                 'data': function(node) {
                     return { 'id': node.id };
                 }
@@ -54,6 +54,13 @@ $(document).ready(function() {
             $(this).css('padding-left', paddingLeft + 'px');
         });
     }
+
+    function openFileUploadPage(menuItemId) {
+        window.location.href = `/menu/files/create?menu_item_id=${menuItemId}`;
+    }
+
+    window.openFileUploadPage = openFileUploadPage;
+
 });
 
 $(document).on('click', '.node-name', function(e) {
@@ -80,3 +87,4 @@ $(document).on('click', '.node-details-status', function(e) {
         }
     });
 });
+

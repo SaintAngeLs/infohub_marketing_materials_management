@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AutosController;
 use App\Http\Controllers\Admin\ConsentionController;
+use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\ReportsController;
@@ -40,12 +41,17 @@ Route::middleware('admin')->group(function () {
 
         Route::post('/menu-items', [MenuItemController::class, 'store'])->name('menu-items.store');
         Route::get('/get-menu-items', [MenuController::class, 'getMenuItems']);
+        Route::get('/get-menu-items-with-files', [MenuController::class, 'getMenuItemsWithFiles']);
 
-        Route::patch('/menu-items/{menuItem}', [MenuItemController::class, 'update'])->name('menu-items.update');
+        Route::patch('/menu-items/{menuItem}', [MenuController::class, 'update'])->name('menu-items.update');
         Route::post('/menu-items/update-order', [MenuItemController::class, 'updateOrder'])->name('menu-items.update-order');
         Route::post('/update-tree-structure', [MenuItemController::class, 'updateTreeStructure'])->name('menu.update-tree-structure');
         Route::post('/menu-items/update-type', [MenuItemController::class, 'updateType'])->name('menu-items.update-type');
+        Route::get('/menu-items/{id}/has-sub-items', [MenuItemController::class, 'hasSubItems'])->name('menu-items.has-sub-items');
         Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
+
+        Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
+        Route::post('/files/store', [FileController::class, 'store'])->name('files.store');
     });
 });
 

@@ -28,12 +28,15 @@ class MenuController extends Controller
     {
         $menuItemsToSelect = MenuItem::all()->except($menuItem->id);
         $users = User::all();
-        Log::debug('An informational message.', [$users]);
+        // Log::debug('An informational message.', [$users]);
         return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users'));
     }
 
     public function update(Request $request, MenuItem $menuItem)
     {
+        Log::debug($request->all());
+        Log::debug($menuItem->toArray());
+
         $validatedData = $request->validate([
             'type' => 'required|string',
             'name' => 'required|string|max:255',
@@ -45,14 +48,23 @@ class MenuController extends Controller
             'banner' => 'required|string',
         ]);
 
-        $menuItem->update([
-            'type' => $validatedData['type'],
-            'name' => $validatedData['name'],
-            'parent_id' => $validatedData['parent_id'],
-            'visibility_start' => $validatedData['visibility_start'],
-            'visibility_end' => $validatedData['visibility_end'],
-            'banner' => $validatedData['banner'],
-        ]);
+        // $menuItem->update([
+        //     'type' => $validatedData['type'],
+        //     'name' => $validatedData['name'],
+        //     'parent_id' => $validatedData['parent_id'],
+        //     'start' => $validatedData['visibility_start'],
+        //     'end' => $validatedData['visibility_end'],
+        //     'banner' => $validatedData['banner'],
+        // ]);
+
+        $menuItem->type = $validatedData['type'];
+        $menuItem->name = $validatedData['name'];
+        $menuItem->parent_id = $validatedData['parent_id'];
+        $menuItem->start = $validatedData['visibility_start'] ?? null;
+        $menuItem->end = $validatedData['visibility_end'] ?? null;
+        $menuItem->banner = $validatedData['banner'];
+
+        Log::debug($menuItem->toArray());
 
         if (isset($validatedData['owners'])) {
             $menuItem->owners()->sync($validatedData['owners']);
@@ -83,14 +95,22 @@ class MenuController extends Controller
         return response()->json($formattedMenuItems);
     }
 
+    public function getMenuItemsWithFiles()
+    {
+        $menuItems = MenuItem::get()->toTree();
+        $formattedMenuItems = $this->formatMenuItemsWithFilesForJsTree($menuItems);
+        return response()->json($formattedMenuItems);
+    }
+
+
     protected function formatForJsTree($menuItems)
     {
         $formatted = [];
         foreach ($menuItems as $item) {
-            $status = $item->status ? 'Visible' : 'Invisible';
+            $status = $item->status ? 'Aktywny' : 'Nieaktywny';
             $ownerName = $item->owner->name ?? 'N/A';
             $visibilityTime = $item->start && $item->end
-                            ? $item->start->format('Y-m-d') . ' to ' . $item->end->format('Y-m-d')
+                            ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
                             : 'N/A';
 
         $nodeContent = <<<HTML
@@ -113,5 +133,34 @@ class MenuController extends Controller
         return $formatted;
     }
 
+    protected function formatMenuItemsWithFilesForJsTree($menuItems)
+    {
+        $formatted = [];
+        foreach ($menuItems as $item) {
+            $status = $item->status ? 'Aktywny' : 'Nieaktywny';
+            $ownerName = $item->owner->name ?? 'N/A';
+            $visibilityTime = $item->start && $item->end
+                            ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
+                            : 'N/A';
 
+            // Adding an upload button to each node
+            $nodeContent = <<<HTML
+                <div class='js-tree-node-content' data-node-id="{$item->id}">
+                    <span class='node-name'>{$item->name}</span>
+                    <span class='node-details-status'>($status)</span>
+                    <span class='node-details-ownerName'>{$ownerName}</span>
+                    <span class='node-details-visibilityTime'>{$visibilityTime}</span>
+                    <button onclick="openFileUploadPage({$item->id})" class="btn btn-sm upload-file-btn">Upload File</button>
+                </div>
+            HTML;
+
+            $formattedItem = [
+                'id' => $item->id,
+                'text' => $nodeContent,
+                'children' => $item->children->isEmpty() ? [] : $this->formatMenuItemsWithFilesForJsTree($item->children),
+            ];
+            $formatted[] = $formattedItem;
+        }
+        return $formatted;
+    }
 }

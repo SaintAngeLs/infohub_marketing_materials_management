@@ -142,6 +142,12 @@ class MenuItemController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function hasSubItems($id)
+    {
+        $menuItem = MenuItem::with('children')->find($id);
+        $hasSubItems = $menuItem && $menuItem->children->isNotEmpty();
+        return response()->json(['hasSubItems' => $hasSubItems]);
+    }
 
 
     /**

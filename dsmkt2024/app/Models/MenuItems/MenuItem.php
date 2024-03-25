@@ -26,6 +26,12 @@ class MenuItem extends Model
         'archived_by',
     ];
 
+    protected $casts = [
+        'start' => 'date',
+        'end' => 'date',
+    ];
+
+
     protected $treeConfig = [
         'parent' => 'parent_id',
         'left'   => 'left_edge',
@@ -46,4 +52,8 @@ class MenuItem extends Model
                                     'user_id');
     }
 
+    public function files()
+    {
+        return $this->hasMany(\App\Models\File::class);
+    }
 }
