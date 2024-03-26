@@ -54,6 +54,7 @@ Route::middleware('admin')->group(function () {
         Route::post('/files/store', [FileController::class, 'store'])->name('files.store');
         Route::get('/file/edit/{file}', [FileController::class, 'edit'])->name('file.edit');
         Route::patch('/files/{file}', [FileController::class, 'update'])->name('file.update');
+        Route::get('/files/delete/{id}', 'FileController@deleteFile')->name('files.delete');
     });
 });
 

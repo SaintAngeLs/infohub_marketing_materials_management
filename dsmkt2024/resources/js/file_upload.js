@@ -16,12 +16,11 @@ $(document).ready(function() {
                 var mockFile = { name: existingFileName, size: 12345, accepted: true };
                 myDropzone.files.push(mockFile);
                 myDropzone.emit("addedfile", mockFile);
-                myDropzone.emit("thumbnail", mockFile, existingFileUrl); // Assumes a thumbnail is available
+                myDropzone.emit("thumbnail", mockFile, existingFileUrl);
                 myDropzone.emit("complete", mockFile);
                 myDropzone._updateMaxFilesReachedClass();
             }
 
-            // Listen to file added event to remove existing file
             this.on("addedfile", function(file) {
                 if (this.files.length > 1 && this.files[0].name === existingFileName) {
                     this.removeFile(this.files[0]);

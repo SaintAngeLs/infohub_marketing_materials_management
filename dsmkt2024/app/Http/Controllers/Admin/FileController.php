@@ -84,32 +84,37 @@ class FileController extends Controller
     private function handleFileUpload(Request $request, File &$file, $validated)
     {
         if ($request->hasFile('file')) {
-            // Delete the old file from storage if it exists and is different from the new file
             if (!empty($file->path) && Storage::disk('public')->exists($file->getRawOriginal('path')) && $file->name != $validated['name']) {
                 Storage::disk('public')->delete($file->getRawOriginal('path'));
             }
 
             $uploadedFile = $request->file('file');
 
-            // Generate new filename based on the input from the 'name' field, ensuring it's filesystem-safe
-            // and appending the original file extension to it
             $filename = $validated['name'] . '.' . $uploadedFile->getClientOriginalExtension();
 
-            // Define the directory path where the file should be saved
             $directory = 'menu_files/' . $validated['menu_id'];
 
-            // Save the file to the specified directory under the new name
             $filePath = $uploadedFile->storeAs($directory, $filename, 'public');
 
             Log::debug($filePath);
             Log::debug($directory );
 
-            // Update the file model's 'path' attribute with the path of the saved file
-            // Note: No need to prepend with 'Storage::url()' since the path is stored relative to the disk root
             $file->path = $filePath;
         }
     }
 
+    public function deleteFile($id)
+    {
+        $file = File::findOrFail($id);
+
+        if ($file->path && Storage::exists($file->path)) {
+            Storage::delete($file->path);
+        }
+
+        $file->delete();
+
+        return back()->with('success', 'Plik został usunięty.');
+    }
 
     private function updateFileModel(File &$file, $validated)
     {

@@ -1639,11 +1639,14 @@ input[type="submit"].table-button-2{
     width: 100%;
 }
 
-
+.jstree-default .jstree-anchor {
+    line-height: unset !important;
+    height: unset !important;
+}
 .js-tree-node-files {
     padding-left: 20px;
     margin-bottom: 20px;
-    overflow-y: auto;
+    /* overflow-y: auto; */
     max-height: 200px;
 }
 .node-files ul {

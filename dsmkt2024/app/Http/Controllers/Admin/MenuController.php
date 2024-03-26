@@ -48,6 +48,17 @@ class MenuController extends Controller
             'banner' => 'required|string',
         ]);
 
+        $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
+
+        // If 'parent_id' is explicitly null, handle separately
+        if (is_null($validatedData['parent_id'])) {
+            // Directly setting parent_id to null to avoid any model or ORM interference
+            $menuItem->parent_id = null;
+        } else {
+            // Handle normally for non-null cases
+            $menuItem->parent_id = $validatedData['parent_id'];
+        }
+
         // $menuItem->update([
         //     'type' => $validatedData['type'],
         //     'name' => $validatedData['name'],
@@ -59,7 +70,7 @@ class MenuController extends Controller
 
         $menuItem->type = $validatedData['type'];
         $menuItem->name = $validatedData['name'];
-        $menuItem->parent_id = $validatedData['parent_id'];
+        // $menuItem->parent_id = $validatedData['parent_id'];
         $menuItem->start = $validatedData['visibility_start'] ?? null;
         $menuItem->end = $validatedData['visibility_end'] ?? null;
         $menuItem->banner = $validatedData['banner'];
@@ -86,8 +97,6 @@ class MenuController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-
     public function getMenuItems()
     {
         $menuItems = MenuItem::get()->toTree();
