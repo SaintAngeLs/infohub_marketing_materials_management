@@ -51,4 +51,9 @@ class File extends Model
     {
         return $this->belongsTo(User::class, 'archived_by');
     }
+    public function menuItem()
+    {
+        return $this->belongsTo(MenuItem::class, 'menu_item_id');
+    }
+
 }
