@@ -89,10 +89,16 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.file-link', function(e) {
-        e.preventDefault(); // Prevent default anchor behavior
-        var fileId = $(this).data('file-id'); // Retrieve the file ID
+        e.preventDefault();
+        var fileId = $(this).data('file-id'); 
         if (fileId) {
-            window.location.href = `/menu/file/edit/${fileId}`; // Redirect to the edit page for the file
+            window.location.href = `/menu/file/edit/${fileId}`;
+        }
+    });
+
+    document.getElementById('deleteFileButton').addEventListener('click', function() {
+        if(confirm('Czy na pewno chcesz usunąć ten plik?')) {
+            window.location.href = '{{ $deleteAction }}';
         }
     });
 

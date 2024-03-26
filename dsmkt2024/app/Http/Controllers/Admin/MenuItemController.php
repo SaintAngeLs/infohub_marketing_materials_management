@@ -39,7 +39,7 @@ class MenuItemController extends Controller
         ]);
 
         // If 'parent_id' is not provided or explicitly set to 'null', create a new root menu item
-        if (empty($validated['parent_id']) || $validated['parent_id'] === 'null') {
+        if (empty($validated['parent_id']) || $validated['parent_id'] === 'NULL') {
             $menuItem = new MenuItem(['name' => $validated['name']]);
             $menuItem->saveAsRoot();  // This ensures a new tree is started with this item as the root
 
@@ -89,16 +89,14 @@ class MenuItemController extends Controller
     public function updateOrder(Request $request)
     {
         $menuItem = MenuItem::find($request->item_id);
-        $newParentId = $request->parent_id; // Can be null if moved to root
+        $newParentId = $request->parent_id;
 
-        if ($newParentId) {
+        if ($newParentId == 'NULL' || $newParentId == '0') {
+            $menuItem->makeRoot()->save();
+        } else if (!empty($newParentId)) {
             $parentItem = MenuItem::find($newParentId);
             $menuItem->appendTo($parentItem)->save();
-        } else {
-            // If moved to root
-            $menuItem->makeRoot()->save();
         }
-
         return response()->json(['success' => true]);
     }
 
