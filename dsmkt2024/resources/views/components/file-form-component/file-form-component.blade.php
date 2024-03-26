@@ -40,10 +40,10 @@
             </div>
         </div>
 
-        {{-- File Upload --}}
+        {{-- File Upload Dropzone Area --}}
         <div class="mb-3">
-            <label for="file" class="form-label">Plik*</label>
-            <input type="file" id="file" name="file" class="form-control" required>
+            <label for="dropzoneFileUpload" class="form-label">Plik*</label>
+            <div id="dropzoneFileUpload" class="dropzone"></div>
         </div>
 
         {{-- Visibility Start --}}

@@ -54,6 +54,6 @@ class MenuItem extends Model
 
     public function files()
     {
-        return $this->hasMany(\App\Models\File::class);
+        return $this->hasMany(\App\Models\File::class, 'menu_item_id');
     }
 }

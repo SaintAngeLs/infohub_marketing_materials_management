@@ -16,10 +16,12 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import 'jstree';
 import 'jstree/dist/themes/default/style.min.css';
-
-
-
 import 'jstree/dist/themes/default/style.min.css';
+
+import 'dropzone'
+import 'dropzone/dist/dropzone.css';
+import Dropzone from 'dropzone';
+window.Dropzone = Dropzone;
 
 // import './menu_tree';
 
@@ -32,4 +34,5 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./menu_tree');
     import('./menu_delete');
     import('./menu_tree_files_upload');
+    import('./file_upload');
 });
