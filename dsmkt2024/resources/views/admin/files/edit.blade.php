@@ -5,7 +5,7 @@
             <div class="bg-white dark:bg-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-900">
                     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                        {{ __('Edycja dodanego pliku') }}
+                        {{ __('Edycja pliku') }}
                     </h2>
 
                     @include('components.file-form-component.file-form-component', ['menuItemsToSelect' => $menuItemsToSelect])
