@@ -1,7 +1,9 @@
 // import 'jquery';
 // import $ from 'jquery';
 
+
 $(document).ready(function() {
+
     $('#menu-tree-files').jstree({
         'core': {
             'data': {
@@ -25,10 +27,9 @@ $(document).ready(function() {
         var nodeId = data.node.id;
         var newPosition = data.position;
 
-
         var postData = {
             id: nodeId,
-            parent_id: newParent === "#" ? null : newParent, // Convert "#" to null for root
+            parent_id: newParent === "#" ? null : newParent,
             position: newPosition
         };
         $.ajax({
@@ -61,30 +62,40 @@ $(document).ready(function() {
 
     window.openFileUploadPage = openFileUploadPage;
 
-});
 
-$(document).on('click', '.node-name', function(e) {
-    e.stopPropagation();
-    var nodeId = $(this).closest('.jstree-node').attr('id');
-    window.location.href = '/menu/edit/' + nodeId;
-});
+    $(document).on('click', '.node-name', function(e) {
+        e.stopPropagation();
+        var nodeId = $(this).closest('.jstree-node').attr('id');
+        window.location.href = '/menu/edit/' + nodeId;
+    });
 
-// Toggle status on status details click
-$(document).on('click', '.node-details-status', function(e) {
-    e.stopPropagation();
-    var nodeId = $(this).closest('.jstree-node').attr('id');
+    // Toggle status on status details click
+    $(document).on('click', '.node-details-status', function(e) {
+        e.stopPropagation();
+        var nodeId = $(this).closest('.jstree-node').attr('id');
 
-    $.ajax({
-        url: '/menu/toggle-status/' + nodeId,
-        type: 'POST',
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        success: function(response) {
-            alert('Status updated successfully');
-            location.reload();
-        },
-        error: function(xhr) {
-            alert('Error updating status');
+        $.ajax({
+            url: '/menu/toggle-status/' + nodeId,
+            type: 'POST',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            success: function(response) {
+                alert('Status updated successfully');
+                location.reload();
+            },
+            error: function(xhr) {
+                alert('Error updating status');
+            }
+        });
+    });
+
+    $(document).on('click', '.file-link', function(e) {
+        e.preventDefault(); // Prevent default anchor behavior
+        var fileId = $(this).data('file-id'); // Retrieve the file ID
+        if (fileId) {
+            window.location.href = `/menu/file/edit/${fileId}`; // Redirect to the edit page for the file
         }
     });
+
+
 });
 

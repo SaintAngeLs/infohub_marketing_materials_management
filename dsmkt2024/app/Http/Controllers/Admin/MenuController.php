@@ -125,7 +125,7 @@ class MenuController extends Controller
         $formattedItem = [
             'id' => $item->id,
             'text' => $nodeContent,
-                'children' => $item->children->isEmpty() ? [] : $this->formatForJsTree($item->children),
+            'children' => $item->children->isEmpty() ? [] : $this->formatForJsTree($item->children),
                 // Other jsTree node properties
             ];
             $formatted[] = $formattedItem;
@@ -143,14 +143,33 @@ class MenuController extends Controller
                             ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
                             : 'N/A';
 
-            // Adding an upload button to each node
+            // Fetch files related to this menu item
+            $files = $item->files;
+            $fileLinks = '';
+            foreach ($files as $file) {
+                // Assuming $file->id gives you the unique identifier for the file
+                $fileLinks .= "<li><a href='#' class='file-link' data-file-id='{$file->id}'>{$file->name}</a></li>";
+            }
+            if (!empty($fileLinks)) {
+                $fileLinks = "<ul>$fileLinks</ul>";
+            } else {
+                $fileLinks = "Brak plików";
+            }
+
+            // Including files in node content
             $nodeContent = <<<HTML
-                <div class='js-tree-node-content' data-node-id="{$item->id}">
-                    <span class='node-name'>{$item->name}</span>
-                    <span class='node-details-status'>($status)</span>
-                    <span class='node-details-ownerName'>{$ownerName}</span>
-                    <span class='node-details-visibilityTime'>{$visibilityTime}</span>
-                    <button onclick="openFileUploadPage({$item->id})" class="btn btn-sm upload-file-btn">Upload File</button>
+                <div class="js-tree-files-node-info">
+                    <div class='js-tree-node-content' data-node-id="{$item->id}">
+                        <span class='node-name'>{$item->name}</span>
+                        <span class='node-details-status'>($status)</span>
+                        <span class='node-details-ownerName'>{$ownerName}</span>
+                        <span class='node-details-visibilityTime'>{$visibilityTime}</span>
+                        <button onclick="openFileUploadPage({$item->id})" class="btn btn-sm upload-file-btn">Upload File</button>
+                    </div>
+
+                    <div class='js-tree-node-files' data-node-id="{$item->id}">
+                        <span class='node-files'>$fileLinks</span>
+                    </div>
                 </div>
             HTML;
 
@@ -163,4 +182,5 @@ class MenuController extends Controller
         }
         return $formatted;
     }
+
 }

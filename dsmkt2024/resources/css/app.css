@@ -1573,7 +1573,6 @@ input[type="submit"].table-button-2{
     gap: 10px;
     height: 60px
 }
-/* Hover and selected node styling */
 #menu-tree .jstree-hovered {
     background-color: #f0f0f0;
 }
@@ -1603,7 +1602,7 @@ input[type="submit"].table-button-2{
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 60px
+    min-height: 60px
 }
 /* Hover and selected node styling */
 #menu-tree-files .jstree-hovered {
@@ -1619,7 +1618,7 @@ input[type="submit"].table-button-2{
 /* Node content styling */
 .js-tree-node-content {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
     gap: 10px;
     height: 60px;
     align-items: center;
@@ -1630,11 +1629,27 @@ input[type="submit"].table-button-2{
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
     gap: 10px;
-    height: 60px;
+    height: 20px;
     align-items: center;
     width: 100%;
 }
 
+#menu-tree-files .js-tree-files-node-info {
+    display: block;
+    width: 100%;
+}
+
+
+.js-tree-node-files {
+    padding-left: 20px;
+    margin-bottom: 20px;
+    overflow-y: auto;
+    max-height: 200px;
+}
+.node-files ul {
+    list-style-type: none;
+    padding: 0;
+}
 
 .node-name {
     font-weight: bold;

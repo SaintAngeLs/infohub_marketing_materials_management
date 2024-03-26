@@ -53,7 +53,7 @@ class File extends Model
     }
     public function menuItem()
     {
-        return $this->belongsTo(MenuItem::class, 'menu_item_id');
+        return $this->belongsTo(MenuItem::class, 'menu_id');
     }
 
 }
