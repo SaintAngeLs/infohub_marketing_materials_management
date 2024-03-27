@@ -34,7 +34,7 @@
             <div>
                 <label for="parent_id">Element nadrzędny:</label>
                 <select id="parent_id" name="parent_id">
-                    <option value="NULL">Brak (jest to element nadrzędny)</option>
+                    <option value="">Brak (jest to element nadrzędny)</option>
                     @foreach($menuItemsToSelect as $item)
                         <option value="{{ $item->id }}" @if($isEdit && $menuItem->parent_id == $item->id) selected @endif>{{ $item->name }}</option>
                     @endforeach

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\MenuItems\MenuItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MenuItemController extends Controller
 {
@@ -49,7 +51,7 @@ class MenuItemController extends Controller
             $parentItem = MenuItem::find($validated['parent_id']);
             if ($parentItem) {
                 $menuItem = new MenuItem($validated);
-                $menuItem->appendToNode($parentItem)->save();  // Append this item to the found parent
+                $menuItem->appendTo($parentItem)->save();  // Append this item to the found parent
 
                 session()->flash('success', 'New child menu item created successfully and appended to the parent.');
             } else {
@@ -112,33 +114,57 @@ class MenuItemController extends Controller
 
     public function updateTreeStructure(Request $request)
     {
-        $id = $request->id;
+        Log::debug('updateTreeStructure called', $request->all());
+
+        $itemId = $request->id;
         $newParentId = $request->parent_id;
-        $newPosition = $request->position;
 
-        // Find the moved menu item
-        $menuItem = MenuItem::find($id);
-
+        $menuItem = MenuItem::find($itemId);
         if (!$menuItem) {
+            Log::error('Menu item not found with id: ' . $itemId);
             return response()->json(['error' => 'Menu item not found'], 404);
         }
 
-        // Move to a new parent if provided
-        if ($newParentId) {
-            $newParent = MenuItem::find($newParentId);
-            if (!$newParent) {
-                return response()->json(['error' => 'New parent item not found'], 404);
+        try {
+            DB::beginTransaction();
+
+            if (is_null($newParentId) || $newParentId === "#") {
+                // There is a possible chagne for the unsave here --> need tom try
+                // catch to check it should be Root and it is not Root
+                Log::info('Makeing the new item as the the root.');
+                $menuItem->makeRoot();
+                // Direct intention to set the paren_id to NULL value
+                $menuItem->parent_id = null;
+                $menuItem->save();
+            } else {
+                $newParent = MenuItem::find($newParentId);
+                if (!$newParent) {
+                    DB::rollBack();
+                    return response()->json(['error' => 'New parent item not found'], 404);
+                }
+
+                // Move the item to its new parent and save
+                $menuItem->appendTo($newParent)->save();
             }
-            $menuItem->appendTo($newParent)->save();
-        } else {
-            // Or make it a root item
-            $menuItem->makeRoot()->save();
+
+            Log:info('MenuItem before the commit:', $menuItem->toArray());
+
+            DB::commit();
+            Log::info('Menu item moved successfully.');
+            return response()->json(['success' => true, 'message' => 'Menu item moved successfully.']);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Failed to update the tree structure: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update the tree structure: ' . $e->getMessage()], 500);
         }
-
-        // Optionally, handle newPosition to reorder among siblings
-
-        return response()->json(['success' => true]);
     }
+
+
+
+
+
+
+
 
     public function hasSubItems($id)
     {
