@@ -39,7 +39,7 @@ $(document).ready(function() {
                 formData.append("name", $("#file_name").val());
                 formData.append("visible_from", $("#visible_from").val());
                 formData.append("visible_to", $("#visible_to").val());
-                formData.append("tags", $("#tags").val());
+                formData.append("key_words", $("#key_words").val());
                 formData.append("auto_id", $("#auto_id").val());
                 formData.append("file_source", $("#file_source").val());
                 // formData.append("file_location", $("input[name='file_location']:checked").val());
@@ -92,21 +92,12 @@ $(document).ready(function() {
         var formAction = $(this).attr('action'); // URL to which the request is sent
         var formMethod = $(this).attr('method'); // GET or POST
 
-        myDropzone.files.forEach(function(file, index) {
-            formData.append('file[' + index + ']', file, file.name);
-        });
-
-
-        // Since Dropzone handles file uploads asynchronously,
-        // make sure all files are uploaded before submitting the form data
         if (myDropzone.getQueuedFiles().length > 0) {
             myDropzone.on("queuecomplete", function() {
-                // After all files are uploaded then send form data
                 submitFormData(formData, formAction, formMethod);
             });
-            myDropzone.processQueue(); // Start the upload of files in Dropzone's queue
+            myDropzone.processQueue();
         } else {
-            // If there are no files in Dropzone's queue, just submit the form data
             submitFormData(formData, formAction, formMethod);
         }
     });
@@ -117,16 +108,14 @@ $(document).ready(function() {
             type: method,
             data: formData,
             processData: false,
-            contentType: false, 
+            contentType: false,
             success: function(response) {
 
                 console.log('Success:', response);
-
+                window.location.href = "/menu/files";
             },
             error: function(jqXHR, textStatus, errorThrown) {
-
                 console.error('Error:', textStatus, errorThrown);
-
             }
         });
     }

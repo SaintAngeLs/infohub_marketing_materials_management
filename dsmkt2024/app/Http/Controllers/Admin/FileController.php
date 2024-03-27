@@ -59,7 +59,7 @@ class FileController extends Controller
         try {
             $this->handleFileUpload($request, $file, $validated);
             $this->updateFileModel($file, $validated);
-
+            Log::info("Redirecting to the menu-files");
             return redirect()->route('menu.files')->with('success', 'File updated successfully.');
         } catch (\Exception $e) {
             Log::error('File update error: ' . $e->getMessage());
@@ -90,44 +90,84 @@ class FileController extends Controller
 
     private function handleFileUpload(Request $request, File &$file, array $validated)
     {
-        // Determine the source of the file based on the 'file_source' value from the request.
-        $fileSource = $validated['file_source'];
+        if (!$request->hasFile('file') && $file->exists) {
+            $this->updateFileAttributes($file, $validated, $request);
+            $file->save();
+            return;
+        }
 
-        // Log::error('The file source is:', $fileSource);
-        // Log::info('Validated request value:', $validated);
-        // Initialize strategy variable
+        $fileSource = $validated['file_source'];
+        // Strategy initialization
         $strategy = null;
 
-        Log::info('Handle file input is:', $request->all());
-
-        // Determine which strategy to use based on the source
         switch ($fileSource) {
             case 'file_pc':
-
+                if ($request->hasFile('file')) {
                     $strategy = new UploadFromPCStrategy();
-
+                }
                 break;
             case 'file_external':
-                // Set strategy for handling external URL uploads
                 if (!empty($validated['file_url'])) {
                     $strategy = new UploadFromUrlStrategy();
                 }
                 break;
             case 'server_file':
-                // Set strategy for using server files
                 if (!empty($validated['server_file'])) {
                     $strategy = new UseServerFileStrategy();
                 }
                 break;
         }
 
-        // Execute the strategy if set
         if ($strategy !== null) {
             $strategy->upload($request, $file, $validated);
+            if ($request->hasFile('file')) {
+                $uploadedFile = $request->file('file');
+                $validated['extension'] = $uploadedFile->getClientOriginalExtension();
+                $validated['weight'] = $uploadedFile->getSize(); // Gets the size in bytes
+            }
+            $this->updateFileAttributes($file, $validated, $request);
         } else {
-            throw new \Exception("No valid file upload source provided.");
+            // Handle cases where no valid file is provided during update
+            if ($file->exists && !$request->hasFile('file')) {
+                // Potentially log this situation or handle it as appropriate
+                // e.g., Log::info('No new file provided for update.');
+                Log::info("The request does not cointat in the file");
+            } else {
+                throw new \Exception("No valid file upload source provided or required data missing.");
+            }
         }
     }
+
+    private function updateFileAttributes(File &$file, array $validated, $request = null)
+    {
+        $file->menu_id = $validated['menu_id'];
+        $file->name = $validated['name'];
+        $file->auto_id = $validated['auto_id'] ?? null;
+        $file->start = $validated['start'] ?? null;
+        $file->end = $validated['end'] ?? null;
+        $file->key_words = $validated['key_words'] ?? null;
+        $file->status = $validated['status'] ?? 1;
+
+        if (isset($validated['extension'])) {
+            $file->extension = $validated['extension'];
+        }
+
+        if (isset($validated['weight'])) {
+            $file->weight = $validated['weight']; // You might want to convert this to a different unit
+        }
+
+        // Update the extension if a file is uploaded
+        if ($request && $request->hasFile('file')) {
+            $file->extension = $request->file('file')->getClientOriginalExtension();
+        }
+
+        // Other attributes as before...
+
+        $userId = auth()->id();
+        $file->add_by = $file->exists ? $file->add_by : $userId;
+        $file->update_by = $userId;
+    }
+
 
 
     public function deleteFile($id)
@@ -163,4 +203,5 @@ class FileController extends Controller
 
         return $serverFiles;
     }
+
 }

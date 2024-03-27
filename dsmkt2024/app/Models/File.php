@@ -27,6 +27,10 @@ class File extends Model
         'archived_by',
     ];
 
+    protected $casts = [
+        'start' => 'datetime:Y-m-d',
+        'end' => 'datetime:Y-m-d',
+    ];
     public function menu()
     {
         return $this->belongsTo(MenuItem::class, 'menu_id');

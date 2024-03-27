@@ -85,8 +85,8 @@
 
                 {{-- Keywords --}}
                 <div class="mb-3">
-                    <label for="tags" class="form-label">Słowa Kluczowe</label>
-                    <input type="text" id="tags" name="tags" class="form-control" placeholder="(oddzielone spacją)" value="{{ $isEdit ? $file->tags : '' }}">
+                    <label for="key_words" class="form-label">Słowa Kluczowe</label>
+                    <input type="text" id="key_words" name="key_words" class="form-control" placeholder="(oddzielone spacją)" value="{{ $isEdit ? $file->key_words : '' }}">
                 </div>
 
                 {{-- Car Association --}}
