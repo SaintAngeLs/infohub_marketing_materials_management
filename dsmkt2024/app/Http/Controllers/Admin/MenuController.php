@@ -34,7 +34,7 @@ class MenuController extends Controller
 
     public function update(Request $request, MenuItem $menuItem)
     {
-        Log::debug($request->all());
+        Log::debug('Update function', $request->all());
         Log::debug($menuItem->toArray());
 
         $validatedData = $request->validate([
@@ -50,40 +50,32 @@ class MenuController extends Controller
 
         $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
 
-        // If 'parent_id' is explicitly null, handle separately
-        if (is_null($validatedData['parent_id'])) {
-            // Directly setting parent_id to null to avoid any model or ORM interference
-            $menuItem->parent_id = null;
-        } else {
-            // Handle normally for non-null cases
-            $menuItem->parent_id = $validatedData['parent_id'];
-        }
+        $menuItem->fill($validatedData);
 
-        // $menuItem->update([
-        //     'type' => $validatedData['type'],
-        //     'name' => $validatedData['name'],
-        //     'parent_id' => $validatedData['parent_id'],
-        //     'start' => $validatedData['visibility_start'],
-        //     'end' => $validatedData['visibility_end'],
-        //     'banner' => $validatedData['banner'],
-        // ]);
-
-        $menuItem->type = $validatedData['type'];
-        $menuItem->name = $validatedData['name'];
-        // $menuItem->parent_id = $validatedData['parent_id'];
-        $menuItem->start = $validatedData['visibility_start'] ?? null;
-        $menuItem->end = $validatedData['visibility_end'] ?? null;
-        $menuItem->banner = $validatedData['banner'];
-
-        Log::debug($menuItem->toArray());
+        $menuItem->save();
 
         if (isset($validatedData['owners'])) {
             $menuItem->owners()->sync($validatedData['owners']);
         }
 
+        $this->updateTreeStructureAfterMenuUpdate($menuItem, $validatedData['parent_id']);
+
         return redirect()->route('menu.structure')->with('success', 'Menu item updated successfully.');
     }
 
+    protected function updateTreeStructureAfterMenuUpdate(MenuItem $menuItem, $newParentId)
+    {
+        if (is_null($newParentId)) {
+            if (!$menuItem->isRoot()) {
+                $menuItem->makeRoot();
+            }
+        } else {
+            $newParent = MenuItem::find($newParentId);
+            if ($newParent) {
+                $menuItem->appendTo($newParent)->save();
+            }
+        }
+    }
 
     public function toggleStatus(Request $request, $menuItem)
     {

@@ -28,7 +28,7 @@ $(document).ready(function() {
 
         var postData = {
             id: nodeId,
-            parent_id: newParent === "#" ? null : newParent, // Convert "#" to null for root
+            parent_id: newParent === "#" ? null : newParent,
             position: newPosition
         };
         $.ajax({
