@@ -76,14 +76,27 @@ class FileController extends Controller
             'end' => 'nullable|date',
             'key_words' => 'nullable|string',
             'auto_id' => 'nullable|exists:autos,id',
-            'file_source' => 'required|string',
+            'file_source' => 'required|in:file_pc,file_external,file_server',
         ];
 
-        if ($isStore) {
-            $rules['file'] = 'required|file|max:716800'; // 700 MB
-        } else {
-            $rules['file'] = 'sometimes|file|max:716800';
+        // if ($isStore) {
+        //     $rules['file'] = 'required|file|max:716800'; // 700 MB
+        // } else {
+        //     $rules['file'] = 'sometimes|file|max:716800';
+        // }
+
+        switch ($request->input('file_source')) {
+            case 'file_pc':
+                $rules['file'] = 'required|file|max:716800'; // Adjust based on your needs
+                break;
+            case 'file_external':
+                $rules['file_url'] = 'required|url';
+                break;
+            case 'file_server':
+                $rules['server_file'] = 'required|string';
+                break;
         }
+
 
         return $request->validate($rules);
     }
@@ -96,6 +109,7 @@ class FileController extends Controller
             return;
         }
 
+        Log::info('The request in the fileUpload', $request->all());
         $fileSource = $validated['file_source'];
         // Strategy initialization
         $strategy = null;

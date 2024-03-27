@@ -66,7 +66,11 @@ $(document).ready(function() {
                 var list = $('#serverFileList');
                 list.empty();
 
-                Object.keys(structure).forEach(function(directory) {
+                if (Object.keys(structure).length === 0) {
+                    // No directories or files, display message
+                    list.append($('<li>').text("BRAK PLIKÓW DO WYŚWIETLENIA"));
+                } else {
+                    Object.keys(structure).forEach(function(directory) {
                     var dirItem = $('<li>').text(directory);
                     var fileList = $('<ul>');
                     structure[directory].forEach(function(file) {
@@ -79,7 +83,7 @@ $(document).ready(function() {
                     });
                     dirItem.append(fileList);
                     list.append(dirItem);
-                });
+                });}
 
                 $('#serverFilesModal').show();
             },
@@ -89,6 +93,19 @@ $(document).ready(function() {
             }
         });
     });
+
+    function populateFileField(filePath) {
+        var fileName = filePath.split('/').pop();
+        $('#server_file_input').val(filePath);
+
+        $('#selectedFileName').val(fileName);
+
+        $('#file_name').val(fileName);
+
+        $('#serverFilesModal').hide();
+    }
+
+
 
 
     var closeButton = document.getElementsByClassName("close-button")[0];
