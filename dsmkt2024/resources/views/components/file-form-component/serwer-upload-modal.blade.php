@@ -8,5 +8,9 @@
                 <!-- Dynamically loaded server files will go here -->
             </ul>
         </div>
+        <div class="modal-footer">
+            <button id="chooseFileButton" class="btn btn-primary">Wybierz</button>
+            <button id="cancelModalButton" class="btn btn-secondary">Anuluj</button>
+        </div>
     </div>
 </div>

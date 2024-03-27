@@ -59,9 +59,12 @@
                 </div>
                 <div class="file-source" style="display: none;" id="input_server_file">
                     <button type="button" id="browseServerFilesButton" class="btn btn-primary">Przeglądaj zasoby serwera</button>
-                    {{-- Ensure your server upload modal component is correctly included here --}}
                     @include('components.file-form-component.serwer-upload-modal')
+                    <input type="text" id="selectedFileName" class="form-control mt-2" readonly placeholder="Nazwa wybranego pliku">
+                    <input type="hidden" name="server_file" id="server_file_input" value="">
+
                 </div>
+
 
 
 
