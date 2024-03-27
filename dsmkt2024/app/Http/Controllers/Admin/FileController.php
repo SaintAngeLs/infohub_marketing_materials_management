@@ -153,15 +153,13 @@ class FileController extends Controller
         }
 
         if (isset($validated['weight'])) {
-            $file->weight = $validated['weight']; // You might want to convert this to a different unit
+            $file->weight = $validated['weight'];
         }
 
         // Update the extension if a file is uploaded
         if ($request && $request->hasFile('file')) {
             $file->extension = $request->file('file')->getClientOriginalExtension();
         }
-
-        // Other attributes as before...
 
         $userId = auth()->id();
         $file->add_by = $file->exists ? $file->add_by : $userId;
@@ -203,5 +201,52 @@ class FileController extends Controller
 
         return $serverFiles;
     }
+
+    public function download($fileId)
+    {
+        $file = File::findOrFail($fileId);
+        $filePath = storage_path('app/public/' . $file->path);
+        Log::debug('File path', ['path' => $filePath]);
+        Log::info('File path');
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+
+        return response()->download($filePath, basename($filePath), [
+            'Content-Type' => mime_content_type($filePath)
+        ]);
+    }
+
+    public function getDirectoryStructure()
+    {
+        $directory = storage_path('app/public/ftp_upload');
+        $directories = \File::directories($directory);
+
+        $structure = [];
+
+        // Get files in the root of the directory
+        $files = \File::files($directory);
+        foreach ($files as $file) {
+            $structure['/'][] = [
+                'path' => $file->getRelativePathname(),
+                'name' => basename($file)
+            ];
+        }
+
+
+        foreach ($directories as $dir) {
+            $files = \File::allFiles($dir);
+            foreach ($files as $file) {
+                $dirName = basename($dir);
+                $structure[$dirName][] = [
+                    'path' => $file->getRelativePathname(),
+                    'name' => basename($file)
+                ];
+            }
+        }
+
+        return response()->json($structure);
+    }
+
 
 }

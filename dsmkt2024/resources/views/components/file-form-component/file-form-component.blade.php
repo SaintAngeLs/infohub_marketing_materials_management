@@ -57,14 +57,12 @@
                 <div class="file-source" style="display: none;" id="input_file_external">
                     <input type="text" name="file_url" placeholder="URL pliku" />
                 </div>
-                <div class="file-source" style="display: none;"  id="input_server_file">
-                    <select name="server_file" class="form-select">
-                        <option value="">Wybierz plik</option>
-                        @foreach($serverFiles as $serverFile)
-                        <option value="{{ $serverFile }}">{{ basename($serverFile) }}</option>
-                        @endforeach
-                    </select>
+                <div class="file-source" style="display: none;" id="input_server_file">
+                    <button type="button" id="browseServerFilesButton" class="btn btn-primary">Przeglądaj zasoby serwera</button>
+                    {{-- Ensure your server upload modal component is correctly included here --}}
+                    @include('components.file-form-component.serwer-upload-modal')
                 </div>
+
 
 
 

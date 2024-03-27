@@ -45,8 +45,8 @@ Route::middleware('admin')->group(function () {
 
         Route::patch('/menu-items/{menuItem}', [MenuController::class, 'update'])->name('menu-items.update');
         Route::post('/menu-items/update-order', [MenuItemController::class, 'updateOrder'])->name('menu-items.update-order');
-        Route::post('/update-tree-structure', [MenuItemController::class, 'updateTreeStructure'])->name('menu.update-tree-structure');
         Route::post('/menu-items/update-type', [MenuItemController::class, 'updateType'])->name('menu-items.update-type');
+        Route::post('/update-tree-structure', [MenuItemController::class, 'updateTreeStructure'])->name('menu.update-tree-structure');
         Route::get('/menu-items/{id}/has-sub-items', [MenuItemController::class, 'hasSubItems'])->name('menu-items.has-sub-items');
         Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
 
@@ -54,8 +54,11 @@ Route::middleware('admin')->group(function () {
         Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
         Route::post('/files/store', [FileController::class, 'store'])->name('files.store');
         Route::get('/file/edit/{file}', [FileController::class, 'edit'])->name('file.edit');
-        Route::patch('/files/{file}', [FileController::class, 'update'])->name('file.update');
-        Route::get('/files/delete/{id}', 'FileController@deleteFile')->name('files.delete');
+        Route::patch('/files/{file}', [FileController:: class, 'update'])->name('file.update');
+        Route::get('/files/delete/{id}', [FileController::class, 'delete'])->name('files.delete');
+        Route::get('/files/download/{file}', [FileController::class, 'download'])->name('files.download');
+        Route::get('/files/directory-structure', [FileController::class, 'getDirectoryStructure']);
+
     });
 });
 
