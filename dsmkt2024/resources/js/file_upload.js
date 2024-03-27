@@ -34,7 +34,6 @@ $(document).ready(function() {
                 console.error(response);
             });
             this.on("sending", function(file, xhr, formData) {
-                // Append additional form data on file send
                 formData.append("menu_id", $("#menu_id").val());
                 formData.append("name", $("#file_name").val());
                 formData.append("visible_from", $("#visible_from").val());
@@ -42,13 +41,11 @@ $(document).ready(function() {
                 formData.append("key_words", $("#key_words").val());
                 formData.append("auto_id", $("#auto_id").val());
                 formData.append("file_source", $("#file_source").val());
-                // formData.append("file_location", $("input[name='file_location']:checked").val());
 
                 if ($("#file_source").val() === "file_external") {
                     formData.append("file_url", $("#input_file_external input").val());
                 }
 
-                // Only for server file
                 if ($("#file_source").val() === "file_server") {
                     formData.append("server_file", $("#input_server_file select").val());
                 }
@@ -58,13 +55,60 @@ $(document).ready(function() {
 
     var myDropzone = new Dropzone("#dropzoneFileUpload", dropzoneOptions);
 
+
+    var modal = document.getElementById('serverFilesModal');
+
+    $('#browseServerFilesButton').click(function() {
+        $.ajax({
+            url: '/menu/files/directory-structure',
+            type: 'GET',
+            success: function(structure) {
+                var list = $('#serverFileList');
+                list.empty();
+
+                Object.keys(structure).forEach(function(directory) {
+                    var dirItem = $('<li>').text(directory);
+                    var fileList = $('<ul>');
+                    structure[directory].forEach(function(file) {
+                        var filePath = file.path;
+                        var fileLink = $('<a href="#">').text(file.name).click(function(e) {
+                            e.preventDefault();
+                            populateFileField(filePath);
+                        });
+                        fileList.append($('<li>').append(fileLink));
+                    });
+                    dirItem.append(fileList);
+                    list.append(dirItem);
+                });
+
+                $('#serverFilesModal').show();
+            },
+            error: function(error) {
+                console.error("Error fetching directory structure: ", error);
+                alert('Could not fetch directory structure. Please try again later.');
+            }
+        });
+    });
+
+
+    var closeButton = document.getElementsByClassName("close-button")[0];
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
     function toggleFileSource(source) {
         // Hide all inputs initially
         $('#input_file_pc').hide();
         $('#input_file_external').hide();
         $('#input_server_file').hide();
 
-        // Show the selected input
+
         if (source === 'file_pc') {
             $('#input_file_pc').show();
         } else if (source === 'file_external') {
@@ -83,14 +127,14 @@ $(document).ready(function() {
 
 
     $('form').on('submit', function(e) {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
 
         var formData = new FormData(this);
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]);
         }
-        var formAction = $(this).attr('action'); // URL to which the request is sent
-        var formMethod = $(this).attr('method'); // GET or POST
+        var formAction = $(this).attr('action');
+        var formMethod = $(this).attr('method');
 
         if (myDropzone.getQueuedFiles().length > 0) {
             myDropzone.on("queuecomplete", function() {

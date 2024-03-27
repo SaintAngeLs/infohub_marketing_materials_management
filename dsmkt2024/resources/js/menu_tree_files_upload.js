@@ -90,7 +90,7 @@ $(document).ready(function() {
 
     $(document).on('click', '.file-link', function(e) {
         e.preventDefault();
-        var fileId = $(this).data('file-id'); 
+        var fileId = $(this).data('file-id');
         if (fileId) {
             window.location.href = `/menu/file/edit/${fileId}`;
         }
@@ -103,5 +103,27 @@ $(document).ready(function() {
     });
 
 
+    $('#browseServerFilesButton').click(function() {
+        $.ajax({
+            url: '/menu/files/directory-structure',
+            type: 'GET',
+            success: function(data) {
+                var list = $('#serverFileList');
+                list.empty(); // Clear existing items
+                data.forEach(function(file) {
+                    list.append('<li>' + file.name + ' (' + file.path + ')</li>');
+                });
+                modal.style.display = "block"; // Show the modal after populating it
+            },
+            error: function(error) {
+                console.error("Error fetching directory structure: ", error);
+                alert('Could not fetch directory structure. Please try again later.');
+            }
+        });
+    });
+
 });
+
+
+
 

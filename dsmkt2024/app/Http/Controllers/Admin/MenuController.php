@@ -146,18 +146,26 @@ class MenuController extends Controller
 
             // Fetch files related to this menu item
             $files = $item->files;
-            $fileLinks = '';
+            $fileDetails = '';
             foreach ($files as $file) {
-                // Assuming $file->id gives you the unique identifier for the file
-                $fileLinks .= "<li><a href='#' class='file-link' data-file-id='{$file->id}'>{$file->name}</a></li>";
-            }
-            if (!empty($fileLinks)) {
-                $fileLinks = "<ul>$fileLinks</ul>";
-            } else {
-                $fileLinks = "Brak plików";
-            }
+                    $status = $file->status ? 'Wł' : 'Wył'; // Assuming 1 is 'On' and 0 is 'Off'
+                    $lastUpdate = $file->updated_at ? $file->updated_at->format('d.m.Y H:i:s') : 'N/A';
+                    $start = $file->start ? $file->start->format('d.m.Y') : '-';
+                    $end = $file->end ? $file->end->format('d.m.Y') : '-';
+                    $visibility = "$start - $end";
+                    $fileDetails .= <<<HTML
 
-            // Including files in node content
+                        <span>$status</span>
+                        <span><a href='#' class='file-link' data-file-id='{$file->id}'>{$file->name}</a></span>
+                        <span>$visibility</span>
+                        <span>$lastUpdate</span>
+                        <span>
+                            <button onclick="downloadFile({$file->id})" class="btn btn-sm download-file-btn" data-file-id="{$file->id}">pobierz</button>
+                            <button onclick="deleteFile({$file->id})" class="btn btn-sm delete-file-btn" data-file-id="{$file->id}">usuń</button>
+
+                        </span>
+                HTML;
+            }
             $nodeContent = <<<HTML
                 <div class="js-tree-files-node-info">
                     <div class='js-tree-node-content' data-node-id="{$item->id}">
@@ -168,8 +176,10 @@ class MenuController extends Controller
                         <button onclick="openFileUploadPage({$item->id})" class="btn btn-sm upload-file-btn">Upload File</button>
                     </div>
 
-                    <div class='js-tree-node-files' data-node-id="{$item->id}">
-                        <span class='node-files'>$fileLinks</span>
+                    <div class='files-data'>
+                        <div class='js-tree-node-files' data-node-id="{$item->id}">
+                            $fileDetails
+                        </div>
                     </div>
                 </div>
             HTML;
