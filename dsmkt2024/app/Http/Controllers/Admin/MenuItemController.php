@@ -159,13 +159,6 @@ class MenuItemController extends Controller
         }
     }
 
-
-
-
-
-
-
-
     public function hasSubItems($id)
     {
         $menuItem = MenuItem::with('children')->find($id);

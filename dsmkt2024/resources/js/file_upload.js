@@ -47,4 +47,28 @@ $(document).ready(function() {
     };
 
     var myDropzone = new Dropzone("#dropzoneFileUpload", dropzoneOptions);
+
+    function toggleFileSource(source) {
+        // Hide all inputs initially
+        $('#file_pc').hide();
+        $('#file_external').hide();
+        $('#file_server').hide();
+
+        // Show the selected input
+        if (source === 'pc') {
+            $('#file_pc').show();
+        } else if (source === 'external') {
+            $('#file_external').show();
+        } else if (source === 'server') {
+            $('#file_server').show();
+        }
+    }
+
+    // Set up event listener for file source selection change
+    $('#file_source').change(function() {
+        toggleFileSource($(this).val());
+    });
+
+    // Call the function on page load to set the correct initial state
+    toggleFileSource($('#file_source').val());
 });

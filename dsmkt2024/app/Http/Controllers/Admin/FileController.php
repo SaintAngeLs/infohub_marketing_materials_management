@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Auto;
 use App\Models\File;
 use App\Models\MenuItems\MenuItem;
+use App\Strategies\FileUpload\UploadFromPCStrategy;
+use App\Strategies\FileUpload\UploadFromUrlStrategy;
+use App\Strategies\FileUpload\UseServerFileStrategy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -83,23 +86,22 @@ class FileController extends Controller
 
     private function handleFileUpload(Request $request, File &$file, $validated)
     {
-        if ($request->hasFile('file')) {
-            if (!empty($file->path) && Storage::disk('public')->exists($file->getRawOriginal('path')) && $file->name != $validated['name']) {
-                Storage::disk('public')->delete($file->getRawOriginal('path'));
-            }
+        $strategy = null;
 
-            $uploadedFile = $request->file('file');
+        switch ($validated['file_source']) {
+            case 'pc':
+                $strategy = new UploadFromPCStrategy();
+                break;
+            case 'external':
+                $strategy = new UploadFromUrlStrategy();
+                break;
+            case 'server':
+                $strategy = new UseServerFileStrategy();
+                break;
+        }
 
-            $filename = $validated['name'] . '.' . $uploadedFile->getClientOriginalExtension();
-
-            $directory = 'menu_files/' . $validated['menu_id'];
-
-            $filePath = $uploadedFile->storeAs($directory, $filename, 'public');
-
-            Log::debug($filePath);
-            Log::debug($directory );
-
-            $file->path = $filePath;
+        if ($strategy) {
+            $strategy->upload($request, $file, $validated);
         }
     }
 

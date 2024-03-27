@@ -34,20 +34,30 @@
                 </div>
 
                 {{-- File Location --}}
+                {{-- File Source Selection --}}
                 <div class="mb-3">
-                    <label class="form-label">Lokalizacja Pliku*</label>
-                    <div>
-                        <input type="radio" name="file_location" value="disk" id="location_disk" checked>
-                        <label for="location_disk">import pliku z dysku</label>
-                    </div>
-                    <div>
-                        <input type="radio" name="file_location" value="external" id="location_external">
-                        <label for="location_external">plik z zewnętrznego serwera</label>
-                    </div>
-                    <div>
-                        <input type="radio" name="file_location" value="server" id="location_server">
-                        <label for="location_server">wskaż plik uprzednio wgrany na serwer</label>
-                    </div>
+                    <label class="form-label">Lokalizacja pliku:</label>
+                    <select name="file_source" id="file_source" class="form-select" onchange="toggleFileSource(this.value)">
+                        <option value="pc">import pliku z dysku</option>
+                        <option value="external">plik z zewnętrznego serwera</option>
+                        <option value="server">wskaż plik uprzednio wgrany na serwer</option>
+                    </select>
+                </div>
+
+                {{-- Inputs for each file source --}}
+                <div id="file_pc" class="file-source">
+                    <input type="file" name="file" />
+                </div>
+                <div id="file_external" class="file-source" style="display: none;">
+                    <input type="text" name="file_url" placeholder="URL pliku" />
+                </div>
+                <div id="file_server" class="file-source" style="display: none;">
+                    <select name="server_file" class="form-select">
+                        <option value="">Wybierz plik</option>
+                        @foreach($serverFiles as $serverFile)
+                        <option value="{{ $serverFile }}">{{ basename($serverFile) }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 {{-- File Upload Dropzone Area --}}
