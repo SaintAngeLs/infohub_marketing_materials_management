@@ -41,7 +41,17 @@ $(document).ready(function() {
                 formData.append("visible_to", $("#visible_to").val());
                 formData.append("tags", $("#tags").val());
                 formData.append("auto_id", $("#auto_id").val());
-                formData.append("file_location", $("input[name='file_location']:checked").val());
+                formData.append("file_source", $("#file_source").val());
+                // formData.append("file_location", $("input[name='file_location']:checked").val());
+
+                if ($("#file_source").val() === "file_external") {
+                    formData.append("file_url", $("#input_file_external input").val());
+                }
+
+                // Only for server file
+                if ($("#file_source").val() === "file_server") {
+                    formData.append("server_file", $("#input_server_file select").val());
+                }
             });
         }
     };
@@ -50,25 +60,74 @@ $(document).ready(function() {
 
     function toggleFileSource(source) {
         // Hide all inputs initially
-        $('#file_pc').hide();
-        $('#file_external').hide();
-        $('#file_server').hide();
+        $('#input_file_pc').hide();
+        $('#input_file_external').hide();
+        $('#input_server_file').hide();
 
         // Show the selected input
-        if (source === 'pc') {
-            $('#file_pc').show();
-        } else if (source === 'external') {
-            $('#file_external').show();
-        } else if (source === 'server') {
-            $('#file_server').show();
+        if (source === 'file_pc') {
+            $('#input_file_pc').show();
+        } else if (source === 'file_external') {
+            $('#input_file_external').show();
+        } else if (source === 'file_server') {
+            $('#input_server_file').show();
         }
     }
 
-    // Set up event listener for file source selection change
     $('#file_source').change(function() {
         toggleFileSource($(this).val());
     });
 
-    // Call the function on page load to set the correct initial state
     toggleFileSource($('#file_source').val());
+
+
+
+    $('form').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        var formData = new FormData(this);
+        for (var pair of formData.entries()) {
+            console.log(pair[0]+ ', ' + pair[1]);
+        }
+        var formAction = $(this).attr('action'); // URL to which the request is sent
+        var formMethod = $(this).attr('method'); // GET or POST
+
+        myDropzone.files.forEach(function(file, index) {
+            formData.append('file[' + index + ']', file, file.name);
+        });
+
+
+        // Since Dropzone handles file uploads asynchronously,
+        // make sure all files are uploaded before submitting the form data
+        if (myDropzone.getQueuedFiles().length > 0) {
+            myDropzone.on("queuecomplete", function() {
+                // After all files are uploaded then send form data
+                submitFormData(formData, formAction, formMethod);
+            });
+            myDropzone.processQueue(); // Start the upload of files in Dropzone's queue
+        } else {
+            // If there are no files in Dropzone's queue, just submit the form data
+            submitFormData(formData, formAction, formMethod);
+        }
+    });
+
+    function submitFormData(formData, url, method) {
+        $.ajax({
+            url: url,
+            type: method,
+            data: formData,
+            processData: false,
+            contentType: false, 
+            success: function(response) {
+
+                console.log('Success:', response);
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+
+                console.error('Error:', textStatus, errorThrown);
+
+            }
+        });
+    }
 });
