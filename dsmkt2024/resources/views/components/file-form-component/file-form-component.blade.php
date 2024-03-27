@@ -8,7 +8,7 @@
 
 
 <div class="file-upload-component">
-    <h2 class="text-xl font-semibold mb-4">{{ $isEdit ? 'Edytuj Plik' : 'Pliki / Nowy Plik' }}</h2>
+    {{-- <h2 class="text-xl font-semibold mb-4">{{ $isEdit ? 'Edytuj Plik' : 'Pliki / Nowy Plik' }}</h2> --}}
 
     <form action="{{ $formAction }}" method="post" enctype="multipart/form-data">
         @csrf
@@ -37,21 +37,27 @@
                 {{-- File Source Selection --}}
                 <div class="mb-3">
                     <label class="form-label">Lokalizacja pliku:</label>
-                    <select name="file_source" id="file_source" class="form-select" onchange="toggleFileSource(this.value)">
-                        <option value="pc">import pliku z dysku</option>
-                        <option value="external">plik z zewnętrznego serwera</option>
-                        <option value="server">wskaż plik uprzednio wgrany na serwer</option>
+                    <select name="file_source" id="file_source" class="form-select">
+                        <option value="file_pc">import pliku z dysku</option>
+                        <option value="file_external">plik z zewnętrznego serwera</option>
+                        <option value="file_server">wskaż plik uprzednio wgrany na serwer</option>
                     </select>
                 </div>
 
-                {{-- Inputs for each file source --}}
-                <div id="file_pc" class="file-source">
-                    <input type="file" name="file" />
+                  {{-- File Upload Dropzone Area --}}
+                <div class="mb-3" id="input_file_pc">
+                    <label for="dropzoneFileUpload" class="form-label">Plik*</label>
+                    <div id="dropzoneFileUpload" name="file" class="dropzone"></div>
                 </div>
-                <div id="file_external" class="file-source" style="display: none;">
+
+                {{-- Inputs for each file source --}}
+                {{-- <div  class="file-source">
+                    <input type="file" name="file_pc" />
+                </div> --}}
+                <div class="file-source" style="display: none;" id="input_file_external">
                     <input type="text" name="file_url" placeholder="URL pliku" />
                 </div>
-                <div id="file_server" class="file-source" style="display: none;">
+                <div class="file-source" style="display: none;"  id="input_server_file">
                     <select name="server_file" class="form-select">
                         <option value="">Wybierz plik</option>
                         @foreach($serverFiles as $serverFile)
@@ -60,11 +66,7 @@
                     </select>
                 </div>
 
-                {{-- File Upload Dropzone Area --}}
-                <div class="mb-3">
-                    <label for="dropzoneFileUpload" class="form-label">Plik*</label>
-                    <div id="dropzoneFileUpload" name="file" class="dropzone"></div>
-                </div>
+
 
             </div>
 

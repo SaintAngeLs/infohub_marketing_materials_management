@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auto;
 use App\Models\File;
 use App\Models\MenuItems\MenuItem;
+
 use App\Strategies\FileUpload\UploadFromPCStrategy;
 use App\Strategies\FileUpload\UploadFromUrlStrategy;
 use App\Strategies\FileUpload\UseServerFileStrategy;
@@ -19,8 +20,9 @@ class FileController extends Controller
     {
         $menuItemsToSelect = MenuItem::all();
         $autos = Auto::all();
+        $serverFiles = $this->getServerFiles();
 
-        return view('admin.files.create', compact('menuItemsToSelect', 'autos'));
+        return view('admin.files.create', compact('menuItemsToSelect', 'autos', 'serverFiles'));
     }
 
     public function edit($fileId)
@@ -28,8 +30,9 @@ class FileController extends Controller
         $file = File::findOrFail($fileId);
         $menuItemsToSelect = MenuItem::all();
         $autos = Auto::all();
+        $serverFiles = $this->getServerFiles();
 
-        return view('admin.files.edit', compact('file', 'menuItemsToSelect', 'autos'));
+        return view('admin.files.edit', compact('file', 'menuItemsToSelect', 'autos', 'serverFiles'));
     }
 
     public function store(Request $request)
@@ -73,6 +76,7 @@ class FileController extends Controller
             'end' => 'nullable|date',
             'key_words' => 'nullable|string',
             'auto_id' => 'nullable|exists:autos,id',
+            'file_source' => 'required|string',
         ];
 
         if ($isStore) {
@@ -84,26 +88,47 @@ class FileController extends Controller
         return $request->validate($rules);
     }
 
-    private function handleFileUpload(Request $request, File &$file, $validated)
+    private function handleFileUpload(Request $request, File &$file, array $validated)
     {
+        // Determine the source of the file based on the 'file_source' value from the request.
+        $fileSource = $validated['file_source'];
+
+        // Log::error('The file source is:', $fileSource);
+        // Log::info('Validated request value:', $validated);
+        // Initialize strategy variable
         $strategy = null;
 
-        switch ($validated['file_source']) {
-            case 'pc':
-                $strategy = new UploadFromPCStrategy();
+        Log::info('Handle file input is:', $request->all());
+
+        // Determine which strategy to use based on the source
+        switch ($fileSource) {
+            case 'file_pc':
+
+                    $strategy = new UploadFromPCStrategy();
+
                 break;
-            case 'external':
-                $strategy = new UploadFromUrlStrategy();
+            case 'file_external':
+                // Set strategy for handling external URL uploads
+                if (!empty($validated['file_url'])) {
+                    $strategy = new UploadFromUrlStrategy();
+                }
                 break;
-            case 'server':
-                $strategy = new UseServerFileStrategy();
+            case 'server_file':
+                // Set strategy for using server files
+                if (!empty($validated['server_file'])) {
+                    $strategy = new UseServerFileStrategy();
+                }
                 break;
         }
 
-        if ($strategy) {
+        // Execute the strategy if set
+        if ($strategy !== null) {
             $strategy->upload($request, $file, $validated);
+        } else {
+            throw new \Exception("No valid file upload source provided.");
         }
     }
+
 
     public function deleteFile($id)
     {
@@ -127,5 +152,15 @@ class FileController extends Controller
         }
         $file->save();
         Log::info('File model updated:', $file->toArray());
+    }
+
+    private function getServerFiles()
+    {
+        $files = Storage::disk('public')->files('menu_files');
+        $serverFiles = array_map(function ($file) {
+            return basename($file);
+        }, $files);
+
+        return $serverFiles;
     }
 }
