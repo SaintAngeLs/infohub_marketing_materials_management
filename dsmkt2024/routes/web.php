@@ -50,6 +50,7 @@ Route::middleware('admin')->group(function () {
         Route::get('/menu-items/{id}/has-sub-items', [MenuItemController::class, 'hasSubItems'])->name('menu-items.has-sub-items');
         Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
 
+
         Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
         Route::post('/files/store', [FileController::class, 'store'])->name('files.store');
         Route::get('/file/edit/{file}', [FileController::class, 'edit'])->name('file.edit');

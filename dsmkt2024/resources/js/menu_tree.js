@@ -62,21 +62,21 @@ $(document).on('click', '.node-name', function(e) {
     window.location.href = '/menu/edit/' + nodeId;
 });
 
-// Toggle status on status details click
-$(document).on('click', '.node-details-status', function(e) {
-    e.stopPropagation();
-    var nodeId = $(this).closest('.jstree-node').attr('id');
+// // Toggle status on status details click
+// $(document).on('click', '.node-details-status', function(e) {
+//     e.stopPropagation();
+//     var nodeId = $(this).closest('.jstree-node').attr('id');
 
-    $.ajax({
-        url: '/menu/toggle-status/' + nodeId,
-        type: 'POST',
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        success: function(response) {
-            alert('Status updated successfully');
-            location.reload();
-        },
-        error: function(xhr) {
-            alert('Error updating status');
-        }
-    });
-});
+//     $.ajax({
+//         url: '/menu/toggle-status/' + nodeId,
+//         type: 'POST',
+//         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+//         success: function(response) {
+//             alert('Status updated successfully');
+//             location.reload();
+//         },
+//         error: function(xhr) {
+//             alert('Error updating status');
+//         }
+//     });
+// });
