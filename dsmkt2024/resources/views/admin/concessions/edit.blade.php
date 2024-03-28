@@ -5,10 +5,14 @@
             <div class="bg-white dark:bg-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-900">
                     <p class="content-tab-name">
-                        {{ __('Pliki / Dodaj nowy plik') }}
+                        {{ __('Koncesje / Dodaj nową koncesję') }}
                     <p class="content-tab-name">
 
-                    @include('components.file-form-component.file-form-component', ['menuItemsToSelect' => $menuItemsToSelect, 'selectedMenuItemId' => $selectedMenuItemId])
+                    <p  class="table-button">
+                        <a href="{{ route('menu.concessions.create') }}" class="btn">Dodaj nową koncesję</a>
+                    </p>
+
+
                 </div>
             </div>
         </div>

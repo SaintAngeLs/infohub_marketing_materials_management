@@ -235,7 +235,7 @@ class FileController extends Controller
             // Redirect to the external URL
             return redirect()->away($file->path);
         }
-        
+
         $filePath = storage_path('app/public/' . $file->path);
         Log::debug('File path', ['path' => $filePath]);
         Log::info('File path');
@@ -269,5 +269,23 @@ class FileController extends Controller
 
         return response()->json($secureStructure);
     }
+
+    public function toggleStatus($id)
+    {
+        Log::info('Attempting to toggle status for file: ' . $id);
+        $file = File::find($id);
+
+        if (!$file) {
+            Log::error('File not found with ID: ' . $id);
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+
+        $file->status = !$file->status;
+        $file->save();
+        Log::info('Toggled status for file: ' . $id . ' to ' . $file->status);
+
+        return response()->json(['success' => true, 'newStatus' => $file->status]);
+    }
+
 
 }

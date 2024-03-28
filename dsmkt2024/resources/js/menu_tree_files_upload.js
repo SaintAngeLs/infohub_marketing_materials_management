@@ -122,8 +122,41 @@ $(document).ready(function() {
         });
     });
 
+
 });
 
 
 
 
+
+$(document).on('click', '.toggle-file-status', function(e) {
+    e.preventDefault(); // Prevent default action
+    e.stopPropagation(); // Stop the event from bubbling up the DOM tree
+
+    console.log('Status toggle clicked'); // Confirm the click event is captured
+
+    var fileId = $(this).data('file-id'); // Get the file ID from the data attribute
+    var element = $(this); // Store the clicked element for later use
+
+    // AJAX request to toggle the status
+    $.ajax({
+        url: '/menu/file/toggle-status/' + fileId, // Make sure this URL matches your routing
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token for Laravel
+        },
+        success: function(response) {
+            if (response.success) {
+                var newStatusText = response.newStatus ? 'Wł' : 'Wył';
+                element.text(newStatusText); // Update the button text to the new status
+                console.log('Status updated successfully.');
+            } else {
+                alert('Failed to update status. Server responded with error.');
+            }
+        },
+        error: function(xhr) {
+            console.error('Error updating status:', xhr.responseText);
+            alert('Error updating status. Please check the console for more details.');
+        }
+    });
+});
