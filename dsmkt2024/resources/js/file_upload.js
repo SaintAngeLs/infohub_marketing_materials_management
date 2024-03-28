@@ -47,7 +47,7 @@ $(document).ready(function() {
                 }
 
                 if ($("#file_source").val() === "file_server") {
-                    formData.append("server_file", $("#input_server_file select").val());
+                    formData.append("server_file", $("#input_server_file input").val());
                 }
             });
         }
@@ -62,28 +62,25 @@ $(document).ready(function() {
         $.ajax({
             url: '/menu/files/directory-structure',
             type: 'GET',
-            success: function(structure) {
+            success: function(response) {
                 var list = $('#serverFileList');
                 list.empty();
 
-                if (Object.keys(structure).length === 0) {
-                    // No directories or files, display message
-                    list.append($('<li>').text("BRAK PLIKÓW DO WYŚWIETLENIA"));
-                } else {
-                    Object.keys(structure).forEach(function(directory) {
-                    var dirItem = $('<li>').text(directory);
-                    var fileList = $('<ul>');
-                    structure[directory].forEach(function(file) {
-                        var filePath = file.path;
+                console.log(response); // For debugging
+
+                // Assuming the structure is correct and using 'ftp_upload' as the key
+                if (response['ftp_upload'] && response['ftp_upload'].length > 0) {
+                    response['ftp_upload'].forEach(function(file) {
                         var fileLink = $('<a href="#">').text(file.name).click(function(e) {
                             e.preventDefault();
-                            populateFileField(filePath);
+                            populateFileField(file.id, file.name);
                         });
-                        fileList.append($('<li>').append(fileLink));
+                        var listItem = $('<li>').append(fileLink);
+                        list.append(listItem);
                     });
-                    dirItem.append(fileList);
-                    list.append(dirItem);
-                });}
+                } else {
+                    list.append($('<li>').text("No files available"));
+                }
 
                 $('#serverFilesModal').show();
             },
@@ -94,16 +91,18 @@ $(document).ready(function() {
         });
     });
 
-    function populateFileField(filePath) {
-        var fileName = filePath.split('/').pop();
-        $('#server_file_input').val(filePath);
 
+    function populateFileField(fileId, fileName) {
+        // Use fileId for internal logic or submission to the server
+        $('#server_file_input').val(fileId);
+
+        // Display the file name to the user
         $('#selectedFileName').val(fileName);
 
-        $('#file_name').val(fileName);
-
+        // Hide the modal after the file is selected
         $('#serverFilesModal').hide();
     }
+
 
 
 
@@ -173,7 +172,7 @@ $(document).ready(function() {
             success: function(response) {
 
                 console.log('Success:', response);
-                window.location.href = "/menu/files";
+                // window.location.href = "/menu/files";
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error:', textStatus, errorThrown);

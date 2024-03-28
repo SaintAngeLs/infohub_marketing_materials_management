@@ -8,7 +8,7 @@
                         {{ __('Pliki / Dodaj nowy plik') }}
                     <p class="content-tab-name">
 
-                    @include('components.file-form-component.file-form-component', ['menuItemsToSelect' => $menuItemsToSelect, 'serverFiles' => $serverFiles])
+                        @include('components.file-form-component.file-form-component', ['menuItemsToSelect' => $menuItemsToSelect, 'selectedMenuItemId' => $selectedMenuItemId])
                 </div>
             </div>
         </div>
