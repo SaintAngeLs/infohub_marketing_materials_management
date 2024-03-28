@@ -8,11 +8,7 @@
                         {{ __('Koncesje / Dodaj nową koncesję') }}
                     <p class="content-tab-name">
 
-                    <p  class="table-button">
-                        <a href="{{ route('menu.files.create') }}" class="btn">Dodaj nową koncesję</a>
-                    </p>
-
-
+                    @include('components.concessions-component.concessions-component')
                 </div>
             </div>
         </div>

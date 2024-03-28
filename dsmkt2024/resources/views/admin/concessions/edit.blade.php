@@ -12,7 +12,7 @@
                         <a href="{{ route('menu.concessions.create') }}" class="btn">Dodaj nową koncesję</a>
                     </p>
 
-
+                    @include('components.concessions-component.concessions-component')
                 </div>
             </div>
         </div>

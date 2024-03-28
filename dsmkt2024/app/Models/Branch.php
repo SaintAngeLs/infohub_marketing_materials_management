@@ -12,7 +12,7 @@ class Branch extends Model
         'code',
         'city',
         'phone',
-        'fax'
+        'email'
     ];
     public function users()
     {

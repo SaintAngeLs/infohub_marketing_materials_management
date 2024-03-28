@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('code', 10)->nullable();
             $table->string('city', 100)->nullable();
             $table->string('phone', 12)->nullable();
-            $table->string('fax', 12)->nullable();
-            $table->timestamp('fingerprint')->useCurrent();
+            $table->string('email', 255)->nullable();
+            $table->timestamps();
+            // $table->timestamp('fingerprint')->useCurrent();
         });
     }
 
