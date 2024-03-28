@@ -67,18 +67,18 @@ Route::middleware('admin')->group(function () {
         Route::post('/concessions/store', [ConcessionsController::class, 'store'])->name('concessions.store');
         Route::patch('/concessions/update/{concession}', [ConcessionsController::class, 'update'])->name('concessions.update');
 
-        Route::get('/usergoups', [UserGroupsController::class, 'index'])->name('groups');
 
-        Route::get('/applications', [UserGroupsController::class, 'index'])->name('applications');
+        Route::prefix('users')->name('users.')->middleware(['auth', 'verified'])->group(function () {
+            Route::get('/usergroups', [UsersController::class, 'index'])->name('groups');
+            Route::get('/applications', [UsersController::class, 'index'])->name('applications');
+            Route::get('/create', [UsersController::class, 'create'])->name('create');
+            Route::post('/store', [UsersController::class, 'store'])->name('store');
+        });
 
     });
 
 
 
-    Route::prefix('users')->name('users.')->middleware(['auth', 'verified'])->group(function () {
-        Route::get('/usergoups', [UserGroupsController::class, 'index'])->name('groups');
-        Route::get('/applications', [UserGroupsController::class, 'index'])->name('applications');
-    });
 
 });
 

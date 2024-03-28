@@ -1,8 +1,8 @@
 <h2><a href="{{ route('menu.concessions') }}">Koncesje</a></h2>
 <h2><a href="{{ route('menu.users') }}">Użytkownicy</a></h2>
 <ul>
-    <li><a href="{{ route('menu.groups')}}">grupy</a></li>
-    <li><a href="{{ route('menu.applications')}}">zgłoszenia</a></li>
+    <li><a href="{{ route('menu.users.groups')}}">grupy</a></li>
+    <li><a href="{{ route('menu.users.applications')}}">zgłoszenia</a></li>
 </ul>
 <h2><a href="{{ route('menu') }}">Struktura menu</a></h2>
 <h2><a href="{{ route('menu.autos') }}">Samochody</a></h2>
