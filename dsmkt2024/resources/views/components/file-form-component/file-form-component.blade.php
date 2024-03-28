@@ -18,13 +18,31 @@
             <div class="col">
                 {{-- Menu Item Selection --}}
                 <div class="mb-3">
-                    <label for="menu_id" class="form-label">Zakładka</label>
+                    {{-- <label for="menu_id" class="form-label">Zakładka</label>
                     <select id="menu_id" name="menu_id" class="form-select">
                         <option value="">Wybierz zakładkę</option>
                         @foreach($menuItemsToSelect as $menuItem)
                             <option value="{{ $menuItem->id }}" {{ $isEdit && $file->menu_id == $menuItem->id ? 'selected' : '' }}>{{ $menuItem->name }}</option>
                         @endforeach
-                    </select>
+                    </select> --}}
+
+                    @if(isset($selectedMenuItemId))
+                        @php
+                            $selectedMenuItem = $menuItemsToSelect->firstWhere('id', $selectedMenuItemId);
+                        @endphp
+                        <label for="menu_id" class="form-label">Zakładka</label>
+                        <input type="hidden" name="menu_id" value="{{ $selectedMenuItemId }}">
+                        <p class="form-control-plaintext">{{ $selectedMenuItem->name ?? 'Menu Item Not Found' }}</p>
+                    @else
+                        <label for="menu_id" class="form-label">Zakładka</label>
+                        <select id="menu_id" name="menu_id" class="form-select">
+                            <option value="">Wybierz zakładkę</option>
+                            @foreach($menuItemsToSelect as $menuItem)
+                                <option value="{{ $menuItem->id }}">{{ $menuItem->name }}</option>
+                            @endforeach
+                        </select>
+                    @endif
+
                 </div>
 
                 {{-- File Name --}}

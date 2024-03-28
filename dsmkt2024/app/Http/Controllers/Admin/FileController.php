@@ -21,8 +21,9 @@ class FileController extends Controller
         $menuItemsToSelect = MenuItem::all();
         $autos = Auto::all();
         $serverFiles = $this->getServerFiles();
+        $selectedMenuItemId = $request->query('menu_item_id');
 
-        return view('admin.files.create', compact('menuItemsToSelect', 'autos', 'serverFiles'));
+        return view('admin.files.create', compact('menuItemsToSelect', 'autos', 'serverFiles', 'selectedMenuItemId'));
     }
 
     public function edit($fileId)
@@ -31,8 +32,9 @@ class FileController extends Controller
         $menuItemsToSelect = MenuItem::all();
         $autos = Auto::all();
         $serverFiles = $this->getServerFiles();
+        $selectedMenuItemId = $file->menu_id;
 
-        return view('admin.files.edit', compact('file', 'menuItemsToSelect', 'autos', 'serverFiles'));
+        return view('admin.files.edit', compact('file', 'menuItemsToSelect', 'autos', 'serverFiles', 'selectedMenuItemId'));
     }
 
     public function store(Request $request)
@@ -114,6 +116,10 @@ class FileController extends Controller
         // Strategy initialization
         $strategy = null;
 
+        Log::info('Validated data:', $validated);
+        Log::info('File source:', ['source' => $fileSource]);
+
+
         switch ($fileSource) {
             case 'file_pc':
                 if ($request->hasFile('file')) {
@@ -125,13 +131,14 @@ class FileController extends Controller
                     $strategy = new UploadFromUrlStrategy();
                 }
                 break;
-            case 'server_file':
+            case 'file_server':
                 if (!empty($validated['server_file'])) {
                     $strategy = new UseServerFileStrategy();
+                    Log::info("The stategor for the server file");
                 }
                 break;
         }
-
+        // Log::debug("Selected strategy: " . get_class($strategy));
         if ($strategy !== null) {
             $strategy->upload($request, $file, $validated);
             if ($request->hasFile('file')) {
@@ -197,11 +204,15 @@ class FileController extends Controller
 
     private function updateFileModel(File &$file, $validated)
     {
-        foreach ($validated as $key => $value) {
-            if ($key !== 'file') {
-                $file->$key = $value ?? null;
-            }
-        }
+        Log::info('UpdatefileModel function', $file->toArray());
+        // foreach ($validated as $key => $value) {
+        //     if ($key !== 'file') {
+        //         Log::info('unpatedeFileModel fail: the file is not present');
+        //         $file->$key = $value ?? null;
+        //     }
+        // }
+
+        $this->updateFileAttributes($file, $validated);
         $file->save();
         Log::info('File model updated:', $file->toArray());
     }
@@ -219,6 +230,12 @@ class FileController extends Controller
     public function download($fileId)
     {
         $file = File::findOrFail($fileId);
+
+        if ($file->file_source == 'file_external') {
+            // Redirect to the external URL
+            return redirect()->away($file->path);
+        }
+        
         $filePath = storage_path('app/public/' . $file->path);
         Log::debug('File path', ['path' => $filePath]);
         Log::info('File path');
@@ -231,36 +248,26 @@ class FileController extends Controller
         ]);
     }
 
-    public function getDirectoryStructure()
-    {
-        $directory = storage_path('app/public/ftp_upload');
-        $directories = \File::directories($directory);
+    public function getDirectoryStructure() {
+        $specificFolderPath = storage_path('app/public/ftp_upload');
+        $secureStructure = [];
 
-        $structure = [];
-
-        // Get files in the root of the directory
-        $files = \File::files($directory);
-        foreach ($files as $file) {
-            $structure['/'][] = [
-                'path' => $file->getRelativePathname(),
-                'name' => basename($file)
-            ];
-        }
-
-
-        foreach ($directories as $dir) {
-            $files = \File::allFiles($dir);
+        if (\File::isDirectory($specificFolderPath)) {
+            $files = \File::files($specificFolderPath);
             foreach ($files as $file) {
-                $dirName = basename($dir);
-                $structure[$dirName][] = [
-                    'path' => $file->getRelativePathname(),
-                    'name' => basename($file)
+                $fileName = $file->getFilename();
+                // Ensure this matches exactly with how you're generating the path in fetchDynamicPathMap
+                $relativeFilePath = 'ftp_upload/' . $fileName; // Adjusted to match fetchDynamicPathMap logic
+                $fileId = md5($relativeFilePath);
+
+                $secureStructure['ftp_upload'][] = [
+                    'id' => $fileId,
+                    'name' => $fileName,
                 ];
             }
         }
 
-        return response()->json($structure);
+        return response()->json($secureStructure);
     }
-
 
 }
