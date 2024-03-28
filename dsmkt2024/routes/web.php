@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\ReportsController;
+use App\Http\Controllers\Admin\UserGroupsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
@@ -66,7 +67,19 @@ Route::middleware('admin')->group(function () {
         Route::post('/concessions/store', [ConcessionsController::class, 'store'])->name('concessions.store');
         Route::patch('/concessions/update/{concession}', [ConcessionsController::class, 'update'])->name('concessions.update');
 
+        Route::get('/usergoups', [UserGroupsController::class, 'index'])->name('groups');
+
+        Route::get('/applications', [UserGroupsController::class, 'index'])->name('applications');
+
     });
+
+
+
+    Route::prefix('users')->name('users.')->middleware(['auth', 'verified'])->group(function () {
+        Route::get('/usergoups', [UserGroupsController::class, 'index'])->name('groups');
+        Route::get('/applications', [UserGroupsController::class, 'index'])->name('applications');
+    });
+
 });
 
 
