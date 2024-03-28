@@ -62,6 +62,10 @@ Route::middleware('admin')->group(function () {
 
         Route::get('/concessions', [ConcessionsController::class, 'index'])->name('concessions');
         Route::get('/concessions/create', [ConcessionsController::class, 'create'])->name('concessions.create');
+        Route::get('/concessions/edit/{id}', [ConcessionsController::class, 'edit'])->name('concessions.edit');
+        Route::post('/concessions/store', [ConcessionsController::class, 'store'])->name('concessions.store');
+        Route::patch('/concessions/update/{concession}', [ConcessionsController::class, 'update'])->name('concessions.update');
+
     });
 });
 
