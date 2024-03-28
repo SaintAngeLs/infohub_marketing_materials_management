@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AutosController;
-use App\Http\Controllers\Admin\ConsentionController;
+use App\Http\Controllers\Admin\ConcessionsController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
@@ -23,7 +23,7 @@ Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 
 Route::middleware('admin')->group(function () {
     Route::prefix('menu')->name('menu.')->middleware(['auth', 'verified'])->group(function () {
-        Route::get('/concessions', [ConsentionController::class, 'index'])->name('concessions');
+
         Route::get('/users', [UsersController::class, 'index'])->name('users');
         Route::get('/structure', [MenuController::class, 'index'])->name('structure');
         Route::get('/autos', [AutosController::class, 'index'])->name('autos');
@@ -58,7 +58,10 @@ Route::middleware('admin')->group(function () {
         Route::get('/files/delete/{id}', [FileController::class, 'delete'])->name('files.delete');
         Route::get('/files/download/{file}', [FileController::class, 'download'])->name('files.download');
         Route::get('/files/directory-structure', [FileController::class, 'getDirectoryStructure']);
+        Route::post('/file/toggle-status/{id}', [FileController::class, 'toggleStatus'])->name('file.toggleStatus');
 
+        Route::get('/concessions', [ConcessionsController::class, 'index'])->name('concessions');
+        Route::get('/concessions/create', [ConcessionsController::class, 'create'])->name('concessions.create');
     });
 });
 

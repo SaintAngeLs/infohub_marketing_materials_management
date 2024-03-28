@@ -148,7 +148,8 @@ class MenuController extends Controller
             $files = $item->files;
             $fileDetails = '';
             foreach ($files as $file) {
-                    $status = $file->status ? 'Wł' : 'Wył'; // Assuming 1 is 'On' and 0 is 'Off'
+                    $status = $file->status ? "<span class='toggle-file-status' data-file-id='{$file->id}' style='cursor:pointer;'>Wł</span>"
+                                            : "<span class='toggle-file-status' data-file-id='{$file->id}' style='cursor:pointer;'>Wył</span>";
                     $lastUpdate = $file->updated_at ? $file->updated_at->format('d.m.Y H:i:s') : 'N/A';
                     $start = $file->start ? $file->start->format('d.m.Y') : '-';
                     $end = $file->end ? $file->end->format('d.m.Y') : '-';
