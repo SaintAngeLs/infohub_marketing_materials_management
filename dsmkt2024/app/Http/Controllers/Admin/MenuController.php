@@ -28,7 +28,6 @@ class MenuController extends Controller
     {
         $menuItemsToSelect = MenuItem::all()->except($menuItem->id);
         $users = User::all();
-        // Log::debug('An informational message.', [$users]);
         return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users'));
     }
 
@@ -46,6 +45,7 @@ class MenuController extends Controller
             'visibility_start' => 'nullable|date',
             'visibility_end' => 'nullable|date',
             'banner' => 'required|string',
+            'menu_permissions' => 'required|array',
         ]);
 
         $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
@@ -58,9 +58,16 @@ class MenuController extends Controller
             $menuItem->owners()->sync($validatedData['owners']);
         }
 
+        $this->updateMenuItemPermissions($menuItem, $request->input('menu_permissions', []));
+
         $this->updateTreeStructureAfterMenuUpdate($menuItem, $validatedData['parent_id']);
 
         return redirect()->route('menu.structure')->with('success', 'Menu item updated successfully.');
+    }
+
+    protected function updateMenuItemPermissions(MenuItem $menuItem, array $permissions)
+    {
+        $menuItem->users()->sync($permissions);
     }
 
     protected function updateTreeStructureAfterMenuUpdate(MenuItem $menuItem, $newParentId)
@@ -103,6 +110,13 @@ class MenuController extends Controller
         return response()->json($formattedMenuItems);
     }
 
+    public function getMenuItemWithPermissions()
+    {
+        $menuItems = MenuItem::get()->toTree();
+        $formattedMenuItems = $this->formatForJsTreePermissions($menuItems);
+        return response()->json($formattedMenuItems);
+    }
+
 
     protected function formatForJsTree($menuItems)
     {
@@ -124,15 +138,39 @@ class MenuController extends Controller
         HTML;
 
         $formattedItem = [
-            'id' => $item->id,
-            'text' => $nodeContent,
-            'children' => $item->children->isEmpty() ? [] : $this->formatForJsTree($item->children),
-                // Other jsTree node properties
+                'id' => $item->id,
+                'text' => $nodeContent,
+                'children' => $item->children->isEmpty() ? [] : $this->formatForJsTree($item->children),
             ];
             $formatted[] = $formattedItem;
         }
         return $formatted;
     }
+
+    public function formatForJsTreePermissions($menuItems)
+    {
+        $formatted = [];
+        foreach ($menuItems as $item) {
+            $checkboxHtml = "<input type='checkbox' class='menu-item-checkbox' name='menu_permissions[{$item->id}]' id='menu_permission_{$item->id}' value='{$item->id}' />";
+
+            $nodeContent = <<<HTML
+                <div class='js-tree-node-content' data-node-id="{$item->id}">
+                    <span class='node-name'>{$item->name}</span>
+                    <span class='node-checkbox'>$checkboxHtml</span>
+                </div>
+            HTML;
+
+            $formattedItem = [
+                'id' => $item->id,
+                'text' => $nodeContent,
+                'children' => $item->children->isEmpty() ? [] : $this->formatForJsTreePermissions($item->children),
+            ];
+
+            $formatted[] = $formattedItem;
+        }
+        return $formatted;
+    }
+
 
     protected function formatMenuItemsWithFilesForJsTree($menuItems)
     {
@@ -143,8 +181,6 @@ class MenuController extends Controller
             $visibilityTime = $item->start && $item->end
                             ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
                             : 'N/A';
-
-            // Fetch files related to this menu item
             $files = $item->files;
             $fileDetails = '';
             foreach ($files as $file) {

@@ -18,7 +18,6 @@
         @endif
     </div>
 
-     <!-- Surname Field -->
      <div class="form-group">
         <label for="surname">NAZWISKO*</label>
         <input type="text" name="surname" id="surname" value="{{ old('surname', $user->surname ?? '') }}" class="form-control {{ $errors->has('surname') ? 'is-invalid' : '' }}">
@@ -27,7 +26,6 @@
         @enderror
     </div>
 
-    <!-- Email Field -->
     <div class="form-group">
         <label for="email">LOGIN (ADRES EMAIL)*</label>
         <input type="email" name="email" id="email" value="{{ old('email', $user->email ?? '') }}" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" {{ $isEdit ? 'disabled' : '' }}>
@@ -36,7 +34,6 @@
         @enderror
     </div>
 
-    <!-- Phone Field -->
     <div class="form-group">
         <label for="phone">TELEFON*</label>
         <input type="text" name="phone" id="phone" value="{{ old('phone', $user->phone ?? '') }}" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}">
@@ -45,7 +42,6 @@
         @enderror
     </div>
 
-    <!-- User Group Field -->
     <div class="form-group">
         <label for="users_groups_id">GRUPA*</label>
         <select name="users_groups_id" id="users_groups_id" class="form-control {{ $errors->has('users_groups_id') ? 'is-invalid' : '' }}" required>
@@ -59,7 +55,6 @@
         @enderror
     </div>
 
-    <!-- Status Field -->
     <div class="form-group">
         <label for="status">STATUS UŻYTKOWNIKA*</label>
         <select name="status" id="status" class="form-control {{ $errors->has('status') ? 'is-invalid' : '' }}" required>
@@ -71,9 +66,7 @@
         @enderror
     </div>
 
-    <!-- Conditional Password Fields -->
     @if(!$isEdit)
-        <!-- Password Option Field -->
         <div class="form-group">
             <label for="password_option">Ustaw Hasło:</label>
             <select name="password_option" id="password_option" class="form-control" required onchange="togglePasswordFields(this)">
@@ -82,7 +75,6 @@
             </select>
         </div>
 
-        <!-- Password Fields -->
         <div id="password_fields" style="display: none;">
             <div class="form-group">
                 <label for="password">HASŁO*</label>

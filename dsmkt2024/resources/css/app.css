@@ -1554,33 +1554,33 @@ input[type="submit"].table-button-2{
     width: 55px;
 }
 /* Base styling for jsTree */
-#menu-tree {
+#menu-tree, #menu-tree-permissions {
     font-family: Arial, sans-serif;
     font-size: 14px;
 }
 
 /* Node styling */
-#menu-tree .jstree-node {
+#menu-tree .jstree-node , #menu-tree-permissions .jstree-node {
     border-bottom: 1px solid #e3e3e3;
     background-color: #fafafa;
     min-height: 60px;
 }
 
-#menu-tree .jstree-anchor {
+#menu-tree .jstree-anchor, #menu-tree-permissions .jstree-anchor {
     padding: 10px;
     display: flex;
     align-items: center;
     gap: 10px;
     height: 60px
 }
-#menu-tree .jstree-hovered {
+#menu-tree .jstree-hovered, #menu-tree-permissions .jstree-hovered {
     background-color: #f0f0f0;
 }
-#menu-tree .jstree-icon {
+#menu-tree .jstree-icon, #menu-tree-permissions .jstree-icon {
     display: none !important;
 }
 
-#menu-tree .jstree-clicked {
+#menu-tree .jstree-clicked, #menu-tree-permission .jstree-clicked {
     background-color: #e0e0e0;
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\MenuItems;
+use App\Models\UsersGroup;
 use Fureev\Trees\Config\Base;
 use Fureev\Trees\Contracts\TreeConfigurable;
 use Illuminate\Database\Eloquent\Model;
@@ -55,5 +56,15 @@ class MenuItem extends Model
     public function files()
     {
         return $this->hasMany(\App\Models\File::class, 'menu_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'menu_item_user', 'menu_item_id', 'user_id');
+    }
+
+    public function userGroups()
+    {
+        return $this->belongsToMany(UsersGroup::class, 'user_group_menu_item', 'menu_item_id', 'user_group_id');
     }
 }

@@ -57,7 +57,7 @@ class UseServerFileStrategy implements FileUploadStrategy
         $files = Storage::disk('public')->files('ftp_upload');
         $map = [];
         foreach ($files as $filePath) {
-            $relativePath = 'ftp_upload/' . basename($filePath); // Ensure the path structure matches getDirectoryStructure
+            $relativePath = 'ftp_upload/' . basename($filePath); 
             $hash = md5($relativePath);
             $map[$hash] = $relativePath;
         }

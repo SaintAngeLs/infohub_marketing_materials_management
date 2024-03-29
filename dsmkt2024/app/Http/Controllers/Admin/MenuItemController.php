@@ -40,18 +40,16 @@ class MenuItemController extends Controller
             'parent_id' => 'nullable'
         ]);
 
-        // If 'parent_id' is not provided or explicitly set to 'null', create a new root menu item
         if (empty($validated['parent_id']) || $validated['parent_id'] === 'NULL') {
             $menuItem = new MenuItem(['name' => $validated['name']]);
-            $menuItem->saveAsRoot();  // This ensures a new tree is started with this item as the root
+            $menuItem->saveAsRoot();
 
             session()->flash('success', 'New root menu item created successfully.');
         } else {
-            // If 'parent_id' is provided, attempt to find the parent and append this item as a child
             $parentItem = MenuItem::find($validated['parent_id']);
             if ($parentItem) {
                 $menuItem = new MenuItem($validated);
-                $menuItem->appendTo($parentItem)->save();  // Append this item to the found parent
+                $menuItem->appendTo($parentItem)->save();
 
                 session()->flash('success', 'New child menu item created successfully and appended to the parent.');
             } else {
@@ -129,11 +127,8 @@ class MenuItemController extends Controller
             DB::beginTransaction();
 
             if (is_null($newParentId) || $newParentId === "#") {
-                // There is a possible chagne for the unsave here --> need tom try
-                // catch to check it should be Root and it is not Root
                 Log::info('Makeing the new item as the the root.');
                 $menuItem->makeRoot();
-                // Direct intention to set the paren_id to NULL value
                 $menuItem->parent_id = null;
                 $menuItem->save();
             } else {
@@ -143,7 +138,6 @@ class MenuItemController extends Controller
                     return response()->json(['error' => 'New parent item not found'], 404);
                 }
 
-                // Move the item to its new parent and save
                 $menuItem->appendTo($newParent)->save();
             }
 

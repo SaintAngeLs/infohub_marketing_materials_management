@@ -12,14 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            // $table->id();
-            // $table->string('name');
-            // $table->string('email')->unique();
-            // $table->timestamp('email_verified_at')->nullable();
-            // $table->string('password');
-            // $table->rememberToken();
-            // $table->timestamps();
-            $table->id();
+                        $table->id();
             $table->foreignId('users_groups_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('branch_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name', 100)->nullable();

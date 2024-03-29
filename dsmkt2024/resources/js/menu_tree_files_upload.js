@@ -1,9 +1,4 @@
-// import 'jquery';
-// import $ from 'jquery';
-
-
 $(document).ready(function() {
-
     $('#menu-tree-files').jstree({
         'core': {
             'data': {
@@ -50,7 +45,6 @@ $(document).ready(function() {
         var selector = nodeId ? '#' + nodeId + ' > .jstree-children' : '#menu-tree .jstree-node';
         $(selector).each(function() {
             var depth = instance.get_node($(this).closest('.jstree-node')).parents.length;
-             // Base padding + 5px for each level
             var paddingLeft = 5 + depth * 3;
             $(this).css('padding-left', paddingLeft + 'px');
         });
@@ -69,7 +63,6 @@ $(document).ready(function() {
         window.location.href = '/menu/edit/' + nodeId;
     });
 
-    // Toggle status on status details click
     $(document).on('click', '.node-details-status', function(e) {
         e.stopPropagation();
         var nodeId = $(this).closest('.jstree-node').attr('id');
@@ -109,11 +102,11 @@ $(document).ready(function() {
             type: 'GET',
             success: function(data) {
                 var list = $('#serverFileList');
-                list.empty(); // Clear existing items
+                list.empty();
                 data.forEach(function(file) {
                     list.append('<li>' + file.name + ' (' + file.path + ')</li>');
                 });
-                modal.style.display = "block"; // Show the modal after populating it
+                modal.style.display = "block";
             },
             error: function(error) {
                 console.error("Error fetching directory structure: ", error);
@@ -121,34 +114,29 @@ $(document).ready(function() {
             }
         });
     });
-
-
 });
 
 
 
-
-
 $(document).on('click', '.toggle-file-status', function(e) {
-    e.preventDefault(); // Prevent default action
-    e.stopPropagation(); // Stop the event from bubbling up the DOM tree
+    e.preventDefault();
+    e.stopPropagation();
 
-    console.log('Status toggle clicked'); // Confirm the click event is captured
+    console.log('Status toggle clicked');
 
-    var fileId = $(this).data('file-id'); // Get the file ID from the data attribute
-    var element = $(this); // Store the clicked element for later use
+    var fileId = $(this).data('file-id');
+    var element = $(this);
 
-    // AJAX request to toggle the status
     $.ajax({
-        url: '/menu/file/toggle-status/' + fileId, // Make sure this URL matches your routing
+        url: '/menu/file/toggle-status/' + fileId,
         type: 'POST',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token for Laravel
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
             if (response.success) {
                 var newStatusText = response.newStatus ? 'Wł' : 'Wył';
-                element.text(newStatusText); // Update the button text to the new status
+                element.text(newStatusText);
                 console.log('Status updated successfully.');
             } else {
                 alert('Failed to update status. Server responded with error.');
