@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->timestamp('created_at')->nullable();
 
             // Nested Set columns
-            
+
             $table->unsignedInteger('lft')->nullable();
             $table->unsignedInteger('rgt')->nullable();
             $table->unsignedInteger('lvl')->nullable();

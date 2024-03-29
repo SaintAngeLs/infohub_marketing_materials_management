@@ -1,6 +1,3 @@
-{{-- Blade Template for Creating or Editing Menu Items --}}
-{{-- Assumes $menuItem exists and is not null when editing --}}
-
 @php
     $isEdit = isset($menuItem);
     $formAction = $isEdit ? route('menu.menu-items.update', $menuItem->id) : route('menu.menu-items.store');
@@ -13,7 +10,6 @@
         @method($formMethod)
     @endif
 
-    {{-- Type --}}
     <div class="row">
         <div class="col">
             <div>
@@ -24,13 +20,11 @@
                 </select>
             </div>
 
-            {{-- Name --}}
             <div>
                 <label for="name">Nazwa zakładki:</label>
                 <input type="text" id="name" name="name" value="{{ $isEdit ? $menuItem->name : '' }}" required>
             </div>
 
-            {{-- Parent ID --}}
             <div>
                 <label for="parent_id">Element nadrzędny:</label>
                 <select id="parent_id" name="parent_id">
@@ -41,7 +35,6 @@
                 </select>
             </div>
 
-            {{-- Owners --}}
             <div>
                 <label for="owners">Opiekuny/Administratorzy:</label>
                 <select id="owners" name="owners[]" multiple>
@@ -53,20 +46,17 @@
         </div>
 
         <div class="col">
-            {{-- Visibility Start --}}
             <div>
                 <label for="start">Zakładka widoczna od:</label>
                 <input type="date" id="start" name="start" value="{{ $isEdit && $menuItem->start ? $menuItem->start->format('Y-m-d') : '' }}">
             </div>
 
-            {{-- Visibility End --}}
             <div>
                 <label for="end">Zakładka widoczna do:</label>
                 <input type="date" id="end" name="end" value="{{ $isEdit && $menuItem->end ? $menuItem->end->format('Y-m-d') : '' }}">
             </div>
 
 
-            {{-- Banner --}}
             <div>
                 <label for="menu_banner">Przypisanie banera:</label>
                 <select id="menu_banner" name="banner">
@@ -74,9 +64,6 @@
                     <option value="dedicated_banner" @if($isEdit && $menuItem->banner == 'dedicated_banner') selected @endif>Baner dedykowany</option>
                 </select>
             </div>
-
-            {{-- Form Actions --}}
-
         </div>
 
     </div>

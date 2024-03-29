@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ConcessionsController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\UserGroupsController;
 use App\Http\Controllers\ProfileController;
@@ -68,19 +69,30 @@ Route::middleware('admin')->group(function () {
         Route::post('/concessions/store', [ConcessionsController::class, 'store'])->name('concessions.store');
         Route::patch('/concessions/update/{concession}', [ConcessionsController::class, 'update'])->name('concessions.update');
 
-
         Route::prefix('users')->name('users.')->middleware(['auth', 'verified'])->group(function () {
-            Route::get('/usergroups', [UsersController::class, 'index'])->name('groups');
+            Route::get('/usergroups', [UserGroupsController::class, 'index'])->name('groups');
+            Route::get('/usergroups/create', [UserGroupsController::class, 'create'])->name('group.create');
+            Route::patch('/usergroups/update', [UserGroupsController::class, 'update'])->name('group.update');
+            Route::post('/usergroups/store', [UserGroupsController::class, 'store'])->name('group.store');
+            Route::get('/usergroups/edit/{id}', [UserGroupsController::class, 'edit'])->name('group.edit');
+
             Route::get('/applications', [ApplicationsController::class, 'index'])->name('applications');
             Route::post('/applications/create', [ApplicationsController::class, 'create'])->name('applications.create');
+
             Route::get('/create', [UsersController::class, 'create'])->name('create');
+            Route::get('/edit/{user}', [UsersController::class, 'edit'])->name('edit');
+            Route::patch('/users/edit/{user}', [UsersController::class, 'update'])->name('update');
             Route::post('/store', [UsersController::class, 'store'])->name('store');
+
+            Route::get('/get-menu-items-permissions', [MenuController::class, 'getMenuItemWithPermissions']);
         });
 
+        Route::prefix('permissions')->name('permissions.')->middleware(['auth', 'verified'])->group(function () {
+            Route::get('/update-or-create-user-permission', [PermissionController::class, 'assignOrUpdateUserPermission'])->name('permission.user.assign');
+            Route::get('/update-or-create-group-permission', [PermissionController::class, 'assignOrUpdateGroupPermissions'])->name('permission.group.assign');
+            ROute::post('/update-group-permission', [PermissionController::class, 'updateGroupPermission'])->name('permission.updateGroup');
+        });
     });
-
-
-
 
 });
 

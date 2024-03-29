@@ -82,11 +82,6 @@
                     <input type="hidden" name="server_file" id="server_file_input" value="">
 
                 </div>
-
-
-
-
-
             </div>
 
             <div class="col">

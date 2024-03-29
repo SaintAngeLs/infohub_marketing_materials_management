@@ -12,13 +12,21 @@ class UsersController extends Controller
     public function index()
     {
         $userGroups = UsersGroup::all();
-        return view('admin.users.index', compact('userGroups'));
+        $users = User::all();
+        return view('admin.users.index', compact('userGroups', 'users'));
     }
 
     public function create()
     {
         $userGroups = UsersGroup::all();
         return view('admin.users.create', compact('userGroups'));
+    }
+
+    public function edit($userId)
+    {
+        $user = User::findOrFail($userId);
+        $userGroups = UsersGroup::all();
+        return view('admin.users.edit', compact('user', 'userGroups'));
     }
 
     public function store(Request $request)

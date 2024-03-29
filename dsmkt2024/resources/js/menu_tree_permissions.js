@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    $('#menu-tree').jstree({
+    $('#menu-tree-permissions').jstree({
         'core': {
             'data': {
-                'url': '/menu/get-menu-items',
+                'url': '/menu/users/get-menu-items-permissions',
                 'data': function(node) {
                     return { 'id': node.id };
                 }
@@ -21,7 +21,6 @@ $(document).ready(function() {
         var newParent = data.parent;
         var nodeId = data.node.id;
         var newPosition = data.position;
-
 
         var postData = {
             id: nodeId,
@@ -42,11 +41,38 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('change', '.menu-item-checkbox', function() {
+        var menuId = $(this).val();
+        var groupId = $('#group-id').val();
+        console.log(groupId);
+        var isChecked = $(this).is(':checked');
+
+
+        var action = isChecked ? 'assign' : 'remove';
+
+        $.ajax({
+            url: '/menu/permissions/update-group-permission',
+            method: 'POST',
+            data: {
+                menu_id: menuId,
+                group_id: groupId,
+                action: action,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                alert('Permissions updated successfully.');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating permissions:', error);
+            }
+        });
+    });
+
+
     function updateNodePadding(instance, nodeId) {
         var selector = nodeId ? '#' + nodeId + ' > .jstree-children' : '#menu-tree .jstree-node';
         $(selector).each(function() {
             var depth = instance.get_node($(this).closest('.jstree-node')).parents.length;
-             // Base padding + 5px for each level
             var paddingLeft = 5 + depth * 3;
             $(this).css('padding-left', paddingLeft + 'px');
         });
@@ -58,4 +84,3 @@ $(document).on('click', '.node-name', function(e) {
     var nodeId = $(this).closest('.jstree-node').attr('id');
     window.location.href = '/menu/edit/' + nodeId;
 });
-

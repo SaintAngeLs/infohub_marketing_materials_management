@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    // Initialize Dropzone
     var dropzoneOptions = {
         url: "/menu/files/store",
         method: "post",
@@ -93,18 +92,10 @@ $(document).ready(function() {
 
 
     function populateFileField(fileId, fileName) {
-        // Use fileId for internal logic or submission to the server
         $('#server_file_input').val(fileId);
-
-        // Display the file name to the user
         $('#selectedFileName').val(fileName);
-
-        // Hide the modal after the file is selected
         $('#serverFilesModal').hide();
     }
-
-
-
 
 
     var closeButton = document.getElementsByClassName("close-button")[0];
@@ -119,7 +110,6 @@ $(document).ready(function() {
     }
 
     function toggleFileSource(source) {
-        // Hide all inputs initially
         $('#input_file_pc').hide();
         $('#input_file_external').hide();
         $('#input_server_file').hide();
@@ -170,9 +160,7 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success: function(response) {
-
                 console.log('Success:', response);
-                // window.location.href = "/menu/files";
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error:', textStatus, errorThrown);

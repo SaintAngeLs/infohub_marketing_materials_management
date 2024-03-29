@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('menu_item_user', function (Blueprint $table) {
-        //     $table->unsignedBigInteger('menu_item_id');
-        //     $table->unsignedBigInteger('user_id');
-        //     $table->timestamps();
+        Schema::create('menu_item_user', function (Blueprint $table) {
+            $table->unsignedBigInteger('menu_item_id');
+            $table->unsignedBigInteger('user_id');
+            $table->timestamps();
 
-        //     $table->foreign('menu_item_id')->references('id')->on('menu_items')->onDelete('cascade');
-        //     $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('menu_item_id')->references('id')->on('menu_items')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-        //     $table->primary(['menu_item_id', 'user_id']);
-        // });
+            $table->primary(['menu_item_id', 'user_id']);
+        });
     }
 
     /**

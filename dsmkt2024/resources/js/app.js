@@ -4,15 +4,10 @@ import 'jquery';
 import $ from 'jquery';
 window.$ = window.jQuery = $;
 
-// window.$ = window.jQuery = $;
-// Import Bootstrap JS
 import 'bootstrap';
-
-// Import Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
 
 import 'jstree';
 import 'jstree/dist/themes/default/style.min.css';
@@ -37,4 +32,5 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./file_upload');
     import('./upload-delete-file');
     import('./users');
+    import('./menu_tree_permissions');
 });
