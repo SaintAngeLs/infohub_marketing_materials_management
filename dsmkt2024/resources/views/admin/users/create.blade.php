@@ -9,7 +9,7 @@
                         {{ __('Użytkownicy / Dodaj użytkownika') }}
                     </p>
                     <p  class="table-button">
-                        <a href="{{ route('user.create') }}" class="btn">Dodaj użyktownika</a>
+                        <a href="{{ route('users.create') }}" class="btn">Dodaj użyktownika</a>
                     </p>
 
                     @include('components.users-form-component.user-form-component')

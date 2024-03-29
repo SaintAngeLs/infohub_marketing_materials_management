@@ -24,17 +24,32 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'users_groups_id' => 'nullable|exists:users_groups,id',
+            'branch_id' => 'nullable|exists:branches,id',
+            'name' => 'nullable|string|max:100',
+            'surname' => 'nullable|string|max:100',
+            'email' => 'nullable|string|email|max:100|unique:users,email',
+            'phone' => 'nullable|string|max:15',
+            'password' => 'nullable|string|min:8',
+            'active' => 'required|boolean',
         ]);
 
+        $password = $request->input('password') ? bcrypt($request->input('password')) : null;
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'users_groups_id' => $request->input('users_groups_id'),
+            'branch_id' => $request->input('branch_id'),
+            'name' => $request->input('name'),
+            'surname' => $request->input('surname'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'password' => $password,
+            'active' => $request->input('active'),
+            'password_last_changed' => now(),
+            'last_login' => now(),
         ]);
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
+
 }
