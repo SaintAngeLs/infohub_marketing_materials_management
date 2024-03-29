@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ApplicationsController;
 use App\Http\Controllers\Admin\AutosController;
 use App\Http\Controllers\Admin\ConcessionsController;
 use App\Http\Controllers\Admin\FileController;
@@ -70,7 +71,8 @@ Route::middleware('admin')->group(function () {
 
         Route::prefix('users')->name('users.')->middleware(['auth', 'verified'])->group(function () {
             Route::get('/usergroups', [UsersController::class, 'index'])->name('groups');
-            Route::get('/applications', [UsersController::class, 'index'])->name('applications');
+            Route::get('/applications', [ApplicationsController::class, 'index'])->name('applications');
+            Route::post('/applications/create', [ApplicationsController::class, 'create'])->name('applications.create');
             Route::get('/create', [UsersController::class, 'create'])->name('create');
             Route::post('/store', [UsersController::class, 'store'])->name('store');
         });
