@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\Permissions\PermissionManagementController;
+use App\Http\Controllers\Admin\Permissions\PermissionViewController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\UserGroupsController;
 use App\Http\Controllers\ProfileController;
@@ -76,6 +77,7 @@ Route::middleware('admin')->group(function () {
             Route::patch('/usergroups/update', [UserGroupsController::class, 'update'])->name('group.update');
             Route::post('/usergroups/store', [UserGroupsController::class, 'store'])->name('group.store');
             Route::get('/usergroups/edit/{id}', [UserGroupsController::class, 'edit'])->name('group.edit');
+            Route::get('/usergroups/{groupId}/permissions/edit', [PermissionViewController::class, 'editGroupPermissions'])->name('group.permissions.edit');
 
             Route::get('/applications', [ApplicationsController::class, 'index'])->name('applications');
             Route::post('/applications/create', [ApplicationsController::class, 'create'])->name('applications.create');
@@ -83,6 +85,7 @@ Route::middleware('admin')->group(function () {
             Route::get('/create', [UsersController::class, 'create'])->name('create');
             Route::get('/edit/{user}', [UsersController::class, 'edit'])->name('edit');
             Route::patch('/users/edit/{user}', [UsersController::class, 'update'])->name('update');
+            Route::get('/{user}/permissions/edit', [PermissionViewController::class, 'editUserPermissions'])->name('permissions.edit');
             Route::post('/store', [UsersController::class, 'store'])->name('store');
 
             Route::get('/get-menu-items-group-permissions', [MenuController::class, 'getMenuItemWithGroupPermissions']);

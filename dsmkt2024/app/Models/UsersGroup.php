@@ -21,5 +21,10 @@ class UsersGroup extends Model
         return $this->belongsToMany(MenuItem::class, 'user_group_menu_item',
         'user_group_id', 'menu_item_id');
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(MenuItem::class, 'user_group_menu_item', 'user_group_id', 'menu_item_id');
+    }
 }
 

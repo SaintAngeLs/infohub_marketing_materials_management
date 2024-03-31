@@ -30,7 +30,7 @@
                                     {{ $user->surname }} {{ $user->name }}
                                 </a>
                             </td>
-                            <td>{{ $user->group->name ?? 'Brak' }}</td>
+                            <td>{{ $user->usersGroup->name ?? 'Brak' }}</td>
                             <td>{{ $user->active ? 'Aktywny' : 'Nieaktywny' }}</td>
                         </tr>
                         @endforeach
