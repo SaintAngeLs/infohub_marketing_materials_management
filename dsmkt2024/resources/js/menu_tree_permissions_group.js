@@ -1,8 +1,13 @@
 $(document).ready(function() {
+    var groupId = $('#group-id').val();
+    console.log(groupId);
+
     $('#menu-tree-permissions').jstree({
         'core': {
-            'data': {
-                'url': '/menu/users/get-menu-items-permissions',
+           'data': {
+                'url': function(node) {
+                    return '/menu/users/get-menu-items-group-permissions?group_id=' + groupId;
+                },
                 'data': function(node) {
                     return { 'id': node.id };
                 }

@@ -84,13 +84,15 @@ Route::middleware('admin')->group(function () {
             Route::patch('/users/edit/{user}', [UsersController::class, 'update'])->name('update');
             Route::post('/store', [UsersController::class, 'store'])->name('store');
 
-            Route::get('/get-menu-items-permissions', [MenuController::class, 'getMenuItemWithPermissions']);
+            Route::get('/get-menu-items-group-permissions', [MenuController::class, 'getMenuItemWithGroupPermissions']);
+            Route::get('/get-menu-items-user-permissions', [MenuController::class, 'getMenuItemWithUserPermissions']);
         });
 
         Route::prefix('permissions')->name('permissions.')->middleware(['auth', 'verified'])->group(function () {
             Route::get('/update-or-create-user-permission', [PermissionController::class, 'assignOrUpdateUserPermission'])->name('permission.user.assign');
             Route::get('/update-or-create-group-permission', [PermissionController::class, 'assignOrUpdateGroupPermissions'])->name('permission.group.assign');
-            ROute::post('/update-group-permission', [PermissionController::class, 'updateGroupPermission'])->name('permission.updateGroup');
+            Route::post('/update-group-permission', [PermissionController::class, 'updateGroupPermission'])->name('permission.updateGroup');
+            Route::post('/update-user-permission', [PermissionController::class, 'updateUserPermission'])->name('permission.updateUser');
         });
     });
 

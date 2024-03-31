@@ -22,3 +22,4 @@ class UsersGroup extends Model
         'user_group_id', 'menu_item_id');
     }
 }
+

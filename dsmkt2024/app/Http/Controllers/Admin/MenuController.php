@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExtendedUser;
+use App\Models\GroupPermission;
 use App\Models\MenuItems\MenuItem;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -109,15 +110,23 @@ class MenuController extends Controller
         $formattedMenuItems = $this->formatMenuItemsWithFilesForJsTree($menuItems);
         return response()->json($formattedMenuItems);
     }
-
-    public function getMenuItemWithPermissions()
+    public function getMenuItemWithGroupPermissions(Request $request)
     {
+        Log::info($request->all());
+        $groupId = $request->input('group_id');
         $menuItems = MenuItem::get()->toTree();
-        $formattedMenuItems = $this->formatForJsTreePermissions($menuItems);
+        $formattedMenuItems = $this->formatForJsTreeGroupPermissions($menuItems, $groupId);
         return response()->json($formattedMenuItems);
     }
 
-
+    public function getMenuItemWithUserPermissions(Request $request)
+    {
+        Log::info($request->all());
+        $groupId = $request->input('group_id');
+        $menuItems = MenuItem::get()->toTree();
+        $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $groupId);
+        return response()->json($formattedMenuItems);
+    }
     protected function formatForJsTree($menuItems)
     {
         $formatted = [];
@@ -147,11 +156,18 @@ class MenuController extends Controller
         return $formatted;
     }
 
-    public function formatForJsTreePermissions($menuItems)
+    public function formatForJsTreeGroupPermissions($menuItems, $groupId = null)
     {
         $formatted = [];
+        $permissions = !is_null($groupId) ? GroupPermission::where('user_group_id', $groupId)
+                                   ->pluck('menu_item_id')
+                                   ->toArray() : [];
+        Log::info($permissions);
+
         foreach ($menuItems as $item) {
-            $checkboxHtml = "<input type='checkbox' class='menu-item-checkbox' name='menu_permissions[{$item->id}]' id='menu_permission_{$item->id}' value='{$item->id}' />";
+            $checked = in_array($item->id, $permissions) ? "checked='checked'" : "";
+
+            $checkboxHtml = "<input type='checkbox' class='menu-item-checkbox' name='menu_permissions[{$item->id}]' {$checked} id='menu_permission_{$item->id}' value='{$item->id}' />";
 
             $nodeContent = <<<HTML
                 <div class='js-tree-node-content' data-node-id="{$item->id}">
@@ -163,14 +179,13 @@ class MenuController extends Controller
             $formattedItem = [
                 'id' => $item->id,
                 'text' => $nodeContent,
-                'children' => $item->children->isEmpty() ? [] : $this->formatForJsTreePermissions($item->children),
+                'children' => $item->children->isEmpty() ? [] : $this->formatForJsTreeGroupPermissions($item->children, $groupId),
             ];
 
             $formatted[] = $formattedItem;
         }
         return $formatted;
     }
-
 
     protected function formatMenuItemsWithFilesForJsTree($menuItems)
     {

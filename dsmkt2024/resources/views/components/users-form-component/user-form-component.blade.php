@@ -94,5 +94,7 @@
         </div>
     @endif
 
+    <div class="menu-tree-component" id="menu-tree-permissions-user"></div>
+
     <button type="submit" class="btn btn-primary">{{ $isEdit ? 'Update' : 'Create' }}</button>
 </form>
