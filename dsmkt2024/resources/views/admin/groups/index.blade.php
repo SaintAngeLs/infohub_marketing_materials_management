@@ -20,6 +20,7 @@
                                 <th>Imię</th>
                                 <th>Liczba Użytkownika</th>
                                 <th>Liczba menu</th>
+                                <th>Uprawnienia</th>
                                 {{-- <th>Actions</th> --}}
                             </tr>
                         </thead>
@@ -34,6 +35,10 @@
                                 </a>
                                 <td>{{ $group->users->count() }}</td>
                                 <td>{{ $group->menuItems->count() }}</td>
+                                <td>
+                                    <a href="{{ route('menu.users.group.permissions.edit', $group->id) }}" class="">Edytuj uprawnienia</a>
+                                </td>
+
                                 {{-- <td>
                                     <a href="{{ route('admin.groups.edit', $group->id) }}" class="btn btn-sm btn-info">Edit</a>
                                     <form action="{{ route('admin.groups.destroy', $group->id) }}" method="POST" style="display: inline-block;">

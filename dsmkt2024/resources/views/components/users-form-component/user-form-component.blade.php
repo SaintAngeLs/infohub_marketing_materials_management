@@ -98,7 +98,9 @@
         </div>
     @endif
 
-    <div class="menu-tree-component" id="menu-tree-permissions-user"></div>
+    @if($isEdit)
+        <a href="{{ route('menu.users.permissions.edit', $user->id) }}" class="btn btn-secondary">Edytuj Uprawnienia</a>
+    @endif
 
     <button type="submit" class="btn btn-primary">{{ $isEdit ? 'Update' : 'Create' }}</button>
 </form>
