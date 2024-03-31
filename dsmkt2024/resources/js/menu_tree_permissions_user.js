@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    var userId = $('#group-id').val();
-    console.log(groupId);
+    var userId = $('#user-id').val();
+    console.log(userId);
 
     $('#menu-tree-permissions-user').jstree({
         'core': {
@@ -46,9 +46,9 @@ $(document).ready(function() {
         });
     });
 
-    $(document).on('change', '.menu-item-checkbox', function() {
+    $(document).on('change', '#menu-tree-permissions-user .menu-item-checkbox', function() {
         var menuId = $(this).val();
-        var userId = $('#group-id').val();
+        var userId = $('#user-id').val();
         console.log(userId);
         var isChecked = $(this).is(':checked');
 
@@ -60,7 +60,7 @@ $(document).ready(function() {
             method: 'POST',
             data: {
                 menu_id: menuId,
-                group_id: userId,
+                user_id: userId,
                 action: action,
                 _token: $('meta[name="csrf-token"]').attr('content')
             },

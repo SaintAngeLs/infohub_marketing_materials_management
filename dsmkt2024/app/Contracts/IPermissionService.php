@@ -3,6 +3,6 @@
 namespace App\Contracts;
 
 interface IPermissionService {
-    public function getPermissions($entityId);
-    public function formatPermissionsForJsTree($menuItems, $permissions);
+    public function updateGroupPermission($menuId, $groupId, $action);
+    public function updateUserPermission($menuId, $userId, $action);
 }

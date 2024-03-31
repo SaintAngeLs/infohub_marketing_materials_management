@@ -17,44 +17,44 @@ class PermissionController extends Controller
         return view('admin.autos.index');
     }
 
-    public function assignOrUpdatePermissions(Request $request)
-    {
-        $validated = $request->validate([
-            'menu_id' => 'required|exists:menu_items,id',
-            'entity_id' => 'required',
-            'entity_type' => 'required|in:user,group',
-        ]);
+    // public function assignOrUpdatePermissions(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'menu_id' => 'required|exists:menu_items,id',
+    //         'entity_id' => 'required',
+    //         'entity_type' => 'required|in:user,group',
+    //     ]);
 
-        $menuId = $validated['menu_id'];
-        $entityId = $validated['entity_id'];
-        $entityType = $validated['entity_type'];
+    //     $menuId = $validated['menu_id'];
+    //     $entityId = $validated['entity_id'];
+    //     $entityType = $validated['entity_type'];
 
-        if ($entityType === 'user') {
-            $this->assignOrUpdateUserPermission($menuId, $entityId);
-        } elseif ($entityType === 'group') {
-            $this->assignOrUpdateGroupPermissions($menuId, $entityId);
-        }
+    //     if ($entityType === 'user') {
+    //         $this->assignOrUpdateUserPermission($menuId, $entityId);
+    //     } elseif ($entityType === 'group') {
+    //         $this->assignOrUpdateGroupPermissions($menuId, $entityId);
+    //     }
 
-        return back()->with('success', 'Permissions assigned/updated successfully.');
-    }
+    //     return back()->with('success', 'Permissions assigned/updated successfully.');
+    // }
 
-    protected function assignOrUpdateUserPermission($menuId, $userId)
-    {
-        Permission::updateOrCreate(
-            ['menu_item_id' => $menuId, 'user_id' => $userId]
-        );
-    }
+    // protected function assignOrUpdateUserPermission($menuId, $userId)
+    // {
+    //     Permission::updateOrCreate(
+    //         ['menu_item_id' => $menuId, 'user_id' => $userId]
+    //     );
+    // }
 
-    protected function assignOrUpdateGroupPermissions($menuId, $groupId)
-    {
-        $users = User::where('users_groups_id', $groupId)->get();
+    // protected function assignOrUpdateGroupPermissions($menuId, $groupId)
+    // {
+    //     $users = User::where('users_groups_id', $groupId)->get();
 
-        foreach ($users as $user) {
-            Permission::updateOrCreate(
-                ['menu_item_id' => $menuId, 'user_id' => $user->id]
-            );
-        }
-    }
+    //     foreach ($users as $user) {
+    //         Permission::updateOrCreate(
+    //             ['menu_item_id' => $menuId, 'user_id' => $user->id]
+    //         );
+    //     }
+    // }
 
     public function updateGroupPermission(Request $request)
     {
@@ -85,6 +85,7 @@ class PermissionController extends Controller
     }
     public function updateUserPermission(Request $request)
     {
+        Log::info('updateUserPermission', $request->all());
         $validated = $request->validate([
             'menu_id' => 'required|integer',
             'user_id' => 'required|integer',
