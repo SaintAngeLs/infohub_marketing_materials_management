@@ -12,7 +12,10 @@ class GroupPermission extends Model
         'menu_item_id',
         'user_group_id',
     ];
-
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
     public function menuItem()
     {
         return $this->belongsTo(MenuItem::class, 'menu_item_id');
