@@ -18,6 +18,8 @@ import 'dropzone/dist/dropzone.css';
 import Dropzone from 'dropzone';
 window.Dropzone = Dropzone;
 
+import 'jquery-validation';
+
 // import './menu_tree';
 
 import Alpine from 'alpinejs';
@@ -34,4 +36,5 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./users');
     import('./menu_tree_permissions_group');
     import('./menu_tree_permissions_user');
+    import('./accessRequest-validation');
 });

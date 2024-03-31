@@ -37,11 +37,21 @@ Route::middleware('guest')->group(function () {
     Route::post('/user/update-password/{user}', [PasswordSetupController::class, 'updatePassword'])
         ->name('user.update-password');
 
-    Route::post('/access-request', [ApplicationManagementController::class, 'storeAccessRequest'])->name('access-request.store');
+    Route::post('/access-request', [ApplicationManagementController::class, 'storeAccessRequest'])
+        ->name('access-request.store');
+
+    Route::get('/access-request-thank-you', function () { return view('thank-you'); })->name('thank-you');
+
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['verified'])->name('dashboard');
+});
 
 Route::middleware('admin')->group(function () {
+
+    Route::get('/menu', [MenuController::class, 'index'])->name('menu');
+
     Route::prefix('menu')->name('menu.')->middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/users', [UserViewController::class, 'index'])->name('users');

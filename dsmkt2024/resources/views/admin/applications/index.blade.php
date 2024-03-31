@@ -24,7 +24,15 @@
                             </tr>
                         </thead>
                         <tbody>
-
+                            @foreach($applications as $application)
+                                <tr>
+                                    <td class="px-6 py-4">{{ $application->company_name }}</td>
+                                    <td class="px-6 py-4">{{ $application->name }} {{ $application->surname }}</td>
+                                    <td class="px-6 py-4">{{ $application->email }}</td>
+                                    <td class="px-6 py-4">{{ $application->phone }}</td>
+                                    <td class="px-6 py-4">{{ $application->created_at->format('Y-m-d H:i:s') }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
 
