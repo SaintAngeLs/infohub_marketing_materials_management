@@ -32,5 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./file_upload');
     import('./upload-delete-file');
     import('./users');
-    import('./menu_tree_permissions');
+    import('./menu_tree_permissions_group');
+    import('./menu_tree_permissions_user');
 });

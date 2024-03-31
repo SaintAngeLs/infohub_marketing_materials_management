@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\GroupPermission;
 use App\Models\MenuItems\MenuItem;
 use App\Models\Permission;
 use App\Models\User;
@@ -69,20 +70,41 @@ class PermissionController extends Controller
         $groupId = $request->group_id;
         $action = $request->action;
 
-        $userIds = User::where('users_groups_id', $groupId)->pluck('id');
-
         if ($action === 'assign') {
-            foreach ($userIds as $userId) {
-                Permission::updateOrCreate(
-                    ['menu_item_id' => $menuId, 'user_id' => $userId]
-                );
-            }
+            GroupPermission::updateOrCreate(
+                ['menu_item_id' => $menuId, 'user_group_id' => $groupId]
+            );
         } else {
-            Permission::where('menu_item_id', $menuId)
-                    ->whereIn('user_id', $userIds)
-                    ->delete();
+            GroupPermission::where('menu_item_id', $menuId)
+                        ->where('user_group_id', $groupId)
+                        ->delete();
         }
 
-        return response()->json(['message' => 'Permissions updated successfully.']);
+        Log::info('Permission was updated');
+        return response()->json(['message' => 'Group permissions updated successfully.']);
+    }
+    public function updateUserPermission(Request $request)
+    {
+        $validated = $request->validate([
+            'menu_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'action' => 'required|in:assign,remove',
+        ]);
+
+        $menuId = $validated['menu_id'];
+        $userId = $validated['user_id'];
+        $action = $validated['action'];
+
+        if ($action === 'assign') {
+            Permission::updateOrCreate(
+                ['menu_item_id' => $menuId, 'user_id' => $userId]
+            );
+        } else {
+            Permission::where('menu_item_id', $menuId)
+                      ->where('user_id', $userId)
+                      ->delete();
+        }
+
+        return response()->json(['message' => 'User permissions updated successfully.']);
     }
 }
