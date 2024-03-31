@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Applications;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Contracts\IApplication;
 use App\Models\AccessRequest;
 use Illuminate\Http\Request;
+
 
 class ApplicationManagementController extends Controller
 {
@@ -40,5 +42,56 @@ class ApplicationManagementController extends Controller
         return redirect()->back()->with('success', 'Your access request has been submitted successfully.');
     }
 
-    // Implement other CRUD methods similarly
+    public function acceptApplication($id)
+    {
+        $application = AccessRequest::find($id);
+        if ($application) {
+
+            $application->update([
+                'status' => 1, // Accepted
+                'accepted_by' => Auth::id(),
+            ]);
+            return redirect()->route('menu.users.applications.view')->with('success', 'Application accepted successfully.');
+        }
+        return back()->withErrors(['error' => 'Application not found.']);
+    }
+
+    public function rejectApplication($id, Request $request)
+    {
+        $application = AccessRequest::find($id);
+        if ($application) {
+            $application->update([
+                'status' => 2, // Rejected
+                'refused_by' => Auth::id(),
+                'refused_comment' => $request->input('refused_comment'),
+            ]);
+            return redirect()->route('menu.users.applications.view')->with('success', 'Application rejected successfully.');
+        }
+        return back()->withErrors(['error' => 'Application not found.']);
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $application = AccessRequest::find($id);
+        if (!$application) {
+            return back()->withErrors(['error' => 'Application not found.']);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:1,2',
+            'refused_comment' => 'nullable|string',
+        ]);
+
+        $updateData = [
+            'status' => $validated['status'],
+            'accepted_by' => $validated['status'] == 1 ? Auth::id(): null,
+            'refused_by' => $validated['status'] == 2 ? Auth::id() : null,
+            'refused_comment' => $validated['status'] == 2 ? $validated['refused_comment'] : null,
+        ];
+
+        $application->update($updateData);
+
+        return redirect()->route('menu.users.applications.view')->with('success', 'Application status updated successfully.');
+    }
+
 }

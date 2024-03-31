@@ -109,7 +109,12 @@ Route::middleware('admin')->group(function () {
             Route::get('/usergroups/{groupId}/permissions/edit', [PermissionViewController::class, 'editGroupPermissions'])->name('group.permissions.edit');
 
             Route::get('applications/view', [ApplicationViewController::class, 'index'])->name('applications.view');
+            Route::patch('/applications/update-status/{id}', [ApplicationManagementController::class, 'updateStatus'])->name('applications.updateStatus');
+            Route::get('/applications/details/{id}', [ApplicationViewController::class, 'showDetails'])->name('applications.details');
             Route::post('/applications/create', [ApplicationManagementController::class, 'create'])->name('applications.create');
+            Route::get('/applications/accept/{id}', [ApplicationManagementController::class, 'acceptApplication'])->name('applications.accept');
+            Route::get('/applications/reject/{id}', [ApplicationManagementController::class, 'rejectApplication'])->name('applications.reject');
+
 
             Route::get('/users', [UserViewController::class, 'index'])->name('index');
             Route::get('/create', [UserViewController::class, 'create'])->name('create');
