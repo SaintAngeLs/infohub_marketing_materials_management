@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\ApplicationsController;
 use App\Http\Controllers\Admin\AutosController;
+use App\Http\Controllers\Admin\Concessions\ConcessionsManagementController;
+use App\Http\Controllers\Admin\Concessions\ConcessionsViewController;
 use App\Http\Controllers\Admin\ConcessionsController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\MenuController;
@@ -11,6 +13,9 @@ use App\Http\Controllers\Admin\Permissions\PermissionManagementController;
 use App\Http\Controllers\Admin\Permissions\PermissionViewController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\UserGroupsController;
+use App\Http\Controllers\Admin\Users\UserManagementController;
+use App\Http\Controllers\Admin\Users\UserViewController;
+use App\Http\Controllers\Admin\Users\PasswordSetupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
@@ -26,10 +31,17 @@ Route::get('/dashboard', function () { return view('dashboard'); })->middleware(
 
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 
+Route::get('/user/set-password/{user}', [PasswordSetupController::class, 'showSetPasswordForm'])
+    ->name('user.set-password')
+    ->middleware('signed');
+
+Route::post('/user/update-password/{user}', [PasswordSetupController::class, 'updatePassword'])
+    ->name('user.update-password');
+
 Route::middleware('admin')->group(function () {
     Route::prefix('menu')->name('menu.')->middleware(['auth', 'verified'])->group(function () {
 
-        Route::get('/users', [UsersController::class, 'index'])->name('users');
+        Route::get('/users', [UserViewController::class, 'index'])->name('users');
         Route::get('/structure', [MenuController::class, 'index'])->name('structure');
         Route::get('/autos', [AutosController::class, 'index'])->name('autos');
         Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
@@ -65,11 +77,15 @@ Route::middleware('admin')->group(function () {
         Route::get('/files/directory-structure', [FileController::class, 'getDirectoryStructure']);
         Route::post('/file/toggle-status/{id}', [FileController::class, 'toggleStatus'])->name('file.toggleStatus');
 
-        Route::get('/concessions', [ConcessionsController::class, 'index'])->name('concessions');
-        Route::get('/concessions/create', [ConcessionsController::class, 'create'])->name('concessions.create');
-        Route::get('/concessions/edit/{id}', [ConcessionsController::class, 'edit'])->name('concessions.edit');
-        Route::post('/concessions/store', [ConcessionsController::class, 'store'])->name('concessions.store');
-        Route::patch('/concessions/update/{concession}', [ConcessionsController::class, 'update'])->name('concessions.update');
+
+        Route::prefix('concessions')->name('concessions.')->group(function () {
+            Route::get('/', [ConcessionsViewController::class, 'index'])->name('index');
+            Route::get('/create', [ConcessionsViewController::class, 'create'])->name('create');
+            Route::get('/edit/{id}', [ConcessionsViewController::class, 'edit'])->name('edit');
+            Route::post('/store', [ConcessionsManagementController::class, 'store'])->name('store');
+            Route::patch('/update/{id}', [ConcessionsManagementController::class, 'update'])->name('update');
+        });
+
 
         Route::prefix('users')->name('users.')->middleware(['auth', 'verified'])->group(function () {
             Route::get('/usergroups', [UserGroupsController::class, 'index'])->name('groups');
@@ -82,11 +98,12 @@ Route::middleware('admin')->group(function () {
             Route::get('/applications', [ApplicationsController::class, 'index'])->name('applications');
             Route::post('/applications/create', [ApplicationsController::class, 'create'])->name('applications.create');
 
-            Route::get('/create', [UsersController::class, 'create'])->name('create');
-            Route::get('/edit/{user}', [UsersController::class, 'edit'])->name('edit');
-            Route::patch('/users/edit/{user}', [UsersController::class, 'update'])->name('update');
+            Route::get('/users', [UserViewController::class, 'index'])->name('index');
+            Route::get('/create', [UserViewController::class, 'create'])->name('create');
+            Route::get('/edit/{user}', [UserViewController::class, 'edit'])->name('edit');
+            Route::patch('/users/edit/{user}', [UserManagementController::class, 'update'])->name('update');
             Route::get('/{user}/permissions/edit', [PermissionViewController::class, 'editUserPermissions'])->name('permissions.edit');
-            Route::post('/store', [UsersController::class, 'store'])->name('store');
+            Route::post('/store', [UserManagementController::class, 'store'])->name('store');
 
             Route::get('/get-menu-items-group-permissions', [MenuController::class, 'getMenuItemWithGroupPermissions']);
             Route::get('/get-menu-items-user-permissions', [MenuController::class, 'getMenuItemWithUserPermissions']);

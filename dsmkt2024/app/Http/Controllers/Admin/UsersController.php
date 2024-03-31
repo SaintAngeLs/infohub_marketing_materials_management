@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UsersGroup;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -44,6 +45,7 @@ class UsersController extends Controller
 
         $password = $request->input('password') ? bcrypt($request->input('password')) : null;
 
+        Log::info('The user store function request is:', $request->all());
         $user = User::create([
             'users_groups_id' => $request->input('users_groups_id'),
             'branch_id' => $request->input('branch_id'),

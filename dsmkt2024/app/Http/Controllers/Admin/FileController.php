@@ -256,8 +256,7 @@ class FileController extends Controller
             $files = \File::files($specificFolderPath);
             foreach ($files as $file) {
                 $fileName = $file->getFilename();
-                // Ensure this matches exactly with how you're generating the path in fetchDynamicPathMap
-                $relativeFilePath = 'ftp_upload/' . $fileName; // Adjusted to match fetchDynamicPathMap logic
+                $relativeFilePath = 'ftp_upload/' . $fileName;
                 $fileId = md5($relativeFilePath);
 
                 $secureStructure['ftp_upload'][] = [
