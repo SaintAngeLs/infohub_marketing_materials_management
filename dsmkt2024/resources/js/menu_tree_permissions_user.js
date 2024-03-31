@@ -6,7 +6,7 @@ $(document).ready(function() {
         'core': {
            'data': {
                 'url': function(node) {
-                    return '/menu/users/get-menu-items-permissions?user_id=' + userId;
+                    return '/menu/users/get-menu-items-user-permissions?user_id=' + userId;
                 },
                 'data': function(node) {
                     return { 'id': node.id };

@@ -121,12 +121,12 @@ class MenuController extends Controller
 
     public function getMenuItemWithUserPermissions(Request $request)
     {
-        Log::info($request->all());
-        $groupId = $request->input('group_id');
+        $userId = $request->input('user_id');
         $menuItems = MenuItem::get()->toTree();
-        $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $groupId);
+        $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $userId);
         return response()->json($formattedMenuItems);
     }
+
     protected function formatForJsTree($menuItems)
     {
         $formatted = [];
@@ -180,6 +180,37 @@ class MenuController extends Controller
                 'id' => $item->id,
                 'text' => $nodeContent,
                 'children' => $item->children->isEmpty() ? [] : $this->formatForJsTreeGroupPermissions($item->children, $groupId),
+            ];
+
+            $formatted[] = $formattedItem;
+        }
+        return $formatted;
+    }
+
+    public function formatForJsTreeUserPermissions($menuItems, $userId = null)
+    {
+        $formatted = [];
+        // Retrieve permissions for a specific user
+        $permissions = $userId ? \App\Models\Permission::where('user_id', $userId)
+                                       ->pluck('menu_item_id')
+                                       ->toArray() : [];
+
+        foreach ($menuItems as $item) {
+            $checked = in_array($item->id, $permissions) ? "checked='checked'" : "";
+
+            $checkboxHtml = "<input type='checkbox' class='menu-item-checkbox' name='user_permissions[{$item->id}]' {$checked} id='user_permission_{$item->id}' value='{$item->id}' />";
+
+            $nodeContent = <<<HTML
+                <div class='js-tree-node-content' data-node-id="{$item->id}">
+                    <span class='node-name'>{$item->name}</span>
+                    <span class='node-checkbox'>$checkboxHtml</span>
+                </div>
+            HTML;
+
+            $formattedItem = [
+                'id' => $item->id,
+                'text' => $nodeContent,
+                'children' => $item->children->isEmpty() ? [] : $this->formatForJsTreeUserPermissions($item->children, $userId),
             ];
 
             $formatted[] = $formattedItem;
