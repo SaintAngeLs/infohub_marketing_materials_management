@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\Permissions\PermissionManagementController;
 use App\Http\Controllers\Admin\ReportsController;
 use App\Http\Controllers\Admin\UserGroupsController;
 use App\Http\Controllers\ProfileController;
@@ -91,8 +92,10 @@ Route::middleware('admin')->group(function () {
         Route::prefix('permissions')->name('permissions.')->middleware(['auth', 'verified'])->group(function () {
             Route::get('/update-or-create-user-permission', [PermissionController::class, 'assignOrUpdateUserPermission'])->name('permission.user.assign');
             Route::get('/update-or-create-group-permission', [PermissionController::class, 'assignOrUpdateGroupPermissions'])->name('permission.group.assign');
-            Route::post('/update-group-permission', [PermissionController::class, 'updateGroupPermission'])->name('permission.updateGroup');
-            Route::post('/update-user-permission', [PermissionController::class, 'updateUserPermission'])->name('permission.updateUser');
+            // Route::post('/update-group-permission', [PermissionController::class, 'updateGroupPermission'])->name('permission.updateGroup');
+            // Route::post('/update-user-permission', [PermissionController::class, 'updateUserPermission'])->name('permission.updateUser');
+            Route::post('/update-group-permission', [PermissionManagementController::class, 'updateGroupPermission'])->name('permissions.updateGroup');
+            Route::post('/update-user-permission', [PermissionManagementController::class, 'updateUserPermission'])->name('permissions.updateUser');
         });
     });
 
