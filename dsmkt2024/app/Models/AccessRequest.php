@@ -11,11 +11,7 @@ class AccessRequest extends Model
 
     // The table associated with the model.
     protected $table = 'access_requests';
-
-    // Indicates if the model should be timestamped.
     public $timestamps = false;
-
-    // The attributes that are mass assignable.
     protected $fillable = [
         'company_name',
         'name',
@@ -27,12 +23,11 @@ class AccessRequest extends Model
         'refused_by',
         'refused_comment',
         'created_at',
-        // 'fingerprint', // Usually, you don't need to fill this manually
+        'updated_at'
     ];
-
-    // The attributes that should be cast.
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
