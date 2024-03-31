@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ExtendedUser;
 use App\Models\GroupPermission;
 use App\Models\MenuItems\MenuItem;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -121,6 +122,7 @@ class MenuController extends Controller
 
     public function getMenuItemWithUserPermissions(Request $request)
     {
+        Log::info('getMenuItemWithUserPermissions',$request->all());
         $userId = $request->input('user_id');
         $menuItems = MenuItem::get()->toTree();
         $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $userId);
@@ -191,10 +193,10 @@ class MenuController extends Controller
     {
         $formatted = [];
         // Retrieve permissions for a specific user
-        $permissions = $userId ? \App\Models\Permission::where('user_id', $userId)
+        $permissions = $userId ? Permission::where('user_id', $userId)
                                        ->pluck('menu_item_id')
                                        ->toArray() : [];
-
+        Log::info('formatForJsTreeUserPermissions', $permissions);
         foreach ($menuItems as $item) {
             $checked = in_array($item->id, $permissions) ? "checked='checked'" : "";
 

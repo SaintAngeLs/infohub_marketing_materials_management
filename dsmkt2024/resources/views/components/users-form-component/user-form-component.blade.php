@@ -8,6 +8,10 @@
     @csrf
     @if($isEdit) @method($formMethod) @endif
 
+    @if($isEdit)
+        <input type="hidden" id="user-id" value="{{ $user->id }}">
+    @endif
+
     <div class="form-group">
         <label for="name">IMIĘ*</label>
         <input type="text" name="name" id="name" value="{{ old('name', $user->name ?? '') }}" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}">

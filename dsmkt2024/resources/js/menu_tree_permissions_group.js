@@ -46,7 +46,7 @@ $(document).ready(function() {
         });
     });
 
-    $(document).on('change', '.menu-item-checkbox', function() {
+    $(document).on('change', '#menu-tree-permissions .menu-item-checkbox', function() {
         var menuId = $(this).val();
         var groupId = $('#group-id').val();
         console.log(groupId);
