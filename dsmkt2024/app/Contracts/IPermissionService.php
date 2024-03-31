@@ -2,7 +2,8 @@
 
 namespace App\Contracts;
 
-interface IPermissionService {
+interface IPermissionService
+{
     public function updateGroupPermission($menuId, $groupId, $action);
     public function updateUserPermission($menuId, $userId, $action);
 }

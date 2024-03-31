@@ -1,52 +1,84 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.guest')
+@section('content')
+<div class="items-center justify-center bg-cover bg-no-repeat bg-center login-block text-center">
+    <h2>MATERIAŁY REKLAMOWE DS</h2>
+    <h4>Rejestracja</h4>
+    <div class="login-box text-left">
+        @if ($errors->any())
+            <div class="mb-4">
+                <ul class="mt-3 list-disc list-inside text-sm text-red-600">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+
+            <div class="form-group">
+                <label for="company_name" class="block font-medium text-sm text-gray-700">Nazwa firmy</label>
+                <input id="company_name" class="block mt-1 w-full" type="text" name="company_name" required autofocus placeholder="Wpisz nazwę firmy"/>
+                @error('company_name')
+                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="first_name" class="block font-medium text-sm text-gray-700">Imię</label>
+                <input id="first_name" class="block mt-1 w-full" type="text" name="first_name" required placeholder="Wpisz imię"/>
+                @error('first_name')
+                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="last_name" class="block font-medium text-sm text-gray-700">Nazwisko</label>
+                <input id="last_name" class="block mt-1 w-full" type="text" name="last_name" required placeholder="Wpisz nazwisko"/>
+                @error('last_name')
+                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="email" class="block font-medium text-sm text-gray-700">Email</label>
+                <input id="email" class="block mt-1 w-full" type="email" name="email" required placeholder="Wpisz email"/>
+                @error('email')
+                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="phone" class="block font-medium text-sm text-gray-700">Telefon</label>
+                <input id="phone" class="block mt-1 w-full" type="text" name="phone" required placeholder="Wpisz telefon"/>
+                @error('phone')
+                    <div class="mt-2 text-sm text-red-600">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="flex items-center justify-center mt-4">
+                <button type="submit" class="login-button">
+                    Zarejestruj się
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-1 text-sm flex">
+            <p>Masz już konto?
+            <a href="{{ route('login') }}" class="text-blue-500 hover:text-blue-600 font-semibold">
+                Zaloguj się
+            </a></p>
         </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
+    </div>
+    <div class="mt-5 text-sm additional-info">
+        <p class="mt-4 text-sm">
+            Serwis dostępny jest wyłącznie dla osób upoważnionych przez Stellantis Polska Sp. z o.o.<br>
+            Gości, którzy nie posiadają loginu i hasła zapraszamy na stronę:<br>
+            <a target="_blank" href="https://www.dsautomobiles.pl/" class="text-blue-500 hover:text-blue-600 font-semibold">
+                www.dsautomobiles.pl
             </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        </p>
+    </div>
+</div>
+@endsection

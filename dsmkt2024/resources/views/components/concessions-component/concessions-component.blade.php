@@ -1,6 +1,15 @@
 @php
     $isEdit = isset($concession);
     $formAction = $isEdit ? route('menu.concessions.update', $concession->id) : route('menu.concessions.store');
+    // Initialize concession with default values if not set
+    $concession = $concession ?? (object)[
+        'name' => '',
+        'address' => '',
+        'code' => '',
+        'city' => '',
+        'phone' => '',
+        'email' => '',
+    ];
 @endphp
 
 <form action="{{ $formAction }}" method="POST">
