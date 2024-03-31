@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Applications\ApplicationManagementController;
+use App\Http\Controllers\Admin\Applications\ApplicationViewController;
 use App\Http\Controllers\Admin\ApplicationsController;
 use App\Http\Controllers\Admin\AutosController;
 use App\Http\Controllers\Admin\Concessions\ConcessionsManagementController;
@@ -23,20 +25,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware;
 
 
-Route::get('/', function () {
-    return view('auth.login');
+Route::middleware('guest')->group(function () {
+    Route::get('/', function () {
+        return view('auth.login');
+    });
+
+    Route::get('/user/set-password/{user}', [PasswordSetupController::class, 'showSetPasswordForm'])
+        ->name('user.set-password')
+        ->middleware('signed');
+
+    Route::post('/user/update-password/{user}', [PasswordSetupController::class, 'updatePassword'])
+        ->name('user.update-password');
+
+    Route::post('/access-request', [ApplicationManagementController::class, 'storeAccessRequest'])->name('access-request.store');
 });
 
-Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/menu', [MenuController::class, 'index'])->name('menu');
-
-Route::get('/user/set-password/{user}', [PasswordSetupController::class, 'showSetPasswordForm'])
-    ->name('user.set-password')
-    ->middleware('signed');
-
-Route::post('/user/update-password/{user}', [PasswordSetupController::class, 'updatePassword'])
-    ->name('user.update-password');
 
 Route::middleware('admin')->group(function () {
     Route::prefix('menu')->name('menu.')->middleware(['auth', 'verified'])->group(function () {
@@ -95,8 +98,8 @@ Route::middleware('admin')->group(function () {
             Route::get('/usergroups/edit/{id}', [UserGroupsController::class, 'edit'])->name('group.edit');
             Route::get('/usergroups/{groupId}/permissions/edit', [PermissionViewController::class, 'editGroupPermissions'])->name('group.permissions.edit');
 
-            Route::get('/applications', [ApplicationsController::class, 'index'])->name('applications');
-            Route::post('/applications/create', [ApplicationsController::class, 'create'])->name('applications.create');
+            Route::get('applications/view', [ApplicationViewController::class, 'index'])->name('applications.view');
+            Route::post('/applications/create', [ApplicationManagementController::class, 'create'])->name('applications.create');
 
             Route::get('/users', [UserViewController::class, 'index'])->name('index');
             Route::get('/create', [UserViewController::class, 'create'])->name('create');

@@ -14,8 +14,7 @@ class ApplicationServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(IApplication::class, ApplicationService::class
-        );
+        $this->app->bind(IApplication::class, ApplicationService::class);
     }
 
     /**
