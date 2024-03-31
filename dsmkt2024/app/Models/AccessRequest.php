@@ -11,7 +11,7 @@ class AccessRequest extends Model
 
     // The table associated with the model.
     protected $table = 'access_requests';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $fillable = [
         'company_name',
         'name',

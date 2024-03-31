@@ -33,6 +33,8 @@ class ApplicationManagementController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'status' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return redirect()->back()->with('success', 'Your access request has been submitted successfully.');

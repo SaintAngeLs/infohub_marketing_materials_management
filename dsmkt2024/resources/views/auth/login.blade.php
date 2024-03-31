@@ -1,8 +1,8 @@
 @extends('layouts.guest')
 @section('content')
 <div class="items-center justify-center bg-cover bg-no-repeat bg-center login-block text-center">
-    <h1>MATERIAŁY REKLAMOWE DS</h1>
-    <h2>Logowanie</h2>
+    <h2>MATERIAŁY REKLAMOWE DS</h2>
+    <h4>Logowanie</h4>
     <div class="login-box text-left">
         <!-- Session Status -->
         @if (session('status'))
