@@ -81,6 +81,10 @@ class User extends Authenticatable
         return $this->belongsToMany(MenuItem::class, 'menu_owners', 'user_id', 'menu_item_id');
     }
 
+    public function accessibleMenuItems()
+    {
+        return $this->belongsToMany(MenuItem::class, 'menu_item_user', 'user_id', 'menu_item_id');
+    }
 
     /**
      * Determine if the user is active.

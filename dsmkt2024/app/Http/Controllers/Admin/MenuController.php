@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\FormatBytes;
 use App\Http\Controllers\Controller;
 use App\Models\ExtendedUser;
 use App\Models\GroupPermission;
@@ -156,7 +157,8 @@ class MenuController extends Controller
         $formatted = [];
         foreach ($menuItems as $item) {
             $status = $item->status ? 'Aktywny' : 'Nieaktywny';
-            $ownerName = $item->owner->name ?? 'N/A';
+            $ownerNames = $item->owners->pluck('name')->implode('<br>');
+            $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
             $visibilityTime = $item->start && $item->end
                             ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
                             : 'N/A';
@@ -165,7 +167,7 @@ class MenuController extends Controller
             <span class='js-tree-node-content' data-node-id="{$item->id}">
                 <span class='node-name'>{$item->name}</span>
                 <span class='node-details-status'>($status)</span>
-                <span class='node-details-ownerName'>{$ownerName}</span>
+                <span class='node-details-ownerName'>{$ownerNameDisplay}</span>
                 <span class='node-details-visibilityTime'>{$visibilityTime}</span>
             </span>
         HTML;
@@ -247,7 +249,8 @@ class MenuController extends Controller
         $formatted = [];
         foreach ($menuItems as $item) {
             $status = $item->status ? 'Aktywny' : 'Nieaktywny';
-            $ownerName = $item->owner->name ?? 'N/A';
+            $ownerNames = $item->owners->pluck('name')->implode(',');
+            $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
             $visibilityTime = $item->start && $item->end
                             ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
                             : 'N/A';
@@ -257,6 +260,8 @@ class MenuController extends Controller
                     $status = $file->status ? "<span class='toggle-file-status' data-file-id='{$file->id}' style='cursor:pointer;'>Wł</span>"
                                             : "<span class='toggle-file-status' data-file-id='{$file->id}' style='cursor:pointer;'>Wył</span>";
                     $lastUpdate = $file->updated_at ? $file->updated_at->format('d.m.Y H:i:s') : 'N/A';
+                    $fileExtension = $file->extension ?? 'unknown';
+                    $fileSize = FormatBytes::formatBytes($file->weight);
                     $start = $file->start ? $file->start->format('d.m.Y') : '-';
                     $end = $file->end ? $file->end->format('d.m.Y') : '-';
                     $visibility = "$start - $end";
@@ -264,6 +269,8 @@ class MenuController extends Controller
 
                         <span>$status</span>
                         <span><a href='#' class='file-link' data-file-id='{$file->id}'>{$file->name}</a></span>
+                        <span>$fileExtension</span>
+                        <span>$fileSize</span>
                         <span>$visibility</span>
                         <span>$lastUpdate</span>
                         <span>
@@ -278,7 +285,7 @@ class MenuController extends Controller
                     <div class='js-tree-node-content' data-node-id="{$item->id}">
                         <span class='node-name'>{$item->name}</span>
                         <span class='node-details-status'>($status)</span>
-                        <span class='node-details-ownerName'>{$ownerName}</span>
+                        <span class='node-details-ownerName'>{$ownerNameDisplay}</span>
                         <span class='node-details-visibilityTime'>{$visibilityTime}</span>
                         <button onclick="openFileUploadPage({$item->id})" class="btn btn-sm upload-file-btn">Upload File</button>
                     </div>

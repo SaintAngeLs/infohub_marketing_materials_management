@@ -1635,7 +1635,7 @@ input[type="submit"].table-button-2{
 }
 #menu-tree-files .js-tree-node-files {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 10px;
     /* height: 20px; */
     align-items: center;
@@ -1652,7 +1652,7 @@ input[type="submit"].table-button-2{
 
 .js-tree-node-files {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 10px;
     /* height: 20px; */
     align-items: center;

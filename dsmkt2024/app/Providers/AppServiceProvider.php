@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Http\CustomKernel;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('partials.user_menu', function ($view) {
+            \Log::debug('User menu view composer is running.');
+            if (Auth::check()) {
+                $user = Auth::user();
+                $menuItems = $user->accessibleMenuItems()->get();
+                \Log::debug('menuItems', $menuItems->toArray());
+                $view->with('menuItems', $menuItems);
+            }
+        });
+
     }
 }

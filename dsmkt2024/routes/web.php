@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\Users\PasswordSetupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
+
+use App\Http\Controllers\User\UserMenu\UserMenuViewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware;
 
@@ -48,6 +50,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['verified'])->name('dashboard');
+    Route::get('/user-menu', [UserMenuViewController::class, 'index'])->name('user.menu');
+    Route::get('/user-menu/{menuItemId}/files', [UserMenuViewController::class, 'showFilesForMenuItem'])->name('user-menu.files');
+    Route::get('/files/download/{id}', [FileController::class, 'download'])->name('files.download');
+
 });
 
 Route::middleware('admin')->group(function () {
@@ -92,7 +98,6 @@ Route::middleware('admin')->group(function () {
         Route::get('/files/directory-structure', [FileController::class, 'getDirectoryStructure']);
         Route::post('/file/toggle-status/{id}', [FileController::class, 'toggleStatus'])->name('file.toggleStatus');
 
-
         Route::prefix('concessions')->name('concessions.')->group(function () {
             Route::get('/', [ConcessionsViewController::class, 'index'])->name('index');
             Route::get('/create', [ConcessionsViewController::class, 'create'])->name('create');
@@ -100,7 +105,6 @@ Route::middleware('admin')->group(function () {
             Route::post('/store', [ConcessionsManagementController::class, 'store'])->name('store');
             Route::patch('/update/{id}', [ConcessionsManagementController::class, 'update'])->name('update');
         });
-
 
         Route::prefix('users')->name('users.')->middleware(['auth', 'verified'])->group(function () {
             Route::get('/usergroups', [UserGroupsController::class, 'index'])->name('groups');
