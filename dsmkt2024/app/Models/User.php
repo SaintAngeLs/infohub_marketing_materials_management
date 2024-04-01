@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\MenuItems\MenuItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -73,6 +74,11 @@ class User extends Authenticatable
     public function usersGroup()
     {
         return $this->belongsTo(UsersGroup::class, 'users_groups_id');
+    }
+
+    public function menuItems()
+    {
+        return $this->belongsToMany(MenuItem::class, 'menu_owners', 'user_id', 'menu_item_id');
     }
 
 

@@ -24,6 +24,26 @@
                     @method('PATCH')
 
                     <div class="mt-4">
+                        <label for="branch_id">Concession (Branch):</label>
+                        <select name="branch_id" id="branch_id" class="form-control">
+                            @foreach($branches as $branch)
+                                <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- User Group Dropdown --}}
+                    <div class="mt-4">
+                        <label for="users_groups_id">User Group:</label>
+                        <select name="users_groups_id" id="users_groups_id" class="form-control">
+                            @foreach($userGroups as $group)
+                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    <div class="mt-4">
                         <label for="status" class="block">Status:</label>
                         <div>
                             <input type="radio" name="status" value="1" id="accept" {{ $application->status == 1 ? 'checked' : '' }} required>

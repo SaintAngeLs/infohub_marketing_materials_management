@@ -15,21 +15,22 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menuItems = MenuItem::all();
+        $menuItems = MenuItem::getOrderedMenuItems();
         return view('admin.menu.index', compact('menuItems'));
     }
 
     public function create()
     {
         $menuItemsToSelect = MenuItem::all();
-        $users = User::all();
+        $users = User::where('active', 1)->get();
         return view('admin.menu.create', compact('menuItemsToSelect', 'users'));
     }
+
 
     public function edit(MenuItem $menuItem)
     {
         $menuItemsToSelect = MenuItem::all()->except($menuItem->id);
-        $users = User::all();
+        $users = User::where('active', 1)->get();
         return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users'));
     }
 
@@ -37,6 +38,21 @@ class MenuController extends Controller
     {
         Log::debug('Update function', $request->all());
         Log::debug($menuItem->toArray());
+
+        Log::debug('Attempting to sync owners');
+        Log::debug('Before syncing owners', ['Owners' => $request->owners]);
+
+        if (!empty($request['owners'])) {
+            Log::debug('Attempting to sync owners', ['Owners' => $request['owners']]);
+
+            // Assuming $validatedData['owners'] is an array of user IDs
+            $menuItem->owners()->sync($request['owners']);
+
+            Log::debug('Owners synced');
+        } else {
+            Log::debug('No owners provided, detaching any existing relations');
+            $menuItem->owners()->detach();
+        }
 
         $validatedData = $request->validate([
             'type' => 'required|string',
@@ -50,6 +66,9 @@ class MenuController extends Controller
             'menu_permissions' => 'required|array',
         ]);
 
+
+
+
         $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
 
         $menuItem->fill($validatedData);
@@ -59,6 +78,9 @@ class MenuController extends Controller
         if (isset($validatedData['owners'])) {
             $menuItem->owners()->sync($validatedData['owners']);
         }
+
+
+
 
         $this->updateMenuItemPermissions($menuItem, $request->input('menu_permissions', []));
 
@@ -100,14 +122,14 @@ class MenuController extends Controller
     }
     public function getMenuItems()
     {
-        $menuItems = MenuItem::get()->toTree();
+        $menuItems = MenuItem::getOrderedMenuItems();
         $formattedMenuItems = $this->formatForJsTree($menuItems);
         return response()->json($formattedMenuItems);
     }
 
     public function getMenuItemsWithFiles()
     {
-        $menuItems = MenuItem::get()->toTree();
+        $menuItems = MenuItem::getOrderedMenuItems();
         $formattedMenuItems = $this->formatMenuItemsWithFilesForJsTree($menuItems);
         return response()->json($formattedMenuItems);
     }

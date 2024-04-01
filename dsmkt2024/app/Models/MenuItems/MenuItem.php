@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\MenuItems;
+use App\Models\User;
 use App\Models\UsersGroup;
 use Fureev\Trees\Config\Base;
 use Fureev\Trees\Contracts\TreeConfigurable;
@@ -47,10 +48,7 @@ class MenuItem extends Model
 
     public function owners()
     {
-        return $this->belongsToMany(\App\Models\User::class,
-                                    'menu_item_user',
-                                    'menu_item_id',
-                                    'user_id');
+        return $this->belongsToMany(User::class, 'menu_owners', 'menu_item_id', 'user_id');
     }
 
     public function files()
@@ -60,11 +58,17 @@ class MenuItem extends Model
 
     public function users()
     {
-        return $this->belongsToMany(\App\Models\User::class, 'menu_item_user', 'menu_item_id', 'user_id');
+        return $this->belongsToMany(User::class, 'menu_item_user', 'menu_item_id', 'user_id');
     }
 
     public function userGroups()
     {
         return $this->belongsToMany(UsersGroup::class, 'user_group_menu_item', 'menu_item_id', 'user_group_id');
+    }
+
+    public static function getOrderedMenuItems()
+    {
+        // This method assumes you have a scope or a method to fetch items in their correct order
+        return MenuItem::orderBy('parent_id')->orderBy('position')->get()->toTree();
     }
 }

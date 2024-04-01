@@ -5,7 +5,7 @@
     <li><a href="{{ route('menu.users.applications.view')}}">zgłoszenia</a></li>
 </ul>
 <h2><a href="{{ route('menu') }}">Struktura menu</a></h2>
-<h2><a href="{{ route('menu.autos') }}">Samochody</a></h2>
+<h2><a href="{{ route('menu.autos.index') }}">Samochody</a></h2>
 <h2><a href="{{ route('menu.files') }}">Pliki</a></h2>
 {{-- @can('view_reports') --}}
 <h2><a href="{{ route('menu.statistics') }}">Statystyki</a></h2>
