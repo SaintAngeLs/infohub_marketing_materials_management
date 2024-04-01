@@ -6,4 +6,5 @@ return [
     App\Providers\UserServiceProvider::class,
     App\Providers\ConcessionServiceProvider::class,
     App\Providers\ApplicationServiceProvider::class,
+    App\Providers\AutoServiceProvider::class,
 ];

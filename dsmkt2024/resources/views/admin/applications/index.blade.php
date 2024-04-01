@@ -6,9 +6,9 @@
             <div class="p-6 text-gray-900 dark:text-gray-900">
                 <p class="content-tab-name">{{ __('Zgłoszenia') }}</p>
 
-                <p class="table-button">
+                {{-- <p class="table-button">
                     <a href="{{ route('menu.users.applications.create') }}" class="btn">Dodaj nowe zgloszenie</a>
-                </p>
+                </p> --}}
 
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">

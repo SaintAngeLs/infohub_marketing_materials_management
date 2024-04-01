@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\Applications\ApplicationManagementController;
 use App\Http\Controllers\Admin\Applications\ApplicationViewController;
 use App\Http\Controllers\Admin\ApplicationsController;
+use App\Http\Controllers\Admin\Autos\AutosManagementController;
+use App\Http\Controllers\Admin\Autos\AutosViewController;
 use App\Http\Controllers\Admin\AutosController;
 use App\Http\Controllers\Admin\Concessions\ConcessionsManagementController;
 use App\Http\Controllers\Admin\Concessions\ConcessionsViewController;
@@ -134,6 +136,15 @@ Route::middleware('admin')->group(function () {
             // Route::post('/update-user-permission', [PermissionController::class, 'updateUserPermission'])->name('permission.updateUser');
             Route::post('/update-group-permission', [PermissionManagementController::class, 'updateGroupPermission'])->name('permissions.updateGroup');
             Route::post('/update-user-permission', [PermissionManagementController::class, 'updateUserPermission'])->name('permissions.updateUser');
+        });
+
+        Route::prefix('autos')->name('autos.')->group(function () {
+            Route::get('/', [AutosViewController::class, 'index'])->name('index');
+            Route::get('/create', [AutosViewController::class, 'create'])->name('create');
+            Route::post('/store', [AutosManagementController::class, 'store'])->name('store');
+            Route::get('/{auto}/edit', [AutosViewController::class, 'edit'])->name('edit');
+            Route::patch('/{auto}', [AutosManagementController::class, 'update'])->name('update');
+            Route::delete('/{auto}', [AutosManagementController::class, 'destroy'])->name('destroy');
         });
     });
 

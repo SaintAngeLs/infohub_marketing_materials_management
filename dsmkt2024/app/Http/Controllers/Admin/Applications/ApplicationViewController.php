@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Applications;
 use App\Http\Controllers\Controller;
 use App\Contracts\IApplication;
 use App\Models\AccessRequest;
+use App\Models\Branch;
+use App\Models\UsersGroup;
 
 class ApplicationViewController extends Controller
 {
@@ -24,9 +26,9 @@ class ApplicationViewController extends Controller
     public function showDetails($id)
     {
         $application = AccessRequest::findOrFail($id);
-        return view('admin.applications.edit', compact('application'));
+        $branches = Branch::all();
+        $userGroups = UsersGroup::all();
+        return view('admin.applications.edit', compact('application', 'branches', 'userGroups'));
     }
 
-
-    // Add methods for viewing individual application details as needed
 }

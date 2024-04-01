@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Applications;
 
+use App\Strategies\UserCreation\CreateUserWithoutPassword;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Contracts\IApplication;
 use App\Models\AccessRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 class ApplicationManagementController extends Controller
@@ -42,7 +44,7 @@ class ApplicationManagementController extends Controller
         return redirect()->back()->with('success', 'Your access request has been submitted successfully.');
     }
 
-    public function acceptApplication($id)
+    public function acceptApplication($id, Request $request)
     {
         $application = AccessRequest::find($id);
         if ($application) {
@@ -51,6 +53,19 @@ class ApplicationManagementController extends Controller
                 'status' => 1, // Accepted
                 'accepted_by' => Auth::id(),
             ]);
+
+            $userData = [
+                'name' => $application->name,
+                'surname' => $application->surname,
+                'email' => $application->email,
+                'branch_id' => $request->branch_id ?? null,
+                'users_groups_id' => $request->users_groups_id ?? null,
+            ];
+
+            Log::info('Creating the new user');
+            $userCreationStrategy = new CreateUserWithoutPassword();
+            $userCreationStrategy->createUser($userData);
+
             return redirect()->route('menu.users.applications.view')->with('success', 'Application accepted successfully.');
         }
         return back()->withErrors(['error' => 'Application not found.']);
@@ -78,18 +93,32 @@ class ApplicationManagementController extends Controller
         }
 
         $validated = $request->validate([
-            'status' => 'required|in:1,2',
+            'status' => 'required|in:0,1,2',
             'refused_comment' => 'nullable|string',
         ]);
 
-        $updateData = [
+        $application->update([
             'status' => $validated['status'],
-            'accepted_by' => $validated['status'] == 1 ? Auth::id(): null,
+            'accepted_by' => $validated['status'] == 1 ? Auth::id() : null,
             'refused_by' => $validated['status'] == 2 ? Auth::id() : null,
             'refused_comment' => $validated['status'] == 2 ? $validated['refused_comment'] : null,
-        ];
+        ]);
 
-        $application->update($updateData);
+        if ($validated['status'] == 1) {
+            $userData = [
+                'name' => $application->name,
+                'surname' => $application->surname,
+                'email' => $application->email,
+                'phone' => $application->phone,
+                'branch_id' => $request->branch_id ?? null,
+                'users_groups_id' => $request->users_groups_id ?? null,
+            ];
+
+            Log::info('Attempting to create a new user from application acceptance', ['email' => $userData['email']]);
+            $userCreationStrategy = new CreateUserWithoutPassword();
+            $user = $userCreationStrategy->createUser($userData);
+            Log::info('New user created successfully', ['user_id' => $user->id]);
+        }
 
         return redirect()->route('menu.users.applications.view')->with('success', 'Application status updated successfully.');
     }

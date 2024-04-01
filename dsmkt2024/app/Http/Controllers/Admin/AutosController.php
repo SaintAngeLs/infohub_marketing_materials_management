@@ -12,3 +12,4 @@ class AutosController extends Controller
         return view('admin.autos.index');
     }
 }
+    
