@@ -30,11 +30,12 @@ Alpine.start();
 document.addEventListener('DOMContentLoaded', () => {
     import('./menu_tree');
     import('./menu_delete');
+    // import('./file_upload_validation');
     import('./menu_tree_files_upload');
     import('./file_upload');
     import('./upload-delete-file');
     import('./users');
     import('./menu_tree_permissions_group');
     import('./menu_tree_permissions_user');
-    import('./accessRequest-validation');
+    import('./accessRequest_validation');
 });
