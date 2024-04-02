@@ -1573,14 +1573,14 @@ input[type="submit"].table-button-2{
     gap: 10px;
     height: 60px
 }
-#menu-tree .jstree-hovered, #menu-tree-permissions .jstree-hovered, #menu-tree-permissions-user .jstree-hovered {
+#menu-tree .jstree-hovered, #menu-tree-permissions .jstree-hovered, #menu-tree-permissions-user .jstree-hovered, #menu-tree-notifications .jstree-hovered {
     background-color: #f0f0f0;
 }
-#menu-tree .jstree-icon, #menu-tree-permissions .jstree-icon,  #menu-tree-permissions-user .jstree-icon {
+#menu-tree .jstree-icon, #menu-tree-permissions .jstree-icon,  #menu-tree-permissions-user .jstree-icon, #menu-tree-notifications .jstree-icon {
     display: none !important;
 }
 
-#menu-tree .jstree-clicked, #menu-tree-permission .jstree-clicked,  #menu-tree-permissions-user .jstree-clicked {
+#menu-tree .jstree-clicked, #menu-tree-permission .jstree-clicked,  #menu-tree-permissions-user .jstree-clicked, #menu-tree-notifications .jstree-clicked {
     background-color: #e0e0e0;
 }
 

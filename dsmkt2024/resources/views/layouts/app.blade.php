@@ -39,7 +39,7 @@
             <div class="clearfix"></div>
             <div class="left-col">
                 @php
-                    $isAdminPanel = Auth::user()->isAdmin() && (Str::startsWith(Route::currentRouteName(), 'menu.') || request()->routeIs('menu') || request()->routeIs('user.my-account') || session('isAdminPanel'));
+                    $isAdminPanel = Auth::user()->isAdmin() && (Str::startsWith(Route::currentRouteName(), 'menu.') || request()->routeIs('menu')  || session('isAdminPanel'));
                 @endphp
 
                 @if($isAdminPanel)
