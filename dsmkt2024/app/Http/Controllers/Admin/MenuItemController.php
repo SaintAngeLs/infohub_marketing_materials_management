@@ -98,7 +98,6 @@ class MenuItemController extends Controller
             $newPosition = $request->position;
             $newParentId = $request->parent_id;
 
-            // Update parent if necessary
             if ($newParentId !== null && $menuItem->parent_id != $newParentId) {
                 $newParent = MenuItem::find($newParentId);
                 if (!$newParent && $newParentId != 'NULL' && $newParentId != '0') {
@@ -111,14 +110,14 @@ class MenuItemController extends Controller
             $siblings = MenuItem::where('parent_id', $menuItem->parent_id)->orderBy('position')->get();
             $siblings->where('id', '!=', $menuItem->id)->each(function ($sibling, $index) use ($newPosition, $menuItem) {
                 if ($index >= $newPosition) {
-                    $sibling->position = $index + 2; // Adjust positions for siblings after the new position
+                    $sibling->position = $index + 2;
                 } else {
-                    $sibling->position = $index + 1; // Keep position for siblings before the new position
+                    $sibling->position = $index + 1;
                 }
                 $sibling->save();
             });
 
-            $menuItem->position = $newPosition + 1; // Set new position for the moving item
+            $menuItem->position = $newPosition + 1;
             $menuItem->save();
 
             DB::commit();

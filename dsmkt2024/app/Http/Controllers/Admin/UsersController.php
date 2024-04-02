@@ -59,6 +59,8 @@ class UsersController extends Controller
             'last_login' => now(),
         ]);
 
+        
+
         return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 

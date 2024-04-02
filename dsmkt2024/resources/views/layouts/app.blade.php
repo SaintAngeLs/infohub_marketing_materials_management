@@ -39,15 +39,15 @@
             <div class="clearfix"></div>
             <div class="left-col">
                 @php
-                    use Illuminate\Support\Str;
+                    $isAdminPanel = Auth::user()->isAdmin() && (Str::startsWith(Route::currentRouteName(), 'menu.') || request()->routeIs('menu') || request()->routeIs('user.my-account') || session('isAdminPanel'));
                 @endphp
-                @if(Auth::user()->isAdmin() &&
-                    (Illuminate\Support\Str::startsWith(Route::currentRouteName(), 'menu.') ||
-                    request()->routeIs('menu')))
+
+                @if($isAdminPanel)
                     @include('partials.admin_menu')
                 @else
                     @include('partials.user_menu')
                 @endif
+
             </div>
             <div class="right-col">
                 @yield('content')

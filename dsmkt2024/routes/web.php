@@ -24,6 +24,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
 
+use App\Http\Controllers\User\Account\UserAccountViewController;
 use App\Http\Controllers\User\UserMenu\UserMenuViewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware;
@@ -48,7 +49,14 @@ Route::middleware('guest')->group(function () {
 
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/user/my-account', [UserAccountViewController::class, 'index'])->name('user.my-account');
+    Route::get('/user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications');
+    Route::get('/user/change-password', [UserChangePasswordController::class, 'index'])->name('user.change-password');
+});
+
 Route::middleware('auth')->group(function () {
+    Route::get('/user/my-account', [UserAccountViewController::class, 'index'])->middleware(['verified'])->name('user.my-account');
     Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['verified'])->name('dashboard');
     Route::get('/user-menu', [UserMenuViewController::class, 'index'])->name('user.menu');
     Route::get('/user-menu/{menuItemId}/files', [UserMenuViewController::class, 'showFilesForMenuItem'])->name('user-menu.files');

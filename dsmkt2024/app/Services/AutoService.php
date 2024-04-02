@@ -11,11 +11,23 @@ class AutoService implements IAutoService
     {
         return Auto::all();
     }
-
     public function createAuto(array $data)
     {
         return Auto::create($data);
     }
+    public function getAutoById($id)
+    {
+        return Auto::find($id);
+    }
 
-    // Implement other methods defined in the interface
+    public function updateAuto($id, array $data)
+    {
+        $auto = $this->getAutoById($id);
+        if ($auto) {
+            $auto->update($data);
+            return $auto;
+        }
+
+        return null;
+    }
 }

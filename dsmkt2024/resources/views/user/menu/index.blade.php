@@ -24,8 +24,8 @@
                             @foreach ($menuItem->files as $file)
                                 <tr>
                                     <td>{{ $file->name }}</td>
-                                    <td>{{ $file->type }}</td>
-                                    <td>{{ $file->size }}</td>
+                                    <td>{{ $file->extension }}</td>
+                                    <td>{{  \App\Helpers\FormatBytes::formatBytes($file->weight) }}</td>
                                     <td>{{ $file->updated_at->format('d.m.Y H:i:s') }}</td>
                                     <td><a href="{{ route('files.download', $file->id) }}">Pobierz</a></td>
                                 </tr>

@@ -32,7 +32,7 @@
 
     <div class="form-group">
         <label for="email">LOGIN (ADRES EMAIL)*</label>
-        <input type="email" name="email" id="email" value="{{ old('email', $user->email ?? '') }}" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" {{ $isEdit ? 'disabled' : '' }}>
+        <input type="email" name="email" id="email" value="{{ old('email', $user->email ?? '') }}" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" }}>
         @error('email')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror

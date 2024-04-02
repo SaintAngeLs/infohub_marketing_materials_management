@@ -31,9 +31,9 @@ class UserManagementController extends Controller
             'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,',
             'users_groups_id' => 'required|exists:users_groups,id',
-            // 'address' => 'required|string|max:255',
-            // 'code' => 'required|string|max:10',
-            // 'city' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
+            'code' => 'required|string|max:10',
+            'city' => 'required|string|max:100',
             'phone' => 'required|string|max:12',
         ]);
 
@@ -41,6 +41,10 @@ class UserManagementController extends Controller
         // $this->userService->createUser($request->all());
         $strategy = $this->getStrategy($request);
         $user = $strategy->createUser($validatedData);
+
+        $groupPermissions = UsersGroup::find($validatedData['users_groups_id'])->menuItems;
+        $user->accessibleMenuItems()->sync($groupPermissions->pluck('id'));
+
         return redirect()->route('menu.users.index')->with('success', 'User created successfully.');
     }
 
@@ -50,14 +54,16 @@ class UserManagementController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $userId,
             'users_groups_id' => 'required|exists:users_groups,id',
-            // 'address' => 'required|string|max:255',
-            // 'code' => 'required|string|max:10',
-            // 'city' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
+            'code' => 'required|string|max:10',
+            'city' => 'required|string|max:100',
             'phone' => 'required|string|max:12',
         ]);
 
         try {
             $user = $this->userService->updateUser($userId, $validatedData);
+            $groupPermissions = UsersGroup::find($validatedData['users_groups_id'])->menuItems;
+            $user->accessibleMenuItems()->sync($groupPermissions->pluck('id'));
             return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
