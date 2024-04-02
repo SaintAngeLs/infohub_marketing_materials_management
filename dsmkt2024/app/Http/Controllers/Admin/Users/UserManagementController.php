@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Users;
 
+use App\Contracts\IStatistics;
 use App\Contracts\IUserService;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -16,10 +17,12 @@ use Illuminate\Support\Facades\Log;
 class UserManagementController extends Controller
 {
     protected $userService;
+    protected $statisticsService;
 
-    public function __construct(IUserService $userService)
+    public function __construct(IUserService $userService, IStatistics $statisticsService)
     {
         $this->userService = $userService;
+        $this->statisticsService = $statisticsService;
     }
 
     public function store(Request $request)
@@ -37,13 +40,18 @@ class UserManagementController extends Controller
             'phone' => 'required|string|max:12',
         ]);
 
-
         // $this->userService->createUser($request->all());
         $strategy = $this->getStrategy($request);
         $user = $strategy->createUser($validatedData);
 
         $groupPermissions = UsersGroup::find($validatedData['users_groups_id'])->menuItems;
         $user->accessibleMenuItems()->sync($groupPermissions->pluck('id'));
+
+        $this->statisticsService->logUserActivity(auth()->id(), [
+            'uri' => $request->path(),
+            'post_string' => $request->except('_token'),
+            'query_string' => $request->getQueryString(),
+        ]);
 
         return redirect()->route('menu.users.index')->with('success', 'User created successfully.');
     }
@@ -64,6 +72,11 @@ class UserManagementController extends Controller
             $user = $this->userService->updateUser($userId, $validatedData);
             $groupPermissions = UsersGroup::find($validatedData['users_groups_id'])->menuItems;
             $user->accessibleMenuItems()->sync($groupPermissions->pluck('id'));
+            $this->statisticsService->logUserActivity(auth()->id(), [
+                'uri' => $request->path(),
+                'post_string' => $request->except('_token'),
+                'query_string' => $request->getQueryString(),
+            ]);
             return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);

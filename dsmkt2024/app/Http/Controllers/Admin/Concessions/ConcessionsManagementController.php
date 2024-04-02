@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Concessions;
 
+use App\Contracts\IStatistics;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\ConcessionService;
@@ -9,10 +10,11 @@ use App\Services\ConcessionService;
 class ConcessionsManagementController extends Controller
 {
     protected $concessionService;
-
-    public function __construct(ConcessionService $concessionService)
+    protected $statisticsService;
+    public function __construct(ConcessionService $concessionService, IStatistics $statisticsService)
     {
         $this->concessionService = $concessionService;
+        $this->statisticsService = $statisticsService;
     }
 
     public function store(Request $request)
@@ -43,6 +45,12 @@ class ConcessionsManagementController extends Controller
         ]);
 
         $this->concessionService->updateConcession($id, $validatedData);
+
+        $this->statisticsService->logUserActivity(auth()->id(), [
+            'uri' => $request->path(),
+            'post_string' => $request->except('_token'),
+            'query_string' => $request->getQueryString(),
+        ]);
 
         return redirect()->route('menu.concessions.index')->with('success', 'Koncesja została zaktualizowana pomyślnie.');
     }

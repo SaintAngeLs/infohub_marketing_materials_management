@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserDownload extends Model
 {
+    protected $table = 'users_downloads';
+    
     protected $fillable = [
         'user_id',
-        'file_id', 
+        'file_id',
         'user_ip'
     ];
 

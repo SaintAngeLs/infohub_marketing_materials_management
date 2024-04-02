@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserViewItem extends Model
 {
+    protected $table = 'users_view_menu_items';
     protected $fillable = [
         'user_id',
         'menu_item_id',

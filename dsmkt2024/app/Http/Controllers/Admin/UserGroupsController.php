@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\IStatistics;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\User;
 use App\Models\UsersGroup;
 use Illuminate\Http\Request;
 
-/**
- * Consentions
- */
 class UserGroupsController extends Controller
 {
+    protected $statisticsService;
+
+    public function __construct(IStatistics $statisticsService)
+    {
+        $this->statisticsService = $statisticsService;
+    }
+
     public function index()
     {
-        // $users = User::all();
         $userGroups = UsersGroup::all();
         return view('admin.groups.index', compact('userGroups'));
     }
@@ -46,6 +50,12 @@ class UserGroupsController extends Controller
         $permissionsIds = array_keys($request->menu_permissions);
 
         $userGroup->permissions()->attach($permissionsIds);
+
+        $this->statisticsService->logUserActivity(auth()->id(), [
+            'uri' => $request->path(),
+            'post_string' => $request->except('_token'),
+            'query_string' => $request->getQueryString(),
+        ]);
 
         return redirect()->route('menu.users.groups')->with('success', 'Grupa została dodana pomyślnie.');
     }
