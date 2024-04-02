@@ -39,7 +39,6 @@
 
     <!-- Display the rest of the content only if authenticated -->
     @auth
-        <h1>MATERIAŁY REKLAMOWE DS</h1>
         <div class="clearfix"></div>
 
         <form id="searchbox" onsubmit="return false;">

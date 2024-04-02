@@ -21,8 +21,8 @@ class UserGroupsController extends Controller
     }
     public function create()
     {
-        // $user = User::all();
-        return view('admin.groups.create');
+        $userGroup = new UsersGroup();
+        return view('admin.groups.create', compact('userGroup'));
     }
 
     public function edit($id)
@@ -31,21 +31,29 @@ class UserGroupsController extends Controller
         return view('admin.groups.edit', compact('userGroup'));
     }
 
-    // Dodanie dowej concesji nie grupy!
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'address' => 'required|string|max:255',
-    //         'code' => 'required|string|max:10',
-    //         'city' => 'required|string|max:100',
-    //         'phone' => 'required|string|max:12',
-    //         'fax' => 'nullable|string|max:12',
-    //     ]);
+    public function store(Request $request)
+    {
+        \Log::info("The store request in the UserGroupsController is", $request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'menu_permissions' => 'required|array', // Adjusted to 'menu_permissions'
+        ]);
 
-    //     Branch::create($request->all());
+        // Create the user group with the provided name
+        $userGroup = UsersGroup::create([
+            'name' => $request->name
+        ]);
 
-    //     return redirect()->route('concessions')->with('success', 'Grupa została dodana pomyślnie.');
-    // }
+        // Since 'menu_permissions' are given as an associative array where keys and values are the same,
+        // we can just use array_keys() to get the menu item IDs.
+        $permissionsIds = array_keys($request->menu_permissions);
+
+        // Validate if menu item IDs exist, you could perform a validation before attaching if needed.
+
+        // Attach the permissions to the user group
+        $userGroup->permissions()->attach($permissionsIds);
+
+        return redirect()->route('menu.users.groups')->with('success', 'Grupa została dodana pomyślnie.');
+    }
 
 }
