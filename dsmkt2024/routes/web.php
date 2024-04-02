@@ -25,6 +25,8 @@ use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
 
 use App\Http\Controllers\User\Account\UserAccountViewController;
+use App\Http\Controllers\User\MenuItemNotifications\MenuItemNotificationsViewController;
+use App\Http\Controllers\User\MenuItemNotifications\MenuItemNotificationsController;
 use App\Http\Controllers\User\UserMenu\UserMenuViewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware;
@@ -51,8 +53,9 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/my-account', [UserAccountViewController::class, 'index'])->name('user.my-account');
-    Route::get('/user/notifications', [UserNotificationController::class, 'index'])->name('user.notifications');
-    Route::get('/user/change-password', [UserChangePasswordController::class, 'index'])->name('user.change-password');
+    Route::get('/user/notifications', [MenuItemNotificationsViewController::class, 'index'])->name('user.notifications');
+    Route::get('/user/change-password', [UserAccountViewController::class, 'index'])->name('user.change-password');
+    Route::get('/user/get-menu-items-user-notifications', [MenuItemNotificationsController::class, 'getMenuItemsNotifications'])->name('user.get-menu-items-user-notifications');
 });
 
 Route::middleware('auth')->group(function () {
@@ -61,6 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-menu', [UserMenuViewController::class, 'index'])->name('user.menu');
     Route::get('/user-menu/{menuItemId}/files', [UserMenuViewController::class, 'showFilesForMenuItem'])->name('user-menu.files');
     Route::get('/files/download/{id}', [FileController::class, 'download'])->name('files.download');
+    Route::post('/user/update-menu-item-notification',  [MenuItemNotificationsController::class, 'updateNotificationPreference'])->name('user.notification-preference.update');
+    Route::get('/user/get-menu-items-user-notifications', [MenuItemNotificationsController::class, 'getMenuItemsNotifications'])->name('user.get-menu-items-user-notifications');
 
 });
 
