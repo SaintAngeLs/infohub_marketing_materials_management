@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\IApplication;
+use App\Contracts\IStatistics;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\MenuItems\MenuItem;
@@ -12,9 +14,14 @@ use Illuminate\Support\Facades\Log;
 class MenuItemController extends Controller
 {
 
-    /**
-     * Display a listing of menu items
-     */
+    protected $applicationService;
+    protected $statisticsService;
+
+    public function __construct(IApplication $applicationService, IStatistics $statisticsService)
+    {
+        $this->applicationService = $applicationService;
+        $this->statisticsService = $statisticsService;
+    }
     public function index()
     {
         $menuItems = MenuItem::get()->toTree();
@@ -58,6 +65,12 @@ class MenuItemController extends Controller
             }
         }
 
+        $this->statisticsService->logUserActivity(auth()->id(), [
+            'uri' => $request->path(),
+            'post_string' => $request->except('_token'),
+            'query_string' => $request->getQueryString(),
+        ]);
+
         return redirect()->route('menu');
     }
 
@@ -83,6 +96,12 @@ class MenuItemController extends Controller
             }
         }
 
+        $this->statisticsService->logUserActivity(auth()->id(), [
+            'uri' => $request->path(),
+            'post_string' => $request->except('_token'),
+            'query_string' => $request->getQueryString(),
+        ]);
+
         return redirect()->route('menu');
     }
 
@@ -106,7 +125,6 @@ class MenuItemController extends Controller
                 $menuItem->parent_id = $newParentId === 'NULL' || $newParentId === '0' ? null : $newParentId;
             }
 
-            // Adjust positions
             $siblings = MenuItem::where('parent_id', $menuItem->parent_id)->orderBy('position')->get();
             $siblings->where('id', '!=', $menuItem->id)->each(function ($sibling, $index) use ($newPosition, $menuItem) {
                 if ($index >= $newPosition) {
@@ -121,6 +139,13 @@ class MenuItemController extends Controller
             $menuItem->save();
 
             DB::commit();
+
+            $this->statisticsService->logUserActivity(auth()->id(), [
+                'uri' => $request->path(),
+                'post_string' => $request->except('_token'),
+                'query_string' => $request->getQueryString(),
+            ]);
+
             return response()->json(['success' => true, 'message' => 'Menu item order updated successfully.']);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -177,6 +202,13 @@ class MenuItemController extends Controller
 
             DB::commit();
             Log::info('Menu item moved successfully.');
+
+            $this->statisticsService->logUserActivity(auth()->id(), [
+                'uri' => $request->path(),
+                'post_string' => $request->except('_token'),
+                'query_string' => $request->getQueryString(),
+            ]);
+
             return response()->json(['success' => true, 'message' => 'Menu item moved successfully.']);
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -186,42 +218,36 @@ class MenuItemController extends Controller
     }
 
     private function updateOrderInternal($menuItem, $newPosition, $newParentId)
-{
-    // Determine the current and new parent IDs for comparison
-    $currentParentId = $menuItem->parent_id;
-    $isNewParent = $currentParentId != $newParentId;
+    {
+        $currentParentId = $menuItem->parent_id;
+        $isNewParent = $currentParentId != $newParentId;
 
-    // Fetch all relevant siblings based on the context (same parent or new parent)
-    $queryParentId = $isNewParent ? $newParentId : $currentParentId;
-    $siblings = MenuItem::where('parent_id', $queryParentId)
-                        ->orderBy('position', 'asc')
-                        ->get();
+        $queryParentId = $isNewParent ? $newParentId : $currentParentId;
+        $siblings = MenuItem::where('parent_id', $queryParentId)
+                            ->orderBy('position', 'asc')
+                            ->get();
 
-    if ($isNewParent) {
-        // If moving to a new parent, adjust positions excluding the current item
-        $menuItem->position = $newPosition;
-    } else {
-        // Handle reordering within the same parent
-        $siblings = $siblings->filter(function ($sib) use ($menuItem) {
-            return $sib->id != $menuItem->id; // Exclude the current item from siblings
-        })->values(); // Reset collection keys for proper indexing
+        if ($isNewParent) {
+            $menuItem->position = $newPosition;
+        } else {
+            $siblings = $siblings->filter(function ($sib) use ($menuItem) {
+                return $sib->id != $menuItem->id;
+            })->values();
+        }
+
+        $siblings->splice($newPosition, 0, [$menuItem]);
+
+        foreach ($siblings as $index => $sib) {
+            $sib->position = $index;
+            $sib->save();
+        }
+
+        if ($isNewParent) {
+            $menuItem->parent_id = $newParentId === 'NULL' || $newParentId === '0' ? null : $newParentId;
+            $menuItem->save();
+        }
+        
     }
-
-    // Insert the menu item in the new position within its siblings
-    $siblings->splice($newPosition, 0, [$menuItem]);
-
-    // Update positions for all items in the new order
-    foreach ($siblings as $index => $sib) {
-        $sib->position = $index;
-        $sib->save();
-    }
-
-    // If the parent has changed, update the parent_id of the moved item
-    if ($isNewParent) {
-        $menuItem->parent_id = $newParentId === 'NULL' || $newParentId === '0' ? null : $newParentId;
-        $menuItem->save();
-    }
-}
 
 
     public function hasSubItems($id)

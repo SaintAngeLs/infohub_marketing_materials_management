@@ -123,7 +123,7 @@ class FileController extends Controller
 
         switch ($request->input('file_source')) {
             case 'file_pc':
-                $rules['file'] = 'required|file|max:716800'; // Adjust based on your needs
+                $rules['file'] = 'required|file|max:716800';
                 break;
             case 'file_external':
                 $rules['file_url'] = 'required|url';
@@ -182,10 +182,7 @@ class FileController extends Controller
             }
             $this->updateFileAttributes($file, $validated, $request);
         } else {
-            // Handle cases where no valid file is provided during update
             if ($file->exists && !$request->hasFile('file')) {
-                // Potentially log this situation or handle it as appropriate
-                // e.g., Log::info('No new file provided for update.');
                 Log::info("The request does not cointat in the file");
             } else {
                 throw new \Exception("No valid file upload source provided or required data missing.");

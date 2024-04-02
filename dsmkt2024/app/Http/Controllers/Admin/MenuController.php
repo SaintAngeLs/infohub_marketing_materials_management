@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\IApplication;
+use App\Contracts\IStatistics;
 use App\Helpers\FormatBytes;
 use App\Http\Controllers\Controller;
 use App\Models\ExtendedUser;
@@ -14,6 +16,14 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
+    protected $applicationService;
+    protected $statisticsService;
+
+    public function __construct(IApplication $applicationService, IStatistics $statisticsService)
+    {
+        $this->applicationService = $applicationService;
+        $this->statisticsService = $statisticsService;
+    }
     public function index()
     {
         $menuItems = MenuItem::getOrderedMenuItems();
@@ -67,9 +77,6 @@ class MenuController extends Controller
             'menu_permissions' => 'required|array',
         ]);
 
-
-
-
         $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
 
         $menuItem->fill($validatedData);
@@ -80,12 +87,15 @@ class MenuController extends Controller
             $menuItem->owners()->sync($validatedData['owners']);
         }
 
-
-
-
         $this->updateMenuItemPermissions($menuItem, $request->input('menu_permissions', []));
 
         $this->updateTreeStructureAfterMenuUpdate($menuItem, $validatedData['parent_id']);
+
+        $this->statisticsService->logUserActivity(auth()->id(), [
+            'uri' => $request->path(),
+            'post_string' => $request->except('_token'),
+            'query_string' => $request->getQueryString(),
+        ]);
 
         return redirect()->route('menu.structure')->with('success', 'Menu item updated successfully.');
     }

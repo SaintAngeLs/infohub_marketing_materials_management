@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Applications;
 
+use App\Contracts\IStatistics;
 use App\Strategies\UserCreation\CreateUserWithoutPassword;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -14,10 +15,12 @@ use Illuminate\Support\Facades\Log;
 class ApplicationManagementController extends Controller
 {
     protected $applicationService;
+    protected $statisticsService;
 
-    public function __construct(IApplication $applicationService)
+    public function __construct(IApplication $applicationService, IStatistics $statisticsService)
     {
         $this->applicationService = $applicationService;
+        $this->statisticsService = $statisticsService;
     }
 
     public function storeAccessRequest(Request $request)
@@ -66,6 +69,11 @@ class ApplicationManagementController extends Controller
             $userCreationStrategy = new CreateUserWithoutPassword();
             $userCreationStrategy->createUser($userData);
 
+            $this->statisticsService->logUserActivity(auth()->id(), [
+                'uri' => $request->path(),
+                'post_string' => $request->except('_token'),
+                'query_string' => $request->getQueryString(),
+            ]);
             return redirect()->route('menu.users.applications.view')->with('success', 'Application accepted successfully.');
         }
         return back()->withErrors(['error' => 'Application not found.']);
@@ -79,6 +87,11 @@ class ApplicationManagementController extends Controller
                 'status' => 2, // Rejected
                 'refused_by' => Auth::id(),
                 'refused_comment' => $request->input('refused_comment'),
+            ]);
+            $this->statisticsService->logUserActivity(auth()->id(), [
+                'uri' => $request->path(),
+                'post_string' => $request->except('_token'),
+                'query_string' => $request->getQueryString(),
             ]);
             return redirect()->route('menu.users.applications.view')->with('success', 'Application rejected successfully.');
         }
@@ -119,6 +132,12 @@ class ApplicationManagementController extends Controller
             $user = $userCreationStrategy->createUser($userData);
             Log::info('New user created successfully', ['user_id' => $user->id]);
         }
+
+        $this->statisticsService->logUserActivity(auth()->id(), [
+            'uri' => $request->path(),
+            'post_string' => $request->except('_token'),
+            'query_string' => $request->getQueryString(),
+        ]);
 
         return redirect()->route('menu.users.applications.view')->with('success', 'Application status updated successfully.');
     }

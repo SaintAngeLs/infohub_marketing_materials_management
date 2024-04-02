@@ -7,21 +7,40 @@ use App\Contracts\StatisticsInterface;
 use App\Models\UserLog;
 use App\Models\UserDownload;
 use App\Models\UserViewItem;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class StatisticsService implements IStatistics
 {
+    protected $request;
+    
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
     public function logUserActivity($userId, $data)
     {
-        $queryString = $data['query_string'] ?? null;
+        $queryString = $this->request->getQueryString();
+        $postData = $this->request->except(['_token', 'file']);
+        $postString = json_encode($postData);
+
+        $files = $this->request->allFiles();
+        $fileDetails = [];
+        foreach ($files as $file) {
+            $fileDetails[] = [
+                'name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'type' => $file->getMimeType(),
+            ];
+        }
+        $fileString = json_encode($fileDetails);
 
         UserLog::create([
             'user_id' => $userId,
             'uri' => $data['uri'] ?? null,
-            'post_string' => json_encode($data['post_string'] ?? []),
+            'post_string' => $postString,
             'query_string' => $queryString,
-            'file_string' => json_encode($data['file_string'] ?? []),
-            'ip' => request()->ip(),
+            'file_string' => $fileString,
+            'ip' => $this->request->ip(),
         ]);
     }
 
