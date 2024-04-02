@@ -16,12 +16,15 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\Permissions\PermissionManagementController;
 use App\Http\Controllers\Admin\Permissions\PermissionViewController;
 use App\Http\Controllers\Admin\ReportsController;
+
+use App\Http\Controllers\Admin\Statistics\StatisticsManagementController;
+use App\Http\Controllers\Admin\Statistics\StatisticsViewController;
 use App\Http\Controllers\Admin\UserGroupsController;
 use App\Http\Controllers\Admin\Users\UserManagementController;
 use App\Http\Controllers\Admin\Users\UserViewController;
 use App\Http\Controllers\Admin\Users\PasswordSetupController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\StatisticsController;
+// use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
 
 use App\Http\Controllers\User\Account\UserAccountViewController;
@@ -84,7 +87,12 @@ Route::middleware('admin')->group(function () {
             return view('admin.files.index');
         })->name('files');
 
-        Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
+        Route::get('/statistics', [StatisticsViewController::class, 'index'])->name('statistics');
+        Route::get('/statistics/entries', [StatisticsManagementController::class, 'showEntries'])->name('statistics.entries');
+        Route::get('/statistics/downloads', [StatisticsManagementController::class, 'showDownloads'])->name('statistics.downloads');
+        Route::get('/statistics/logins', [StatisticsManagementController::class, 'showLogins'])->name('statistics.logins');
+        Route::get('/statistics/download-excel', [StatisticsManagementController::class, 'downloadExcel'])->name('statistics.download-excel');
+
 
         Route::get('/create', [MenuController::class, 'create'])->name('create');
         Route::get('/edit/{menuItem}', [MenuController::class, 'edit'])->name('edit');

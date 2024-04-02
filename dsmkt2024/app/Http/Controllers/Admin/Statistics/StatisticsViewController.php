@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Statistics;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class StatisticsController extends Controller
+class StatisticsViewController extends Controller
 {
     public function index()
     {

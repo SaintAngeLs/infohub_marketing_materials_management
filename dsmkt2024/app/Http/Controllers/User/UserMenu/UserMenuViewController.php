@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserMenuViewController extends Controller
 {
-
     protected $statisticsService;
 
     public function __construct(IStatistics $statisticsService)
@@ -21,7 +20,6 @@ class UserMenuViewController extends Controller
     {
         $user = Auth::user();
         $menuItems = $user->accessibleMenuItems()->get();
-        // Optionally, preload the first menu item's files or content if you want to display something initially
         $firstMenuItemId = $menuItems->first()->id ?? null;
         return redirect()->route('menu.files', ['menuItemId' => $firstMenuItemId]);
     }
