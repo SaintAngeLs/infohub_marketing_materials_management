@@ -33,7 +33,7 @@
                         </tbody>
                     </table>
                     @empty
-                    <li>No items to display</li>
+                    <li>Brak plików</li>
                 @endforelse
 
                     {{-- <div class="menu-tree-component" id="menu-tree"></div> --}}

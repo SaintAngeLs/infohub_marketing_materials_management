@@ -23,7 +23,7 @@ class ConcessionsManagementController extends Controller
             'code' => 'required|string|max:10',
             'city' => 'required|string|max:100',
             'phone' => 'required|string|max:12',
-            'fax' => 'nullable|string|max:12',
+            'email' => 'nullable|string',
         ]);
 
         $this->concessionService->createConcession($validatedData);

@@ -30,6 +30,7 @@ Alpine.start();
 document.addEventListener('DOMContentLoaded', () => {
     import('./menu_tree');
     import('./menu_delete');
+    import('./concessios_component_validation');
     // import('./file_upload_validation');
     import('./menu_tree_files_upload');
     import('./file_upload');
@@ -38,4 +39,5 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./menu_tree_permissions_group');
     import('./menu_tree_permissions_user');
     import('./accessRequest_validation');
+    // import('./concessios_component_validation');
 });
