@@ -7,17 +7,20 @@ use App\Contracts\StatisticsInterface;
 use App\Models\UserLog;
 use App\Models\UserDownload;
 use App\Models\UserViewItem;
+use Illuminate\Support\Facades\Request;
 
 class StatisticsService implements IStatistics
 {
     public function logUserActivity($userId, $data)
     {
+        $queryString = $data['query_string'] ?? null;
+
         UserLog::create([
             'user_id' => $userId,
             'uri' => $data['uri'] ?? null,
-            'post_string' => $data['post_string'] ?? null,
-            'query_string' => $data['query_string'] ?? null,
-            'file_string' => $data['file_string'] ?? null,
+            'post_string' => json_encode($data['post_string'] ?? []),
+            'query_string' => $queryString,
+            'file_string' => json_encode($data['file_string'] ?? []),
             'ip' => request()->ip(),
         ]);
     }

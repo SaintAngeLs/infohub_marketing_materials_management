@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\IStatistics;
 use App\Http\Controllers\Controller;
 use App\Models\Auto;
 use App\Models\File;
@@ -19,11 +20,11 @@ use Illuminate\Support\Facades\Log;
 class FileController extends Controller
 {
     protected $userService;
-
-    // Inject UserService into the controller
-    public function __construct(UserService $userService)
+    protected $statisticsService;
+    public function __construct(UserService $userService,  IStatistics $statisticsService)
     {
         $this->userService = $userService;
+        $this->statisticsService = $statisticsService;
     }
     public function create(Request $request)
     {
@@ -59,8 +60,13 @@ class FileController extends Controller
             $fileChanged = $this->detectFileChanges($file, $validated);
 
             if ($fileChanged) {
-                // If a change is detected, notify users subscribed to this menu item
                 Log::info("fileChanged are set to true ... seding the email");
+                $queryString = $request->getQueryString();
+                $this->statisticsService->logUserActivity(auth()->id(), [
+                    'uri' => $request->path(),
+                    'post_string' => json_encode($request->all()),
+                    'query_string' => $queryString,
+                ]);
                 $this->userService->notifyUserAboutFileChange($file->menu_id, "A file in your subscribed menu item has been updated.");
             }
             return back()->with('success', 'File uploaded successfully.');
@@ -81,6 +87,12 @@ class FileController extends Controller
             $fileChanged = $this->detectFileChanges($file, $validated);
             if ($fileChanged) {
                 Log::info("fileChanged are set to true ... seding the email");
+                $queryString = $request->getQueryString();
+                $this->statisticsService->logUserActivity(auth()->id(), [
+                    'uri' => $request->path(),
+                    'post_string' => json_encode($request->all()),
+                    'query_string' => $queryString,
+                ]);
                 $this->userService->notifyUserAboutFileChange($file->menu_id, "A file in your subscribed menu item has been updated.");
             }
             Log::info("Redirecting to the menu-files");
@@ -166,7 +178,7 @@ class FileController extends Controller
             if ($request->hasFile('file')) {
                 $uploadedFile = $request->file('file');
                 $validated['extension'] = $uploadedFile->getClientOriginalExtension();
-                $validated['weight'] = $uploadedFile->getSize(); // Gets the size in bytes
+                $validated['weight'] = $uploadedFile->getSize();
             }
             $this->updateFileAttributes($file, $validated, $request);
         } else {
@@ -264,6 +276,8 @@ class FileController extends Controller
         if (!file_exists($filePath)) {
             abort(404);
         }
+
+        $this->statisticsService->logDownload(auth()->id(), $fileId);
 
         return response()->download($filePath, basename($filePath), [
             'Content-Type' => mime_content_type($filePath)
