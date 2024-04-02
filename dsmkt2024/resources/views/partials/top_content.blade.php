@@ -9,17 +9,25 @@
 
                     Zalogowany jako: <span>{{ Auth::user()->name }}</span>
                 </p>
-                @if (Auth::user()->isAdmin())
-                    <a href="{{ route('menu') }}" class="{{ request()->routeIs('menu') ? 'active' : '' }}">
-                        <img src="{{ asset('img/icons/user-admin-logo.svg') }}" alt="Admin Panel Icon" />
-                        Panel Administracyjny
-                    </a>
+                 @if (Auth::user()->isAdmin())
+                    @if (request()->routeIs('menu'))
+                        <a href="{{ route('dashboard') }}" class="active">
+                            <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Panel Icon" />
+                            Panel Użytkownika
+                        </a>
+                    @else
+                        <a href="{{ route('menu') }}">
+                            <img src="{{ asset('img/icons/user-admin-logo.svg') }}" alt="Admin Panel Icon" />
+                            Panel Administracyjny
+                        </a>
+                    @endif
                 @endif
 
-                <a href="/user/notification">
+                <a href="{{ route('user.my-account') }}">
                     <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Icon" />
                     Moje konto
                 </a>
+
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <img src="{{ asset('img/icons/log-out.svg') }}" alt="Log Out Icon" />
                     Wyloguj
@@ -28,16 +36,11 @@
             </div>
         </div>
     @else
-        <!-- For unauthenticated users, display the logo centrally -->
         <div id="logo-center" class="center-logo">
             <a href="/"></a>
         </div>
     @endauth
 </div>
-    <!-- Always display the logo -->
-
-
-    <!-- Display the rest of the content only if authenticated -->
     @auth
         <div class="clearfix"></div>
 

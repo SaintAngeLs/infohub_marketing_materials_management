@@ -1,12 +1,12 @@
 @php
     $isEdit = isset($auto) && $auto->id;
-    $formAction = $isEdit ? route('autos.update', $auto->id) : route('menu.autos.store');
+    $formAction = $isEdit ? route('menu.autos.update', $auto->id) : route('menu.autos.store');
     $formMethod = $isEdit ? 'PATCH' : 'POST';
 @endphp
 
 <form action="{{ $formAction }}" method="POST" enctype="multipart/form-data">
     @csrf
-    @if($isEdit) @method($formMethod) @endif
+    @if($isEdit) @method('PATCH') @endif
 
     <div class="form-group">
         <label for="name">Nazwa*</label>
@@ -17,4 +17,5 @@
     </div>
 
     <button type="submit" class="btn btn-primary">{{ $isEdit ? 'Zaktualizuj' : 'Dodaj' }}</button>
+    <a href="{{ route('menu.autos.index') }}" class="btn btn-secondary">Anuluj</a>
 </form>

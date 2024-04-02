@@ -5,6 +5,10 @@ namespace App\Services;
 use App\Contracts\IUserService;
 use App\Models\User;
 use App\Models\UsersGroup;
+use App\Strategies\Notifications\DailyNotifyStrategy;
+use App\Strategies\Notifications\EveryChangeNotifyStrategy;
+use App\Strategies\Notifications\NeverNotifyStrategy;
+use App\Strategies\Notifications\NotificationStrategy;
 
 class UserService implements IUserService
 {
@@ -36,5 +40,25 @@ class UserService implements IUserService
     public function getUserById($userId)
     {
         return User::findOrFail($userId);
+    }
+    protected function getNotificationStrategy($preference): NotificationStrategy
+    {
+        switch ($preference) {
+            case 'never':
+                return new NeverNotifyStrategy();
+            case 'daily':
+                return new DailyNotifyStrategy();
+            case 'every_change':
+                return new EveryChangeNotifyStrategy();
+            default:
+                return new NeverNotifyStrategy();
+        }
+    }
+
+    public function sendNotification($userId, $message)
+    {
+        $user = $this->getUserById($userId);
+        $strategy = $this->getNotificationStrategy($user->notification_preference);
+        $strategy->notify($user, $message);
     }
 }

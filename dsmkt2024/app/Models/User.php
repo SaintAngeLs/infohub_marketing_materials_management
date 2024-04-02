@@ -83,7 +83,7 @@ class User extends Authenticatable
 
     public function accessibleMenuItems()
     {
-        return $this->belongsToMany(MenuItem::class, 'menu_item_user', 'user_id', 'menu_item_id');
+        return $this->belongsToMany(MenuItem::class, 'menu_item_user', 'user_id', 'menu_item_id')->withTimestamps();
     }
 
     /**
@@ -94,5 +94,26 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return $this->active == 1;
+    }
+
+    public function groupMenuItems()
+    {
+        return $this->hasManyThrough(
+            MenuItem::class,
+            UsersGroup::class,
+            'id', // Foreign key on the UsersGroup table
+            'id', // Foreign key on the MenuItem table
+            'users_groups_id', // Local key on the users table
+            'id' // Local key on the UsersGroup table
+        );
+    }
+
+    public function getAllPermissionsAttribute()
+    {
+        $userPermissions = $this->accessibleMenuItems->pluck('id')->toArray();
+
+        $groupPermissions = $this->usersGroup ? $this->usersGroup->menuItems->pluck('id')->toArray() : [];
+
+        return array_unique(array_merge($userPermissions, $groupPermissions));
     }
 }

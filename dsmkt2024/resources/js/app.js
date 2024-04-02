@@ -39,5 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./menu_tree_permissions_group');
     import('./menu_tree_permissions_user');
     import('./accessRequest_validation');
+    import('./menu_tab_create_validation');
     // import('./concessios_component_validation');
 });

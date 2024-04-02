@@ -20,7 +20,20 @@ class AutosManagementController extends Controller
         $validated = $request->validate(['name' => 'required|string|max:255']);
         $this->autoService->createAuto($validated);
 
-        return redirect()->route('admin.autos.index')->with('success', 'Auto created successfully.');
+        return redirect()->route('menu.autos.index')->with('success', 'Auto created successfully.');
     }
 
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate(['name' => 'required|string|max:255']);
+
+        $auto = $this->autoService->getAutoById($id);
+        if (!$auto) {
+            return back()->with('error', 'Samochód nie został znaleziony.');
+        }
+
+        $this->autoService->updateAuto($id, $validated);
+
+        return redirect()->route('menu.autos.index')->with('success', 'Auto updated successfully.');
+    }
 }

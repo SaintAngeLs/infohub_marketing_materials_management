@@ -36,21 +36,15 @@ class UserGroupsController extends Controller
         \Log::info("The store request in the UserGroupsController is", $request->all());
         $request->validate([
             'name' => 'required|string|max:255',
-            'menu_permissions' => 'required|array', // Adjusted to 'menu_permissions'
+            'menu_permissions' => 'required|array',
         ]);
 
-        // Create the user group with the provided name
         $userGroup = UsersGroup::create([
             'name' => $request->name
         ]);
 
-        // Since 'menu_permissions' are given as an associative array where keys and values are the same,
-        // we can just use array_keys() to get the menu item IDs.
         $permissionsIds = array_keys($request->menu_permissions);
 
-        // Validate if menu item IDs exist, you could perform a validation before attaching if needed.
-
-        // Attach the permissions to the user group
         $userGroup->permissions()->attach($permissionsIds);
 
         return redirect()->route('menu.users.groups')->with('success', 'Grupa została dodana pomyślnie.');
