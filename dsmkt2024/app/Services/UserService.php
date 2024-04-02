@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Contracts\IEmailService;
 use App\Contracts\IUserService;
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Models\UsersGroup;
 use App\Strategies\Notifications\DailyNotifyStrategy;
 use App\Strategies\Notifications\EveryChangeNotifyStrategy;
@@ -12,6 +14,13 @@ use App\Strategies\Notifications\NotificationStrategy;
 
 class UserService implements IUserService
 {
+    protected $emailService;
+
+    public function __construct(IEmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
+
     public function getAllUsers()
     {
         return User::all();
@@ -44,21 +53,37 @@ class UserService implements IUserService
     protected function getNotificationStrategy($preference): NotificationStrategy
     {
         switch ($preference) {
-            case 'never':
+            case 0: // Nigdy
                 return new NeverNotifyStrategy();
-            case 'daily':
-                return new DailyNotifyStrategy();
-            case 'every_change':
-                return new EveryChangeNotifyStrategy();
+            case 1: // Raz dziennie
+                return new DailyNotifyStrategy($this->emailService);
+            case 2: // Przy każdej zmianie
+                return new EveryChangeNotifyStrategy($this->emailService);
             default:
                 return new NeverNotifyStrategy();
         }
     }
-
     public function sendNotification($userId, $message)
     {
         $user = $this->getUserById($userId);
         $strategy = $this->getNotificationStrategy($user->notification_preference);
         $strategy->notify($user, $message);
+    }
+
+    public function notifyUserAboutFileChange($menuItemId, $message)
+    {
+        $userNotifications = UserNotification::where('menu_item_id', $menuItemId)
+                                             ->with('user') // Eager load user relationship
+                                             ->get();
+
+        foreach ($userNotifications as $notification) {
+            // Use the frequency from the notification to determine the strategy
+            $strategy = $this->getNotificationStrategy($notification->frequency);
+            if ($strategy) {
+                $strategy->notify($notification->user, $message);
+            } else {
+                \Log::warning("Unsupported notification frequency: {$notification->frequency}");
+            }
+        }
     }
 }
