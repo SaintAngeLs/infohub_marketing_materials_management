@@ -11,9 +11,12 @@ class UserLog extends Model
         'uri',
         'post_string',
         'query_string',
-        'file_string', 
-        'ip'
+        'file_string',
+        'ip',
+        'fingerprint',
     ];
+
+    public $timestamps = false;
 
     public function user()
     {

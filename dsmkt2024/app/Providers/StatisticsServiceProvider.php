@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Contracts\IStatistics;
 use App\Services\StatisticsService;
 
-class AppServiceProvider extends ServiceProvider
+class StatisticsServiceProvider extends ServiceProvider
 {
     public function register()
     {

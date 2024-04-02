@@ -8,5 +8,5 @@ return [
     App\Providers\ApplicationServiceProvider::class,
     App\Providers\AutoServiceProvider::class,
     App\Providers\EmailServiceProvider::class,
-    App\Providers\AppServiceProvider::class
+    App\Providers\StatisticsServiceProvider::class
 ];
