@@ -7,5 +7,6 @@ return [
     App\Providers\ConcessionServiceProvider::class,
     App\Providers\ApplicationServiceProvider::class,
     App\Providers\AutoServiceProvider::class,
-    App\Providers\EmailServiceProvider::class
+    App\Providers\EmailServiceProvider::class,
+    App\Providers\AppServiceProvider::class
 ];
