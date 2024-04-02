@@ -7,6 +7,8 @@ use App\Models\Auto;
 use App\Models\File;
 use App\Models\MenuItems\MenuItem;
 
+use App\Models\UserNotification;
+use App\Services\UserService;
 use App\Strategies\FileUpload\UploadFromPCStrategy;
 use App\Strategies\FileUpload\UploadFromUrlStrategy;
 use App\Strategies\FileUpload\UseServerFileStrategy;
@@ -16,6 +18,13 @@ use Illuminate\Support\Facades\Log;
 
 class FileController extends Controller
 {
+    protected $userService;
+
+    // Inject UserService into the controller
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
     public function create(Request $request)
     {
         $menuItemsToSelect = MenuItem::all();
@@ -47,6 +56,13 @@ class FileController extends Controller
             $this->handleFileUpload($request, $file, $validated);
             $this->updateFileModel($file, $validated);
 
+            $fileChanged = $this->detectFileChanges($file, $validated);
+
+            if ($fileChanged) {
+                // If a change is detected, notify users subscribed to this menu item
+                Log::info("fileChanged are set to true ... seding the email");
+                $this->userService->notifyUserAboutFileChange($file->menu_id, "A file in your subscribed menu item has been updated.");
+            }
             return back()->with('success', 'File uploaded successfully.');
         } catch (\Exception $e) {
             Log::error('File upload error: ' . $e->getMessage());
@@ -57,10 +73,16 @@ class FileController extends Controller
     public function update(Request $request, File $file)
     {
         $validated = $this->validateRequest($request, false);
+        $fileChanged = false;
 
         try {
             $this->handleFileUpload($request, $file, $validated);
             $this->updateFileModel($file, $validated);
+            $fileChanged = $this->detectFileChanges($file, $validated);
+            if ($fileChanged) {
+                Log::info("fileChanged are set to true ... seding the email");
+                $this->userService->notifyUserAboutFileChange($file->menu_id, "A file in your subscribed menu item has been updated.");
+            }
             Log::info("Redirecting to the menu-files");
             return redirect()->route('menu.files')->with('success', 'File updated successfully.');
         } catch (\Exception $e) {
@@ -286,5 +308,11 @@ class FileController extends Controller
         return response()->json(['success' => true, 'newStatus' => $file->status]);
     }
 
+    private function detectFileChanges(File $file, array $validated): bool
+    {
+        return $file->name !== $validated['name'] ||
+               $file->path !== $validated['file'] ||
+               $file->auto_id !== $validated['auto_id'];
+    }
 
 }

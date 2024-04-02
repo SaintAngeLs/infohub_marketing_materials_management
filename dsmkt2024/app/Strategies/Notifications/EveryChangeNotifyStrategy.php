@@ -2,10 +2,20 @@
 
 namespace App\Strategies\Notifications;
 
+use App\Contracts\IEmailService;
+use App\Models\User;
+
 class EveryChangeNotifyStrategy implements NotificationStrategy
 {
-    public function notify($user, $message): void
+    protected $emailService;
+
+    public function __construct(IEmailService $emailService)
     {
-        // not implemented exception
+        $this->emailService = $emailService;
+    }
+
+    public function notify(User $user, $message): void
+    {
+        $this->emailService->sendEmail($user->email, $message);
     }
 }
