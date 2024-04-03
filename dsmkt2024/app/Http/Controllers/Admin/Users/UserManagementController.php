@@ -11,8 +11,12 @@ use App\Services\UserService;
 use App\Strategies\UserCreation\CreateUserWithoutPassword;
 use App\Strategies\UserCreation\CreateUserWithPassword;
 use App\Strategies\UserCreation\UserCreationStrategy;
+// use Dotenv\Exception\ValidationException;
+use Illuminate\Validation\ValidationException;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class UserManagementController extends Controller
 {
@@ -29,18 +33,38 @@ class UserManagementController extends Controller
     {
         Log::info('UserManagementController', $request->all());
 
-        $validatedData = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,',
+            'email' => 'required|string|email|max:255|unique:users',
             'users_groups_id' => 'required|exists:users_groups,id',
             'address' => 'required|string|max:255',
             'code' => 'required|string|max:10',
             'city' => 'required|string|max:100',
             'phone' => 'required|string|max:12',
-        ]);
+        ];
 
-        // $this->userService->createUser($request->all());
+        if ($request->input('password_option') === 'yes') {
+            $rules['password'] = 'nullable|string|min:8|confirmed';
+            $rules['address'] = 'nullable|string|max:255';
+            $rules['code'] = 'nullable|string|max:10';
+            $rules['city'] = 'nullable|string|max:100';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+
+        try {
+            $validatedData = $validator->validated();
+            Log::info('UserManagementController Validated Data', $validatedData);
+        } catch (ValidationException $e) {
+            Log::error('Validation Error', [
+                'errors' => $e->errors(),
+                'data' => $request->all()
+            ]);
+            throw $e;
+        }
+
+
         $strategy = $this->getStrategy($request);
         $user = $strategy->createUser($validatedData);
 

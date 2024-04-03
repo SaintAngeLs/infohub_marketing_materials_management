@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Statistics;
 
 use App\Exports\StatisticsExport;
 use App\Http\Controllers\Controller;
+use App\Models\UserAuthentication;
 use Illuminate\Http\Request;
 use App\Models\UserLog;
 use App\Models\UserDownload;
@@ -28,20 +29,24 @@ class StatisticsManagementController extends Controller
         $from = $request->input('from', Carbon::now()->subMonth());
         $to = $request->input('to', Carbon::now());
 
-        $downloads = UserDownload::whereBetween('created_at', [$from, $to])->get();
+        $downloads = UserDownload::whereBetween('created_at', [$from, $to])->with('file')->get();
 
         return view('admin.statistics.downloads', compact('downloads', 'from', 'to'));
     }
+
 
     public function showLogins(Request $request)
     {
         $from = $request->input('from', Carbon::now()->subMonth());
         $to = $request->input('to', Carbon::now());
 
-        $logins = UserLog::where('action', 'login')->whereBetween('created_at', [$from, $to])->get();
+        $logins = UserAuthentication::whereBetween('fingerprint', [$from, $to])
+                    ->with('user') 
+                    ->get();
 
         return view('admin.statistics.logins', compact('logins', 'from', 'to'));
     }
+
 
     public function downloadExcel(Request $request)
     {
