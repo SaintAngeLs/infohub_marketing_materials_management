@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserDownload extends Model
 {
     protected $table = 'users_downloads';
-    
+
     protected $fillable = [
         'user_id',
         'file_id',
@@ -21,6 +21,6 @@ class UserDownload extends Model
 
     public function file()
     {
-        return $this->belongsTo(File::class);
+        return $this->belongsTo(File::class, 'file_id');
     }
 }

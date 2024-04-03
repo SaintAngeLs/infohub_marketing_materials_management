@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Http\CustomKernel;
+use App\Models\UserAuthentication;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Auth\Events\Login;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +37,5 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('menuItems', $menuItems);
             }
         });
-
     }
 }
