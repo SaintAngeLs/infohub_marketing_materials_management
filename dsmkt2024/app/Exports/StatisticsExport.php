@@ -2,32 +2,30 @@
 
 namespace App\Exports;
 
-use App\Models\UserLog;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use App\Strategies\StatisticsStrategy;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class StatisticsExport implements FromQuery, WithHeadings
 {
     use Exportable;
 
-    protected $from;
-    protected $to;
+    protected $strategy;
 
-    public function __construct(string $from, string $to)
+    public function __construct(StatisticsStrategy $strategy)
     {
-        $this->from = $from;
-        $this->to = $to;
+        $this->strategy = $strategy;
     }
 
     public function query()
     {
-        return UserLog::query()
-            ->whereBetween('fingerprint', [$this->from, $this->to]);
+        return $this->strategy->query();
     }
 
     public function headings(): array
     {
-        return ["ID", "User ID", "URI", "Post String", "Query String", "File String", "IP", "Fingerprint"];
+        // Delegate the headings to the strategy
+        return $this->strategy->headings();
     }
 }
