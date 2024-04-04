@@ -5,15 +5,13 @@
 <div class="container mx-auto">
     <p class="content-tab-name">{{ __('Statystyki / Logowania') }}</p>
     @include('admin.statistics.partials.statistics-menu')
-
     <div class="mt-4">
-        <a href="{{ route('menu.statistics.download-excel') }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+        <a href="{{ route('menu.statistics.download-excel', ['type' => 'logins']) }}"" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
             Pobierz .XLS
         </a>
     </div>
     <h1 class="text-xl font-bold mb-4">Login Statistics</h1>
     <div>
-        {{-- Filter Form --}}
         @include('admin.statistics.partials.filter-form')
     </div>
     <div class="mt-4">

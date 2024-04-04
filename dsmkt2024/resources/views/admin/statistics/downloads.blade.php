@@ -4,9 +4,8 @@
 <div class="container mx-auto">
     <p class="content-tab-name">{{ __('Statystyki / Pobrania') }}</p>
     @include('admin.statistics.partials.statistics-menu')
-
     <div class="mt-4">
-        <a href="{{ route('menu.statistics.download-excel') }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+        <a href="{{ route('menu.statistics.download-excel', ['type' => 'downloads']) }}"" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
             Pobierz .XLS
         </a>
     </div>

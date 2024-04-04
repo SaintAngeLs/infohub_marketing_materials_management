@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Strategies;
+namespace App\Strategies\Statistics;
 
 use App\Models\UserViewItem;
-use App\Strategies\StatisticsStrategy;
+use App\Strategies\Statistics\StatisticsStrategy;
 
 class MenuEntriesViewsStatisticsStrategy implements StatisticsStrategy
 {

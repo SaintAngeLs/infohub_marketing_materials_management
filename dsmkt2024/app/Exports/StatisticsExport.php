@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Strategies\StatisticsStrategy;
+use App\Strategies\Statistics\StatisticsStrategy;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;

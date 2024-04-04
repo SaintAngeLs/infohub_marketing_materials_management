@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Strategies;
+namespace App\Strategies\Statistics;
 
 use App\Models\UserDownload;
-use App\Strategies\StatisticsStrategy;
+use App\Strategies\Statistics\StatisticsStrategy;
 
 class UserDownloadsStatisticsStrategy implements StatisticsStrategy
 {
@@ -19,12 +19,18 @@ class UserDownloadsStatisticsStrategy implements StatisticsStrategy
     public function query()
     {
         return UserDownload::query()
-            ->whereBetween('created_at', [$this->from, $this->to])
-            ->with('user', 'file');
+            ->join('files', 'users_downloads.file_id', '=', 'files.id')
+            ->join('users', 'users_downloads.user_id', '=', 'users.id')
+            ->whereBetween('users_downloads.created_at', [$this->from, $this->to])
+            ->select(
+                'users_downloads.created_at',
+                'files.name as file_name',
+                'users.name as user_name'
+            );
     }
 
     public function headings(): array
     {
-        return ["Date", "File Name", "User ID"];
+        return ["Date", "File Name", "User Name"]; // Adjust the heading for user name
     }
 }
