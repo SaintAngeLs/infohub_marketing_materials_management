@@ -88,7 +88,7 @@ Route::middleware('admin')->group(function () {
         })->name('files');
 
         Route::get('/statistics', [StatisticsViewController::class, 'index'])->name('statistics');
-        Route::get('/statistics/entries', [StatisticsManagementController::class, 'showEntries'])->name('statistics.entries');
+        Route::get('/statistics/entries', [StatisticsManagementController::class, 'showMenuEntries'])->name('statistics.entries');
         Route::get('/statistics/downloads', [StatisticsManagementController::class, 'showDownloads'])->name('statistics.downloads');
         Route::get('/statistics/logins', [StatisticsManagementController::class, 'showLogins'])->name('statistics.logins');
         Route::get('/statistics/download-excel', [StatisticsManagementController::class, 'downloadExcel'])->name('statistics.download-excel');

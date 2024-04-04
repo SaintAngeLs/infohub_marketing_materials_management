@@ -653,7 +653,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 }
 
 .left-col ul{
-	border-top: 1px solid #594A41;
+	/* border-top: 1px solid #594A41; */
 	padding: 10px 0 10px 15px;
 }
 

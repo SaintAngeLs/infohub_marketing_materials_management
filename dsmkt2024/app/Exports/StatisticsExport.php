@@ -23,11 +23,11 @@ class StatisticsExport implements FromQuery, WithHeadings
     public function query()
     {
         return UserLog::query()
-            ->whereBetween('created_at', [$this->from, $this->to]);
+            ->whereBetween('fingerprint', [$this->from, $this->to]);
     }
 
     public function headings(): array
     {
-        return ["ID", "User ID", "URI", "Action", "Created At"];
+        return ["ID", "User ID", "URI", "Post String", "Query String", "File String", "IP", "Fingerprint"];
     }
 }
