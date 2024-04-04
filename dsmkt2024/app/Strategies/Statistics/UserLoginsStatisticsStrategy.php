@@ -1,7 +1,7 @@
 <?php
-namespace App\Strategies;
+namespace App\Strategies\Statistics;
 
-use App\Strategies\StatisticsStrategy;
+use App\Strategies\Statistics\StatisticsStrategy;
 use App\Models\UserAuthentication;
 
 class UserLoginsStatisticsStrategy implements StatisticsStrategy
