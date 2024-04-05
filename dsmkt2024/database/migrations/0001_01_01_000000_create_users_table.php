@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
                         $table->id();
-            $table->foreignId('users_groups_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('branch_id')->nullable()->constrained()->onDelete('set null');
+            $table->unsignedSmallInteger('users_groups_id')->nullable();
+            $table->unsignedSmallInteger('branch_id')->nullable();
             $table->string('name', 100)->nullable();
             $table->string('surname', 100)->nullable();
             $table->string('email', 100)->nullable()->unique();
@@ -33,22 +33,25 @@ return new class extends Migration
             $table->timestamp('fingerprint')->useCurrent()->useCurrentOnUpdate();
             $table->string('remember_token', 100)->nullable();
             $table->timestamp('updated_at')->nullable();
+
+            $table->foreign('users_groups_id')->references('id')->on('users_groups')->onDelete('set null');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('set null');
         });
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
+        // Schema::create('password_reset_tokens', function (Blueprint $table) {
+        //     $table->string('email')->primary();
+        //     $table->string('token');
+        //     $table->timestamp('created_at')->nullable();
+        // });
 
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
+    //     Schema::create('sessions', function (Blueprint $table) {
+    //         $table->string('id')->primary();
+    //         $table->foreignId('user_id')->nullable()->index();
+    //         $table->string('ip_address', 45)->nullable();
+    //         $table->text('user_agent')->nullable();
+    //         $table->longText('payload');
+    //         $table->integer('last_activity')->index();
+    //     });
     }
 
     /**
