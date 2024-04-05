@@ -10,7 +10,7 @@
             Pobierz .XLS
         </a>
     </div>
-    <h1 class="text-xl font-bold mb-4">Login Statistics</h1>
+    <h1 class="text-xl font-bold mb-4">Statystyki logowań</h1>
     <div>
         @include('admin.statistics.partials.filter-form')
     </div>
