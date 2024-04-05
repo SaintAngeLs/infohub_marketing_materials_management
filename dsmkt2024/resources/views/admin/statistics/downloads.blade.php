@@ -9,7 +9,7 @@
             Pobierz .XLS
         </a>
     </div>
-    <h1 class="text-xl font-bold mb-4">Downloads Statistics</h1>
+    <h1 class="text-xl font-bold mb-4">Statystyki pobrań</h1>
     <div>
         @include('admin.statistics.partials.filter-form')
     </div>
