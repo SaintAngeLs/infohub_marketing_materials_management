@@ -1,5 +1,5 @@
 on: push
-name: Deploy on push with commit message
+name: Deploy with commit message
 jobs:
   web-deploy:
     name: Deploy
