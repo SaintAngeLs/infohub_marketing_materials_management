@@ -37,16 +37,16 @@ class MenuItemNotificationsController extends Controller
 
             $checkboxesHtml = <<<HTML
                 <div class='notification-preferences'>
-                    <label><input type='radio' name='notification_preferences[{$item->id}]' value='0' {$checkedNever}> Nigdy</label>
-                    <label><input type='radio' name='notification_preferences[{$item->id}]' value='1' {$checkedDaily}> Raz dziennie</label>
-                    <label><input type='radio' name='notification_preferences[{$item->id}]' value='2' {$checkedOnChange}> Przy każdej zmianie</label>
+                    <input type='radio' name='notification_preferences[{$item->id}]' value='0' {$checkedNever}> Nigdy
+                    <input type='radio' name='notification_preferences[{$item->id}]' value='1' {$checkedDaily}> Raz dziennie
+                    <input type='radio' name='notification_preferences[{$item->id}]' value='2' {$checkedOnChange}> Przy każdej zmianie
                 </div>
             HTML;
 
             $nodeContent = <<<HTML
                 <div class='js-tree-node-content' data-node-id="{$item->id}">
                     <span class='node-name'>{$item->name}</span>
-                    <span class='node-checkboxes'>$checkboxesHtml</span>
+                    <span class=''>$checkboxesHtml</span>
                 </div>
             HTML;
 
