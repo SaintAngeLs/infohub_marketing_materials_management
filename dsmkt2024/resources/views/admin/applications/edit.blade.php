@@ -24,7 +24,7 @@
                     @method('PATCH')
 
                     <div class="mt-4">
-                        <label for="branch_id">Concession (Branch):</label>
+                        <label for="branch_id">Koncesja:</label>
                         <select name="branch_id" id="branch_id" class="form-control">
                             @foreach($branches as $branch)
                                 <option value="{{ $branch->id }}">{{ $branch->name }}</option>
@@ -34,14 +34,13 @@
 
                     {{-- User Group Dropdown --}}
                     <div class="mt-4">
-                        <label for="users_groups_id">User Group:</label>
+                        <label for="users_groups_id">Grupa użytkowników:</label>
                         <select name="users_groups_id" id="users_groups_id" class="form-control">
                             @foreach($userGroups as $group)
                                 <option value="{{ $group->id }}">{{ $group->name }}</option>
                             @endforeach
                         </select>
                     </div>
-
 
                     <div class="mt-4">
                         <label for="status" class="block">Status:</label>
@@ -61,8 +60,10 @@
                     </div>
 
                     <div class="mt-4 flex justify-between">
-                        <button type="submit" class="btn btn-success">Zapisz</button>
-                        <a href="{{ route('menu.users.applications.view') }}" class="btn btn-secondary">Anuluj</a>
+                        <button type="submit" class="btn btn-save">Zapisz</button>
+                        <p class="table-button">
+                            <a href="{{ route('menu.users.applications.view') }}" class="btn ">Anuluj</a>
+                        </p>
                     </div>
                 </form>
             </div>

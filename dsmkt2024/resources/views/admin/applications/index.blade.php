@@ -37,11 +37,19 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('menu.users.applications.accept', $application->id) }}" class="btn btn-success">Accept</a>
-                                <a href="{{ route('menu.users.applications.reject', $application->id) }}" class="btn btn-danger">Reject</a>
+                                <p class="table-button">
+                                    <a href="{{ route('menu.users.applications.accept', $application->id) }}" class="btn ">Akceptuj</a>
+                                </p>
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('menu.users.applications.details', $application->id) }}" class="btn btn-info">Szczegóły</a>
+                                <p class="table-button">
+                                    <a href="{{ route('menu.users.applications.reject', $application->id) }}" class="btn ">Odrzuć</a>
+                                </p>
+                            </td>
+                            <td class="px-6 py-4">
+                                <p class="table-button">
+                                    <a href="{{ route('menu.users.applications.details', $application->id) }}" class="btn ">Szczegóły</a>
+                                </p>
                             </td>
                         </tr>
                         @endforeach

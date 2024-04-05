@@ -9,7 +9,7 @@
             Pobierz .XLS
         </a>
     </div>
-    <h1 class="text-xl font-bold mb-4">Menu Item View Statistics</h1>
+    <h1 class="text-xl font-bold mb-4">Statystyki wejść na zakładkę</h1>
     <div>
         @include('admin.statistics.partials.filter-form')
     </div>
