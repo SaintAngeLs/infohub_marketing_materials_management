@@ -26,5 +26,5 @@ jobs:
         server: s36.cyber-folks.pl 
         username: dev@dsmkt-dev.mcpl6a.cfolks.pl
         password: rCH-#fg-U_Z791me
-        local-dir: ./dsmkt2024
+        local-dir: ./dsmkt2024/
         server-dir: public_html/
