@@ -1887,7 +1887,19 @@ input[type="submit"].table-button-2{
 .start-required {
     color: #594A41;
 }
-
+#menu-tree-notifications
 .concession-component-add {
     max-width: 500px;
+}
+
+
+#menu-tree-notifications .notification-preferences {
+    z-index: 10;
+    position: relative;
+    cursor: pointer;
+}
+
+#menu-tree-notifications .notification-preferences, #menu-tree-notifications input[type="radio"] {
+    z-index: 10;
+    position: relative;
 }
