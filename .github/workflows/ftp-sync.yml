@@ -1,0 +1,30 @@
+on: push
+name: Deploy with commit message
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get latest code
+      uses: actions/checkout@v3
+
+    - name: Check commit message
+      id: check-message
+      run: |
+        commit_message=$(git log --format=%B -n 1 ${{ github.event.after }})
+        echo "Commit message: $commit_message"
+        if [[ "$commit_message" =~ \[deploy\] ]]; then
+          echo "should_deploy=true" >> $GITHUB_ENV
+        else
+          echo "should_deploy=false" >> $GITHUB_ENV
+        fi
+
+    - name:  Sync files
+      if: env.should_deploy == 'true'
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: s36.cyber-folks.pl 
+        username: dev@dsmkt-dev.mcpl6a.cfolks.pl
+        password: rCH-#fg-U_Z791me
+        local-dir: ./dsmkt2024/
+        server-dir: public_html/

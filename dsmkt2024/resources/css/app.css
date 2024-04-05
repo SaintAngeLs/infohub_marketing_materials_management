@@ -1,0 +1,1905 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+
+
+
+html, body{
+	margin: 0 auto;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+}
+
+/* general reset */
+
+ul, ol, li, p, h1, h2, h3, h4{
+	margin: 0;
+	padding: 0;
+	/*line-height: 140%;*/
+}
+
+th, td{
+	padding: 0;
+	margin: 0;
+}
+
+ul, li{
+	list-style-type: none;
+}
+
+input, textarea, select{
+	margin: 0;
+	padding: 0;
+}
+
+img{
+	border:none;
+	padding: 0;
+	margin: 0;
+}
+
+a:active, a:focus{
+	outline: 0;
+}
+
+.clearfix{
+	clear: both;
+	width: 0;
+	height: 0;
+}
+
+/* font-face */
+
+@font-face {
+    font-family: "CitroenRegular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/citroen_regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/citroen_bold-webfont.ttf") format("truetype");
+}
+@font-face {
+    font-family: "CitroenBold";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/citroen_bold-webfont.eot#iefix") format("embedded-opentype"), url("../fonts/citroen_bold-webfont.ttf") format("truetype");
+}
+@font-face {
+    font-family: "CitroenLight";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/citroen_light-webfont.eot#iefix") format("embedded-opentype"), url("../fonts/citroen_light-webfont.ttf") format("truetype");
+}
+/*
+@font-face {
+    font-family: 'citroenbold';
+    src: url('../fonts/citroen_bold-webfont.eot');
+    src: url('../fonts/citroen_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/citroen_bold-webfont.woff') format('woff'),
+         url('../fonts/citroen_bold-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'citroenregular';
+    src: url('../fonts/citroen_regular-webfont.eot');
+    src: url('../fonts/citroen_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/citroen_regular-webfont.woff') format('woff'),
+         url('../fonts/citroen_regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/*
+@-moz-document url-prefix() {
+	@font-face {
+	    font-family: 'citroenbold';
+	    src: url('citroen_bold-webfont.eot');
+	    src: url('citroen_bold-webfont.eot?#iefix') format('embedded-opentype'),
+	         url('citroen_bold-webfont.woff') format('woff'),
+	         url('citroen_bold-webfont.ttf') format('truetype');
+	    font-weight: normal;
+	    font-style: normal;
+	    src: url("../fonts/Citroen Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/Citroen Bold.ttf") format("truetype");
+	}
+
+	@font-face {
+	    font-family: 'citroenregular';
+	    src: url('citroen_regular-webfont.eot');
+	    src: url('citroen_regular-webfont.eot?#iefix') format('embedded-opentype'),
+	         url('citroen_regular-webfont.woff') format('woff'),
+	         url('citroen_regular-webfont.ttf') format('truetype');
+	    font-weight: normal;
+	    font-style: normal;
+	    src: url("../fonts/Citroen Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Citroen Regular.ttf") format("truetype");
+	}
+}
+*/
+/* site beginning */
+
+#main-wrapper{
+	width: 100%;
+	min-width: 960px;
+	font-family: 'CitroenLight', 'Arial', sans-serif;
+	letter-spacing: 1px;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -65px;
+}
+
+#main-wrapper a{
+	text-decoration: none;
+}
+
+#main-wrapper{
+	color: #1A1B1B;
+}
+
+/* headers and buttons and inputs */
+
+h1, h2{
+	text-transform: uppercase;
+	font-size: 20px;
+}
+
+h2{
+	border-top: 1px solid #594A41;
+}
+
+h2, h2 a{
+	text-transform: uppercase;
+	font-size: 15px;
+	font-family: 'CitroenLight', 'Arial', sans-serif;
+	font-weight: normal;
+	color: #594A41;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.right-col h2{
+	padding-left: 15px;
+}
+
+.right-col h2.table-heading{
+	padding-left: 15px;
+
+}
+
+.right-col h2, .right-col h2 a{
+	color: #594A41;
+}
+
+h2 a:hover{
+	color: #9D8C83;
+}
+
+h3{
+	margin-top: 30px;
+	margin-bottom: 20px;
+	font-size: 16px;
+}
+
+/* login box */
+
+.login-box {
+    width: 400px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.login-box {
+	margin: 0 auto;
+	color: #594A41;
+}
+
+.login-block  h2 {
+    text-transform: none;
+    border-top: none;
+}
+
+.login-button {
+    /* Style your button to match the Figma design */
+    background-color: #000; /* Example: black background */
+    color: #fff; /* Example: white text */
+    border: none;
+    padding: 10px 40px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+    /* Add other styles such as border-radius or box-shadow as needed */
+}
+
+.login-button:hover {
+    background-color: #555;
+}
+
+.additional-info {
+    margin-top: 4rem;
+    color: #000;
+    font-size: 0.875rem;
+    /* max-width: 400px;  */
+    text-align: center;
+}
+
+
+.login-box table a{
+	color: #594A41;
+}
+
+.login-box table a:hover{
+	color: #cf2128;
+}
+
+.login-box table th{
+	text-align: center;
+	color: #cf2128;
+	text-transform: uppercase;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	font-weight: normal;
+	font-size: 16px;
+	padding-bottom: 15px;
+}
+
+.login-box table input[type=text], .login-box table input[type=password]{
+	color: #594A41;
+	border: 1px solid #594A41;
+	height: 26px;
+	width: 230px;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	font-weight: normal;
+	font-size: 16px;
+	padding-left: 8px;
+}
+
+.login-box table input[type=submit]{
+	background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #E8E8E8;
+    color: #DC002E;
+    font-family: 'CitroenRegular','Arial',sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+	height: 28px;
+    padding: 0 10px 0 10px;
+	margin-bottom: 10px;
+    text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.login-box table td.login-info{
+	color: #cf2128;
+	padding-top: 5px;
+}
+
+.login-box table.forms tbody tr:hover{
+	background: transparent;
+}
+
+
+
+@-moz-document url-prefix() {
+	.login-box table input[type=submit] { /* hack for firefox */
+		padding-bottom: 4px;
+		padding-top: 4px;
+	}
+}
+
+.login-box table input[type=submit]:hover{
+	background: none repeat scroll 0 0 #cf2128;
+    color: #fff;
+}
+
+.login-box p{
+	margin: 0 auto;
+	text-align: center;
+	padding: 20px 0 10px 0;
+	font-size: 13px;
+	color: #594A41;
+	line-height: 130%;
+}
+
+.login-box p a{
+	color: #373737;
+	text-decoration: none;
+}
+
+.login-box p a:hover{
+	color: #cf2128;
+}
+
+/* top */
+#top-wrapper{
+    height: 151px;
+    width: 100%;
+    background-color: #1A1B1B;
+}
+#top{
+    /* width: 960px; */
+	margin: 0 5rem;
+    background-color: #1A1B1B;
+}
+
+#top h1{
+	margin-top: 63px;
+	float: left;
+}
+
+/* user panel */
+
+/* #user-panel{
+	float: right;
+} */
+
+#user-panel p{
+	float: right;
+	font-size: 11px;
+	color: #E2E3E3;
+	line-height: 32px;
+	height: 32px;
+	margin-right: 10px;
+}
+
+
+#user-panel p span{
+	color: #cf2128;
+}
+
+.navigation {
+    /* display: flex; */
+
+    justify-content: space-between;
+    /* padding: 1rem; */
+    background-color: #1A1B1B; /* Adjust to match your design */
+}
+
+.navigation-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 2rem 2rem
+}
+
+#logo {
+    margin-right: 2rem;
+    /* Logo styles */
+}
+
+.user-info {
+    margin-left: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    color: #E2E3E3;
+    font-size: 0.875rem;
+}
+.user-info p {
+    padding-top: 18px;
+    font-weight: bold	;
+}
+.user-info p span {
+    color: #9D8C83;
+}
+.user-info a, .user-info p {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+}
+
+.user-info a {
+    color: #E2E3E3;
+    text-decoration: none;
+    font-weight: bold; /* Makes text bold */
+}
+
+.user-info a:hover {
+    color: #9D8C83; /* Change color on hover */
+}
+
+.user-info a.active {
+    color: #9D8C83; /* Active link color */
+}
+
+#logout-form {
+    display: none;
+}
+
+/* Additional styles for content and forms can be added below */
+
+
+p#log-out, p#my-account, p#admin-panel{
+	margin-left: 10px;
+	margin-right: 0;
+}
+
+p#log-out a, p#my-account a, p#admin-panel a{
+	padding: 0 12px 0 35px;
+	color: #E2E3E3;
+	text-transform: uppercase;
+	font-size: 11px;
+}
+
+p#admin-panel {
+    background-color: #E2E3E3;
+    color: #1c1616;
+}
+
+p#admin-panel a {
+    color: #1c1616;
+    background: url('../images/icons.png') no-repeat 0 -62px #E2E3E3;
+    display: block;
+}
+
+p#log-out a{
+	background: url('../images/icons.png') no-repeat 0 -30px #1c1616;
+	display: block;
+}
+
+p#my-account a{
+	background: url('../images/icons.png') no-repeat 0 0 #1c1616;
+	display: block;
+}
+
+p#log-out a:hover, p#my-account a:hover{
+	color: #cf2128;
+/*        background-color: #E2E3E3;*/
+}
+p#admin-panel a:hover {
+	color: #1c1616;
+        background-color:#E2E3E3;
+}
+
+.top-button{
+	float: left;
+	line-height: 28px;
+	margin-top: 30px;
+	margin-bottom: 20px;
+	margin-right: 25px;
+        margin-left: -15px;
+}
+
+.top-button a{
+	line-height: 28px;
+	text-transform: uppercase;
+	font-size: 16px;
+	color: #E2E3E3;
+	padding: 6px 16px 5px 16px;
+	background: #1c1616;
+/*	border: 1px solid #594A41;*/
+}
+
+.top-button a:hover{
+	color: #1c1616;
+	background: #EDEDEF;
+/*	border: 1px solid #cfcfcf;*/
+}
+
+/* search */
+
+form#searchbox{
+	float: right;
+	margin-top: 29px;
+	margin-bottom: 20px;
+}
+
+form#searchbox input[type="text"]#search {
+/*	background: #fff;*/
+	color: #E2E3E3;
+	border: 1px solid #E2E3E3;
+	font-weight: normal;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	padding: 0 30px 0 5px;
+	height: 26px;
+	line-height: 28px;
+	font-size: 16px;
+	width: 135px;
+	background: url('../images/icons.png') no-repeat bottom right;
+	display: block;
+	float: left;
+}
+
+form#searchbox input[type="submit"].submit, .right-col input[type="submit"].submit {
+        cursor: pointer;
+	font-size: 14px;
+	text-transform: uppercase;
+	color: #E2E3E3;
+	background: #1c1616;
+	text-align: center;
+/*	border: 1px solid #594A41;*/
+	padding: 0 6px 0 6px;
+	height: 28px;
+	line-height: 27px;
+	float: left;
+	margin-left: -1px;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+}
+
+form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="submit"].submit:active, .right-col input[type="submit"].submit:hover {
+	color: #cf2128;
+/*	background: #E2E3E3;*/
+}
+
+.right-col input[type="submit"].submit{
+	margin:25px 0 25px 15px;
+}
+
+/* logo */
+
+#logo, #logo-start{
+	width: 105px;
+    height: 90px;
+    padding-top: 0;
+    margin-right: 25px;
+    /* margin-top: 25px; */
+    float: left;
+}
+
+#logo-start{
+	float: none;
+	margin-right: 0;
+	margin: 0 auto;
+	margin-top: 0;
+	margin-bottom: 30px;
+	padding-top: 30px;
+}
+
+#logo a, #logo-start a{
+	width: 145px;
+	height: 110px;
+	background: url('/public/img/logo/logo.png') no-repeat;
+	display: block;
+}
+
+.center-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#logo-center a {
+
+    display: block;
+    width: 145px;
+    height: 110px;
+    background: url('/public/img/logo/logo.png') no-repeat center center;
+    background-size: contain;
+    margin-top: 25px;
+}
+
+/* banner */
+/*moved to index.php*/
+/* content */
+
+#content{
+	width: 1700px;
+	margin: 0 auto;
+	padding-bottom: 70px;
+}
+
+#content h1{
+	margin: 0 auto;
+	margin-top: 30px;
+	text-align: center;
+}
+
+/* menu */
+
+#menu{
+	margin-top: 25px;
+	margin-bottom: 0;
+}
+
+#menu p, #menu p a{
+	text-align: left;
+	text-transform: uppercase;
+	font-size: 16px;
+	color: #373737;
+}
+
+#menu p{
+	float: left;
+	color: #594A41;
+}
+
+#menu p a:hover, #menu p a.active{
+	color: #9D8C83;
+}
+
+/* columns */
+
+#content .left-col{
+	width: 260px;
+	padding-right: 30px;
+	float: left;
+	margin-top: 25px;
+}
+
+#content .right-col{
+	width: 1400px;
+	float: right;
+	margin-top: 25px;
+}
+
+/* horizontal stripe */
+
+.horizontal-border{
+	height: 1px;
+	border-top: 1px solid #594A41;
+}
+
+#top .horizontal-border{
+	margin-top: 20px;
+}
+
+/* left col narrow */
+
+.left-col ul li, .left-col ul li a{
+	color: #594A41;
+	font-size: 14px;
+}
+
+.left-col ul li a:hover{
+	color: #cf2128;
+}
+
+.left-col ul li{
+	line-height: 22px;
+}
+
+.left-col ul{
+	/* border-top: 1px solid #594A41; */
+	padding: 10px 0 10px 15px;
+}
+
+.left-col ul ul{
+	border-top: none;
+	padding: 10px 0 10px 35px;
+}
+
+#content .left-col ul li a span{
+	visibility: hidden;
+}
+
+#content .left-col ul li a.active-link span, #content .left-col ul li a:hover span, h2 a:hover.active-link{
+	visibility: visible;
+}
+
+#content .left-col ul li a.active-link, #content .right-col h2 a.active-link, h2 a.active-link{
+	color: #cf2128;
+}
+
+/* right col wide */
+
+#content .right-col h2 a span{
+	text-transform: none;
+}
+
+#content .right-col h2.left-heading{
+	float: left;
+	width: 400px;
+}
+
+#content .right-col h2.right-heading{
+	float: right;
+	padding-left: 0;
+	padding-right: 10px;
+	width: 235px;
+	text-align: right;
+}
+
+/* table files*/
+
+.right-col table{
+	width: 660px;
+	margin-top: 20px;
+	text-align: left;
+	letter-spacing: 0;
+	border-collapse: collapse; /* 'cellspacing' equivalent */
+	padding: 0; /* 'cellpadding' equivalent */
+	border: 0;
+}
+
+.right-col table tr th, .right-col table tr td{
+	padding-left: 0;
+	line-height: 15px;
+}
+
+.right-col table tr th:first-child, .right-col table tr td:first-child{
+	/*padding-left: 15px;*/
+}
+
+
+
+.right-col table tbody tr:hover{
+	background: #fafafa;
+}
+
+table.forms tbody tr:hover{
+	background: #fff;
+}
+
+.right-col table th{
+	padding-bottom: 20px;
+/*	text-align: center;*/
+}
+
+.right-col table th.no-padding{
+	padding-top: 0;
+	padding-bottom: 0;
+	text-align: left;
+}
+
+.right-col table th, .right-col table th a{
+	color: #594A41;
+        font-size: 14px;
+	line-height: 22px;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+.right-col table th a.active{
+	background: url('../images/sort-arrows.png') no-repeat left 0;
+	display: block;
+}
+
+.right-col table th a.active-2{
+	background: url('../images/sort-arrows.png') no-repeat left -44px;
+	display: block;
+}
+
+.right-col table th a{
+	background: url('../images/sort-arrows.png') no-repeat left -22px;
+	display: block;
+	padding-left: 15px;
+	text-align: left;
+}
+
+.right-col table td{
+	border-bottom: 1px solid #594A41;
+	height: 30px;
+	color: #594A41;
+	font-size: 14px;
+	padding: 7px 0 5px 0;
+}
+
+.right-col table td.name{
+	color: #373737;
+}
+
+.right-col table td.name:hover{
+	color: #cf2128;
+}
+
+.right-col table td.type{
+	width: 47px;
+}
+
+.right-col table td.size{
+	width: 80px;
+}
+
+.right-col table td.date{
+	width: 80px;
+}
+
+/* download */
+
+.right-col table .download, .right-col table .download a{
+	width: 58px;
+}
+
+.right-col table .download a{
+	width: 13px;
+	height: 13px;
+	margin: 0 auto;
+	background: url('../images/checkbox-download-delete.png') no-repeat 0 -44px;
+	display: block;
+	margin-top: -3px;
+}
+
+/* checkboxes */
+
+.right-col table .select{
+/*	text-align: center;*/
+}
+
+.right-col table .select input[type=checkbox]{
+	margin-top: 4px;
+}
+
+/* table my account */
+
+.right-col table td.radio-button {
+	text-align: center;
+	width: 80px;
+}
+
+.right-col table th.first{
+	text-align: left;
+	color: #cf2128;
+	text-transform: uppercase;
+}
+
+.right-col table th.first span{
+	text-transform: none;
+}
+
+.right-col table td.uppercase{
+	text-transform: uppercase;
+	color: #373737;
+}
+
+.right-col h2.uppercase, .right-col h2.uppercase a{
+	color: #373737;
+	font-size: 14px;
+	text-transform: uppercase;
+}
+
+.right-col a.uppercase, .right-col a.uppercase {
+	color: #373737;
+	font-size: 14px;
+	text-transform: uppercase;
+}
+
+.right-col h2.lowercase, .right-col h2.lowercase a{
+	text-transform: none;
+	color: #594A41;
+	font-size: 14px;
+}
+
+.right-col a.lowercase, .right-col a.lowercase {
+	text-transform: none;
+	color: #594A41;
+	font-size: 14px;
+}
+
+.right-col h2 span.init:hover, .right-col h2 span a:hover{
+	color: #cf2128;
+}
+
+.right-col h2 span.init{
+	cursor: pointer;
+}
+
+.right-col h2 span.upload{
+	float: right;
+	width: 13px;
+	height: 12px;
+	margin-right: 10px;
+}
+
+.right-col h2 span.upload a{
+	width: 13px;
+	height: 12px;
+	background: url('../images/checkbox-download-delete.png') no-repeat 0 -65px;
+	display: block;
+	padding: 0;
+}
+
+/* table password */
+
+table.forms td{
+	border: none;
+	padding: 2px 0 2px 0;
+}
+
+#content .right-col table td.box-title{
+	width: 160px;
+}
+
+.right-col table td.text-box input{
+	border: 1px solid #594A41;
+	height: 26px;
+	line-height: 26px;
+	width: 222px;
+	color: #373737;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	font-weight: normal;
+	font-size: 14px;
+	padding-left: 8px;
+}
+
+/* table add files */
+
+.right-col table td.indent{
+	padding-left: 40px !important;
+	width: 270px;
+}
+
+.right-col table td.name a, .right-col table td.indent a, .right-col table td.indent a{
+	text-decoration: none;
+	color: #373737;
+}
+
+.right-col table td.name a:hover, .right-col table td.indent a:hover{
+	color: #cf2128;
+}
+
+.right-col table td.name a.active-link, .right-col table td.indent a.active-link{
+	color: #cf2128;
+}
+
+.right-col table.forms input[type="button"]#modal-init, input[type="button"]#select-init{
+	width: 232px;
+	font-size: 16px;
+	text-transform: uppercase;
+	color: #cf2128;
+	background: #fff;
+	text-align: center;
+	border: 1px solid #594A41;
+	height: 28px;
+	line-height: 30px;
+	float: left;
+	margin-left: 0;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+}
+
+.right-col table.forms input[type="button"]#modal-init:hover{
+	color: #fff;
+	background: #cf2128;
+}
+
+/* modal */
+
+#modal-overlay{
+	background: #000000;
+	opacity: 0.8;
+	background/*\**/: url('../images/modal-bg.png') repeat left top\9; /* ie7 & ie8 hack */
+	display/*\**/: block\9; /* ie7 & ie8 hack */
+	width: 100%;
+	height: 100%;
+	z-index: 50;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#modal{
+	width: 640px;
+	height: 460px;
+	background: #fff;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -320px;
+	margin-top: -230px;
+	padding: 20px;
+	z-index: 100;
+}
+
+#modal-container{
+	width: 640px;
+	height: 400px;
+	border: 1px solid #E8E8E8;
+	overflow: auto;
+}
+
+#modal-container p{
+	width: 134px;
+	height: 88px;
+	padding: 25px 10px 17px 10px;
+	margin: 1px;
+	float: left;
+	font-size: 14px;
+	color: #bbb;
+	text-align: center;
+}
+
+#modal-container p.selected, #modal-container p:hover{
+	background: #cf2128;
+	color: #fff;
+}
+
+#modal p.file-desc{
+	color: #594A41;
+	float: left;
+	width: 390px;
+	margin-left: 10px;
+	margin-top: 25px;
+	line-height: 26px;
+	font-family: 'CitroenRegular','Arial',sans-serif;
+    font-size: 14px;
+}
+
+#modal-container p span.icon-zip{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-zip.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-zip, #modal-container p.selected span.icon-zip{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-zip.png') no-repeat center bottom;
+	display: block;
+}
+
+#modal-container p span.icon-xls{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-xls.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-xls, #modal-container p.selected span.icon-xls{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-xls.png') no-repeat center bottom;
+	display: block;
+}
+
+#modal-container p span.icon-video{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-video.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-video, #modal-container p.selected span.icon-video{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-video.png') no-repeat center bottom;
+	display: block;
+}
+
+#modal-container p span.icon-pdf{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-pdf.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-pdf, #modal-container p.selected span.icon-pdf{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-pdf.png') no-repeat center bottom;
+	display: block;
+}
+
+#modal-container p span.icon-doc{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-doc.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-doc, #modal-container p.selected span.icon-doc{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-doc.png') no-repeat center bottom;
+	display: block;
+}
+
+#modal-container p span.icon-audio{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-audio.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-audio, #modal-container p.selected span.icon-audio{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-audio.png') no-repeat center bottom;
+	display: block;
+}
+
+#modal-container p span.icon-jpg{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-jpg.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-jpg, #modal-container p.selected span.icon-jpg{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-jpg.png') no-repeat center bottom;
+	display: block;
+}
+
+#modal-container p span.icon-png{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-png.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-png, #modal-container p.selected span.icon-png{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-png.png') no-repeat center bottom;
+	display: block;
+}
+
+#modal-container p span.icon-plik{
+	width: 56px;
+	height: 38px;
+	margin: 0 auto;
+	background: url('../images/icon-plik.png') no-repeat center top;
+	display: block;
+}
+
+#modal-container p:hover span.icon-plik, #modal-container p.selected span.icon-plik{
+	width: 56px;
+	height: 38px;
+	background: url('../images/icon-plik.png') no-repeat center bottom;
+	display: block;
+}
+
+/* table admin panel */
+
+table.admin-panel{
+	margin-top: 0;
+	clear:both;
+}
+
+.right-col h3{
+	padding-left: 15px;
+	font-size: 13px;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	font-weight: normal;
+	float: left;
+	color: #cf2128;
+}
+
+.right-col table th.numbers, .right-col table td.numbers{
+	width: 35px;
+	padding-right: 15px;
+	padding-left: 7px !important;
+}
+
+.right-col table th.align-left, .right-col table td.align-left{
+	text-align: left;
+}
+
+.right-col table th.align-right, .right-col table td.align-right{
+	text-align: right;
+}
+
+.right-col table th.align-left span{
+	color: #cf2128;
+}
+
+.right-col table td.wide{
+	width: 100px;
+}
+
+.right-col table td.edit a{
+	color: #373737;
+}
+
+.right-col table td.edit a:hover{
+	color: #cf2128;
+}
+
+.right-col table td a.arrow-up, .right-col table td a.arrow-down{
+	width: 14px;
+	height: 14px;
+	margin: 0 auto;
+}
+
+.right-col table td a.arrow-up{
+	background: url('../images/user-arrows.png') no-repeat right top;
+	display: block;
+}
+
+.right-col table td a.arrow-down{
+	background: url('../images/user-arrows.png') no-repeat left top;
+	display: block;
+}
+
+.right-col table td a.arrow-up:hover{
+	background: url('../images/user-arrows.png') no-repeat right bottom;
+	display: block;
+}
+
+.right-col table td a.arrow-down:hover{
+	background: url('../images/user-arrows.png') no-repeat left bottom;
+	display: block;
+}
+
+.right-col table td.td-link{
+	text-align: center;
+}
+
+.right-col table td.td-link a{
+	color: #594A41;
+}
+
+.right-col table td.td-link a:hover{
+	color: #cf2128;
+}
+
+/* table add new user */
+
+.right-col table td.new-user{
+	width: 220px;
+}
+
+.right-col table td.new-user:hover{
+	color: #373737;
+}
+
+table.forms td.radio-button{
+	width: 40px;
+}
+
+table.forms td.radio-button input[type=radio]{
+	margin-top: 4px;
+}
+
+/* table edit content */
+
+.right-col table td a.delete{
+	width: 13px;
+	height: 13px;
+	margin: 0 auto;
+	background: url('../images/checkbox-download-delete.png') no-repeat bottom;
+	display: block;
+}
+
+/* notification paragraph */
+
+p.success{
+	padding-bottom: 7px;
+    padding-left: 15px;
+    padding-top: 7px;
+	margin-top: 15px;
+	border: 1px solid #373737;
+	color: #373737;
+	/*border: 1px solid #cf2128;
+	color: #cf2128;*/
+}
+
+p.error{
+	padding-bottom: 7px;
+    padding-left: 15px;
+    padding-top: 7px;
+	margin-top: 15px;
+	border: 1px solid #cf2128;
+	color: #fff;
+	background: #cf2128;
+}
+
+p.error-big{
+	padding: 10px 0 10px 15px;
+	margin-top: 15px;
+	border: 1px solid #cf2128;
+	color: #fff;
+	background: #cf2128;
+	font-size: 40px;
+}
+
+/* paragraph */
+
+p.personal-details{
+	padding-left: 15px;
+	color: #bbbbbb;
+	font-size: 14px;
+	line-height: 130%;
+	margin-top: 25px;
+}
+
+p.personal-details a{
+	color: #bbbbbb;
+	text-decoration: none;
+}
+
+p.personal-details a:hover{
+	color: #cf2128;
+	text-decoration: none;
+}
+
+.right-col p.personal-details span{
+	color: #373737;
+}
+
+/* download and submit buttons */
+
+input[type="submit"].table-button, input[type="submit"].table-button-2{
+	margin-top: 25px;
+	margin-bottom: 25px;
+	height: 28px;
+	padding: 0px 16px 0px 16px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	font-size: 16px;
+	color: #9D8C83;
+	background: #fff;
+	border: 1px solid #594A41;
+	font-family: 'CitroenLight', 'Arial', sans-serif;
+	font-weight: normal;
+}
+
+input[type="submit"].table-button{
+	float: right;
+	margin-left: 0;
+	margin-right: 10px;
+}
+
+input[type="submit"].table-button-2{
+	float: left;
+	margin-left: 15px;
+	margin-right: 0;
+}
+
+.table-button, .table-button-2{
+	margin-top: 25px;
+	margin-bottom: 26px;
+	height: 26px;
+	line-height: 26px;
+	background: #fff;
+}
+
+.table-button{
+	float: right;
+	margin-left: 0;
+	margin-right: 10px;
+        cursor:pointer;
+}
+
+.table-button-2{
+	float: left;
+	margin-left: 15px;
+	margin-right: 0;
+}
+
+.table-button a, .table-button-2 a{
+	text-transform: uppercase;
+	font-size: 16px;
+	color: #9D8C83;
+	height: 26px;
+	line-height: 26px;
+	padding: 0 16px 0 16px;
+	border: 1px solid #594A41;
+	font-family: 'CitroenLight', 'Arial', sans-serif;
+	font-weight: normal;
+	display: block;
+}
+
+.table-button a:hover, .table-button-2 a:hover, input[type="submit"].table-button:hover, input[type="submit"].table-button-2:hover{
+	color: #fff;
+	background: #9D8C83;
+	border: 1px solid #cfcfcf;
+}
+
+.table-button-2-hovered {
+	color: #ffffff !important;
+	background: #cf2128;
+	border: 1px solid #cfcfcf;
+}
+
+/* select list */
+
+.select-list{
+	width: 110px;
+	overflow: hidden;
+	background: url('../images/arrow-down.png') no-repeat right center;
+	display: block;
+	border: 1px solid #594A41;
+	float: left;
+	margin: 25px 0 25px 15px;
+	height: 26px;
+}
+
+.select-list select{
+	background: transparent;
+	width: 135px;
+	padding: 5px 5px 5px 5px;
+	font-size: 14px;
+	line-height: 18px;
+	border: 0;
+	border-radius: 0;
+	-webkit-appearance: none;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	font-weight: normal;
+}
+
+.select-list select option, table td .table-select-list select option{
+	font-size: 14px;
+	line-height: 18px;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	font-weight: normal;
+}
+
+.right-col table td .table-select-list{
+	overflow: hidden;
+	background: url('../images/arrow-down.png') no-repeat right center;
+	display: block;
+	border: 1px solid #594A41;
+	width: 230px;
+	height: 26px;
+}
+
+.right-col table td .table-select-list select{
+	background: transparent;
+	color: #373737;
+	width: 255px;
+	padding: 3px 5px 1px 5px;
+	font-size: 14px;
+	line-height: 18px;
+	border: 0;
+	border-radius: 0;
+	-webkit-appearance: none;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+	font-weight: normal;
+	height: 26px;
+}
+
+/* footer */
+
+.footer, .push{
+	height: 65px;
+}
+
+.footer{
+	width: 100%;
+	min-width: 960px;
+	margin: 0 auto;
+	background: url('../images/footer-bg.png') repeat-x center bottom #E9E7E1;
+	display: block;
+    color: #000;
+	font-family: 'CitroenRegular', 'Arial', sans-serif;
+}
+
+#footer-content{
+
+	min-height: 30px;
+	margin: 0 auto;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+#footer-content p{
+	text-align: right;
+	color: #000;
+	font-size: 11px;
+	padding-top: 25px;
+	padding-right: 10px;
+}
+.mandatory-field {
+	color: #cf2128;
+}
+.roll {
+	padding-top: 2px;
+	display: inline-block;
+	font-size: 20px;
+}
+.social {
+	display:inline;
+	width:50%;
+	float:left;
+	text-align:left !important;
+	padding-top: 25px !important;
+}
+.social a {
+    margin: 0 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.social a img {
+    height: 20px; /* Adjust if necessary */
+    width: auto;
+}
+
+#social-icon-1 a{
+    background: url("../images/social-icons.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#social-icon-2 a {
+    background: url("../images/social-icons.png") no-repeat scroll -54px 0 rgba(0, 0, 0, 0);
+
+    margin-right: 10px;
+}
+
+#social-icon-3 a {
+    background: url("../images/social-icons.png") no-repeat scroll -107px 0 rgba(0, 0, 0, 0);
+    display: inline-block;
+    margin-right: 10px;
+}
+#social-icon-4 a {
+    background: url("../images/social-icons.png") no-repeat scroll -161px 0 rgba(0, 0, 0, 0);
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#social-icon-5 a {
+    background: url("../images/social-icons.png") no-repeat scroll -221px 0 rgba(0, 0, 0, 0);
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#social-icon-1, #social-icon-1 a {
+    height: 20px;
+    width: 54px;
+}
+
+#social-icon-2, #social-icon-2 a {
+    height: 20px;
+    width: 55px;
+}
+
+#social-icon-3, #social-icon-3 a{
+    height: 20px;
+    width: 55px;
+}
+
+#social-icon-4, #social-icon-4 a{
+    height: 20px;
+    width: 60px;
+}
+
+#social-icon-5, #social-icon-5 a {
+    height: 20px;
+    width: 55px;
+}
+/* Base styling for jsTree */
+#menu-tree, #menu-tree-permissions, #menu-tree-permissions-user {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* Node styling */
+#menu-tree .jstree-node , #menu-tree-permissions .jstree-node, #menu-tree-permissions-user .jstree-node {
+    border-bottom: 1px solid #e3e3e3;
+    background-color: #fafafa;
+    min-height: 60px;
+}
+
+#menu-tree .jstree-anchor, #menu-tree-permissions .jstree-anchor, #menu-tree-permissions-user .jstree-anchor {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 60px
+}
+#menu-tree .jstree-hovered, #menu-tree-permissions .jstree-hovered, #menu-tree-permissions-user .jstree-hovered, #menu-tree-notifications .jstree-hovered {
+    background-color: #f0f0f0;
+}
+#menu-tree .jstree-icon, #menu-tree-permissions .jstree-icon,  #menu-tree-permissions-user .jstree-icon, #menu-tree-notifications .jstree-icon {
+    display: none !important;
+}
+
+#menu-tree .jstree-clicked, #menu-tree-permission .jstree-clicked,  #menu-tree-permissions-user .jstree-clicked, #menu-tree-notifications .jstree-clicked {
+    background-color: #e0e0e0;
+}
+
+
+#menu-tree-files {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+/* Node styling */
+#menu-tree-files .jstree-node {
+    border-bottom: 1px solid #e3e3e3;
+    background-color: #fafafa;
+    min-height: 60px;
+}
+
+#menu-tree-files .jstree-anchor {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 60px
+}
+/* Hover and selected node styling */
+#menu-tree-files .jstree-hovered {
+    background-color: #f0f0f0;
+}
+#menu-tree-files .jstree-icon {
+    display: none !important;
+}
+
+#menu-tree-files .jstree-clicked {
+    background-color: #e0e0e0;
+}
+/* Node content styling */
+.js-tree-node-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    height: 60px;
+    align-items: center;
+    width: 100%;
+}
+
+#menu-tree-files .js-tree-node-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    height: 20px;
+    align-items: center;
+    width: 100%;
+}
+#menu-tree-files .js-tree-node-files {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    /* height: 20px; */
+    align-items: center;
+    width: 100%;
+}
+#menu-tree-files .files-data {
+    display: block;
+    gap: 10px;
+    align-items: center;
+}
+
+
+
+
+.js-tree-node-files {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    /* height: 20px; */
+    align-items: center;
+    width: 100%;
+}
+
+
+#menu-tree-files .js-tree-files-node-info {
+    display: block;
+    width: 100%;
+}
+
+.jstree-default .jstree-anchor {
+    line-height: unset !important;
+    height: unset !important;
+}
+.js-tree-node-files {
+    padding-left: 20px;
+    margin-bottom: 20px;
+    /* overflow-y: auto; */
+    /* max-height: 200px; */
+}
+.node-files ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.node-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.node-details-status,
+.node-details-ownerName,
+.node-details-visibilityTime {
+    color: #555;
+    text-align: left;
+}
+
+
+
+/* Increase the height of whole row */
+.jstree-default .jstree-wholerow {
+    height: 48px !important;
+}
+
+
+#create-menu-item-form {
+    /* max-width: 600px; */
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+#create-menu-item-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+#create-menu-item-form input[type="text"],
+#create-menu-item-form input[type="date"],
+#create-menu-item-form select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#create-menu-item-form select[multiple] {
+    height: auto;
+    min-height: 80px;
+}
+
+#create-menu-item-form button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+#create-menu-item-form button:hover {
+    background-color: #45a049;
+}
+
+/* Utility Classes */
+.text-gray-800 {
+    color: #2d3748;
+}
+
+.text-gray-900 {
+    color: #1a202c;
+}
+
+.bg-white {
+    background-color: #ffffff;
+}
+
+.dark\:bg-gray-100 {
+    background-color: #f7fafc;
+}
+
+.dark\:text-gray-900 {
+    color: #1a202c;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.leading-tight {
+    line-height: 1.25;
+}
+
+.py-12 {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.max-w-7xl {
+    max-width: 80rem;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sm\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.lg\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.sm\:rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+#create-menu-item-form .btn-reset {
+    background-color: #f44336; /* Red color for the reset button */
+    color: white;
+}
+
+#create-menu-item-form .btn-reset:hover {
+    background-color: #d32f2f; /* Darker shade of red on hover */
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between; /* Adjust this as per your layout */
+}
+
+
+.content-tab-name {
+    font-size: 18px;
+    line-height: 19.26px;
+    letter-spacing: 1px;
+    color: #1A1B1B;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content - Make it smaller */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50% !important;
+    min-width: 300px;
+}
+
+/* The Close Button */
+.close-button {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.start-required {
+    color: #594A41;
+}
+#menu-tree-notifications
+.concession-component-add {
+    max-width: 500px;
+}
+
+
+#menu-tree-notifications .notification-preferences {
+    z-index: 10;
+    position: relative;
+    cursor: pointer;
+}
+
+#menu-tree-notifications .notification-preferences, #menu-tree-notifications input[type="radio"] {
+    z-index: 10;
+    position: relative;
+}
