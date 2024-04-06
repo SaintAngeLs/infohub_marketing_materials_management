@@ -7,6 +7,7 @@ jobs:
     steps:
     - name: Get latest code
       uses: actions/checkout@v3
+      fetch-depth : 100000
 
     - name: Check commit message
       id: check-message
@@ -18,7 +19,7 @@ jobs:
         else
           echo "should_deploy=false" >> $GITHUB_ENV
         fi
-        
+
 
     - name:  Sync files
       if: env.should_deploy == 'true'
