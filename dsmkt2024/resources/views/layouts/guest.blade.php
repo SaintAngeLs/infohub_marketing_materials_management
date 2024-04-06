@@ -9,8 +9,14 @@
     <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if(app()->environment('production'))
+        <!-- Production CSS -->
+        <link rel="stylesheet" href="{{ App\Helpers\AssetHelper::asset('resources/css/app.css') }}">
+        <!-- Production JS -->
+        <script src="{{ App\Helpers\AssetHelper::asset('resources/js/app.js') }}" defer></script>
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endif
     @stack('scripts')
 
     <style type="text/css">
