@@ -53,6 +53,7 @@ jobs:
         lftp -c "
         set ftps:initial-prot '';
         set ftp:ssl-force true;
+        set ssl:verify-certificate no;
         open -u dev@dsmkt-dev.mcpl6a.cfolks.pl,rCH-#fg-U_Z791me s36.cyber-folks.pl;
         ls;
         lcd dsmkt2024;
