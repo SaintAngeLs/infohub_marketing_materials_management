@@ -53,7 +53,7 @@ jobs:
         lftp -c "
         set ftps:initial-prot '';
         set ftp:ssl-force true;
-        open -u ${{ secrets.FTP_USERNAME }}, ${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
+        open -u dev@dsmkt-dev.mcpl6a.cfolks.pl, rCH-#fg-U_Z791me s36.cyber-folks.pl;
         ls;
         lcd dsmkt2024;
         cd public_html/;
