@@ -31,14 +31,34 @@ jobs:
     #     local-dir: ./dsmkt2024/
     #     server-dir: public_html/
 
-    - name: Custom FTP Deploy
+    # - name: Custom FTP Deploy
+    #   if: env.should_deploy == 'true'
+    #   run: |
+    #     lftp -c "
+    #     set ftps:initial-prot '';
+    #     set ftp:ssl-force true;
+    #     open -u dev@dsmkt-dev.mcpl6a.cfolks.pl, rCH-#fg-U_Z791me s36.cyber-folks.pl ;
+    #     lcd ./dsmkt2024/;
+    #     cd public_html/;
+    #     mirror --reverse --delete --verbose ./dsmkt2024/ public_html/;
+    #     "
+
+    - name: Install lftp
+      if: env.should_deploy == 'true'
+      run: sudo apt-get update && sudo apt-get install -y lftp
+
+    - name: Sync files with lftp
       if: env.should_deploy == 'true'
       run: |
         lftp -c "
         set ftps:initial-prot '';
         set ftp:ssl-force true;
-        open -u dev@dsmkt-dev.mcpl6a.cfolks.pl, rCH-#fg-U_Z791me s36.cyber-folks.pl ;
+        open -u ${{ secrets.FTP_USERNAME }}, ${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
         lcd ./dsmkt2024/;
         cd public_html/;
         mirror --reverse --delete --verbose ./dsmkt2024/ public_html/;
         "
+      env:
+        FTP_USERNAME: dev@dsmkt-dev.mcpl6a.cfolks.pl
+        FTP_PASSWORD: rCH-#fg-U_Z791me
+        FTP_SERVER: s36.cyber-folks.pl
