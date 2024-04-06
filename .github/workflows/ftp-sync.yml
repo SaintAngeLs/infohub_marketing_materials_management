@@ -7,7 +7,6 @@ jobs:
     steps:
     - name: Get latest code
       uses: actions/checkout@v3
-      fetch-depth : 100000
 
     - name: Check commit message
       id: check-message
@@ -19,11 +18,11 @@ jobs:
         else
           echo "should_deploy=false" >> $GITHUB_ENV
         fi
-
+        
 
     - name:  Sync files
       if: env.should_deploy == 'true'
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0
       with:
         server: s36.cyber-folks.pl 
         username: dev@dsmkt-dev.mcpl6a.cfolks.pl
