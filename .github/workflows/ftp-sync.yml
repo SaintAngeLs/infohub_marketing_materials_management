@@ -22,10 +22,11 @@ jobs:
 
     - name:  Sync files
       if: env.should_deploy == 'true'
-      uses: SamKirkland/FTP-Deploy-Action@4.1.0
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: s36.cyber-folks.pl 
         username: dev@dsmkt-dev.mcpl6a.cfolks.pl
         password: rCH-#fg-U_Z791me
+        protocol: ftps
         local-dir: ./dsmkt2024/
         server-dir: public_html/
