@@ -54,6 +54,7 @@ jobs:
         set ftps:initial-prot '';
         set ftp:ssl-force true;
         open -u ${{ secrets.FTP_USERNAME }}, ${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
+        ls;
         lcd dsmkt2024;
         cd public_html/;
         mirror --reverse --delete --verbose ./dsmkt2024/ public_html/;
