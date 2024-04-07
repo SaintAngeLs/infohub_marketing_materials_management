@@ -21,24 +21,21 @@ class UploadFromUrlStrategy implements FileUploadStrategy
     {
         Log::info('Inside the strategy for external URL files');
 
-        // The file URL is directly saved without downloading the file.
         $file->path = $validated['file_url'];
-        $file->file_source = 'file_external'; // Marking the source as external.
+        $file->file_source = 'file_external';
 
         $urlPath = parse_url($file->path, PHP_URL_PATH);
         $filename = basename($urlPath);
 
-        // If a name has not been explicitly provided, use the extracted filename.
         if (empty($validated['name'])) {
             $file->name = $filename;
         } else {
             $file->name = $validated['name'];
         }
 
-        // Extracting the file extension from the filename.
         $file->extension = pathinfo($filename, PATHINFO_EXTENSION);
-
-        $file->weight = null; 
+        $file->hosted = '1';
+        $file->weight = null;
 
         Log::info('File information set for external URL:', ['file' => $file]);
     }

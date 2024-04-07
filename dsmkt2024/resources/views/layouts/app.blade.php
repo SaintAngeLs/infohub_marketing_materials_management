@@ -48,7 +48,6 @@
 
         return false;
     }
-
     </script>
     <div id="main-wrapper">
         <div id="top-wrapper">

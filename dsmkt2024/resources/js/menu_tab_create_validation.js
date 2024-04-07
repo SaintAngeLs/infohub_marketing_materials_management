@@ -72,14 +72,18 @@ $(document).ready(function() {
         }
     });
 
-    $.validator.addMethod("greaterThan",
-    function(value, element, param) {
-        var $min = $(param);
-        if (this.settings.onfocusout) {
-            $min.off(".validate-greaterThan").on("blur.validate-greaterThan", function() {
-                $(element).valid();
-            });
+    $.validator.addMethod("greaterThan", function(value, element, param) {
+        var startDateValue = $(param).val();
+        var endDateValue = value;
+        function isDateInvalidOrEmpty(dateValue) {
+            var regex = /^(dd\/mm\/yyyy|)$/i;
+            return regex.test(dateValue);
         }
-        return Date.parse(value) > Date.parse($min.val());
+
+        if (isDateInvalidOrEmpty(startDateValue) || isDateInvalidOrEmpty(endDateValue)) {
+            return true;
+        }
+
+        return Date.parse(endDateValue) > Date.parse(startDateValue);
     }, "Data końca musi być późniejsza niż data początku.");
 });

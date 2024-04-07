@@ -70,11 +70,10 @@ class MenuController extends Controller
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:menu_items,id',
             'owners' => 'nullable|array',
-            'owners.*' => 'exists:users,id',
             'visibility_start' => 'nullable|date',
             'visibility_end' => 'nullable|date',
             'banner' => 'required|string',
-            'menu_permissions' => 'required|array',
+            'menu_permissions' => 'nullable|array',
         ]);
 
         $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
@@ -82,10 +81,6 @@ class MenuController extends Controller
         $menuItem->fill($validatedData);
 
         $menuItem->save();
-
-        if (isset($validatedData['owners'])) {
-            $menuItem->owners()->sync($validatedData['owners']);
-        }
 
         $this->updateMenuItemPermissions($menuItem, $request->input('menu_permissions', []));
 
@@ -216,12 +211,14 @@ class MenuController extends Controller
         foreach ($menuItems as $item) {
             $checked = in_array($item->id, $permissions) ? "checked='checked'" : "";
 
-            $checkboxHtml = "<input type='checkbox' class='menu-item-checkbox' name='menu_permissions[{$item->id}]' {$checked} id='menu_permission_{$item->id}' value='{$item->id}' />";
+            $checkboxHtml = "<input type='checkbox' class='menu-item-checkbox' name='menu_permissions[{$item->id}]' {$checked} id='menu_permission_{$item->id}' value='{$item->id}' onclick='updateGroupPermission(this)' />";
 
             $nodeContent = <<<HTML
                 <div class='js-tree-node-content' data-node-id="{$item->id}">
                     <span class='node-name'>{$item->name}</span>
-                    <span class='node-checkbox'>$checkboxHtml</span>
+                    <div class="checkbox-wrapper">
+                        <span class='node-checkbox'>$checkboxHtml</span>
+                    </div>
                 </div>
             HTML;
 
@@ -252,7 +249,9 @@ class MenuController extends Controller
             $nodeContent = <<<HTML
                 <div class='js-tree-node-content' data-node-id="{$item->id}">
                     <span class='node-name'>{$item->name}</span>
-                    <span class='node-checkbox'>$checkboxHtml</span>
+                    <div class="checkbox-wrapper">
+                        <span class='node-checkbox'>$checkboxHtml</span>
+                    </div>
                 </div>
             HTML;
 

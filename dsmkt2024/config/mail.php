@@ -100,4 +100,20 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+
+    'markdown' => [
+        'theme' => 'default',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+        ],
+
+        'logo' => [
+            'path' => 'https://www.dsautomobiles.pl/content/dam/ds/master/home/DS_D1_Logoheader-Desktop-new.png',
+            'width' => '100',
+            'height' => '100',
+        ],
+    ],
+
+
 ];

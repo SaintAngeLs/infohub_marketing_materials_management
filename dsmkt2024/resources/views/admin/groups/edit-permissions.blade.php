@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('content')
+<script>
+   
+
+ </script>
     <div class="">
         <div class="max-w-9xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
@@ -13,7 +17,7 @@
                         <input type="hidden" id="group-id" value="{{ $group->id }}">
                     @endif
 
-                 
+
                     <div class="menu-tree-component" id="menu-tree-permissions"></div>
 
                     <div class="mt-4">

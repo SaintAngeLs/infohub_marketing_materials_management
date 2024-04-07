@@ -27,7 +27,9 @@ window.Alpine = Alpine;
 Alpine.start();
 
 
+
 document.addEventListener('DOMContentLoaded', () => {
+    import('./global/menu_group_permissions')
     import('./menu_tree');
     import('./menu_delete');
     import('./concessios_component_validation');
