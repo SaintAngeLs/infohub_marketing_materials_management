@@ -56,7 +56,7 @@ class PermissionManagementController extends Controller
             $validated['user_id'],
             $validated['action']
         );
-        
+
         $this->statisticsService->logUserActivity(auth()->id(), [
             'uri' => $request->path(),
             'post_string' => $request->except('_token'),
@@ -65,4 +65,21 @@ class PermissionManagementController extends Controller
 
         return response()->json(['message' => 'User permissions updated successfully.']);
     }
+
+    public function copyUserPermissions(Request $request)
+    {
+        Log::info("copyUserPermissions", $request->all());
+        $validated = $request->validate([
+            'source_user_id' => 'required|integer',
+            'target_user_id' => 'required|integer',
+        ]);
+
+        $this->permissionService->copyUserPermissions(
+            $validated['source_user_id'],
+            $validated['target_user_id']
+        );
+
+        return back()->with('success', 'Permissions copied successfully.');
+    }
+
 }

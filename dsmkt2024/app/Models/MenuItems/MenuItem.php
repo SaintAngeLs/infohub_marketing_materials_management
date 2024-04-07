@@ -71,4 +71,9 @@ class MenuItem extends Model
         // This method assumes you have a scope or a method to fetch items in their correct order
         return MenuItem::orderBy('parent_id')->orderBy('position')->get()->toTree();
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
 }

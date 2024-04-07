@@ -31,9 +31,25 @@
         background-size: cover;
         background-position: center calc(80%);
     }
+
+
     </style>
 </head>
+
 <body>
+    <script>
+        function searchMe() {
+        var query = document.getElementById('search').value;
+        if(query.length < 2) {
+            alert('Please enter at least 2 characters');
+            return false;
+        }
+        window.location.href = `/search?query=${encodeURIComponent(query)}`;
+
+        return false;
+    }
+
+    </script>
     <div id="main-wrapper">
         <div id="top-wrapper">
             <div id="top">
@@ -58,6 +74,14 @@
             <div class="right-col">
                 @yield('content')
             </div>
+            @auth
+            <div class="search-col">
+                <form id="searchbox" action="{{ route('search') }}" method="GET" class="search-box">
+                    <input id="search" name="query" type="text" placeholder="szukaj" value="">
+                    <input class="submit" type="submit" value="Szukaj">
+                </form>
+            </div>
+            @endauth
             <div class="clearfix"></div>
         </div>
         <div class="push"></div>

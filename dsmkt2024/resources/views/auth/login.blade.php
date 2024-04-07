@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 @section('content')
-<div class="items-center justify-center bg-cover bg-no-repeat bg-center login-block text-center">
+<div class="w-full items-center justify-center bg-cover bg-no-repeat bg-center login-block text-center">
     <h2>MATERIAŁY REKLAMOWE DS</h2>
     <h4>Logowanie</h4>
     <div class="login-box text-left">

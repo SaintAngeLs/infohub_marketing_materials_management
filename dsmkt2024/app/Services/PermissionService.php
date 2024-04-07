@@ -6,6 +6,7 @@ use App\Contracts\IPermissionService;
 use App\Models\GroupPermission;
 use App\Models\Permission;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PermissionService implements IPermissionService
 {
@@ -55,5 +56,28 @@ class PermissionService implements IPermissionService
                       ->where('user_id', $userId)
                       ->delete();
         }
+    }
+
+     /**
+     * Copies permissions from one user to another.
+     *
+     * @param integer $sourceUserId ID of the user to copy permissions from
+     * @param integer $targetUserId ID of the user to copy permissions to
+     * @return void
+     */
+    public function copyUserPermissions($sourceUserId, $targetUserId)
+    {
+        DB::transaction(function () use ($sourceUserId, $targetUserId) {
+            $sourcePermissions = Permission::where('user_id', $sourceUserId)->get();
+
+            Permission::where('user_id', $targetUserId)->delete();
+
+            foreach ($sourcePermissions as $permission) {
+                Permission::create([
+                    'user_id' => $targetUserId,
+                    'menu_item_id' => $permission->menu_item_id,
+                ]);
+            }
+        });
     }
 }
