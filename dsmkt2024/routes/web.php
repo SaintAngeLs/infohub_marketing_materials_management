@@ -99,7 +99,9 @@ Route::middleware('admin')->group(function () {
         Route::post('/menu-items/update-type', [MenuItemController::class, 'updateType'])->name('menu-items.update-type');
         Route::post('/update-tree-structure', [MenuItemController::class, 'updateTreeStructure'])->name('menu.update-tree-structure');
         Route::get('/menu-items/{id}/has-sub-items', [MenuItemController::class, 'hasSubItems'])->name('menu-items.has-sub-items');
-        Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
+        // Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
+        Route::delete('/menu-items/{menuItem}', [MenuController::class, 'destroy'])->name('menu-items.destroy');
+
 
 
         Route::get('/files/create', [FileController::class, 'create'])->name('files.create');
