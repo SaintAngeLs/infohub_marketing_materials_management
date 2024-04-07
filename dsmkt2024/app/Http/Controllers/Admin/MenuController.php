@@ -13,6 +13,7 @@ use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
@@ -43,6 +44,29 @@ class MenuController extends Controller
         $menuItemsToSelect = MenuItem::all()->except($menuItem->id);
         $users = User::where('active', 1)->get();
         return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users'));
+    }
+
+    public function destroy(Request $request, MenuItem $menuItem)
+    {
+        $this->deleteSubMenuItems($menuItem);
+
+        $menuItem->delete();
+
+        return response()->json(['success' => 'Menu item and all associated data have been deleted.']);
+    }
+
+    protected function deleteSubMenuItems(MenuItem $menuItem)
+    {
+        foreach ($menuItem->children as $child) {
+            $this->deleteSubMenuItems($child);
+        }
+
+        $directory = "menu_files/{$menuItem->id}";
+        if (Storage::disk('public')->exists($directory)) {
+            Storage::disk('public')->deleteDirectory($directory);
+        }
+
+        $menuItem->delete();
     }
 
     public function update(Request $request, MenuItem $menuItem)
@@ -149,25 +173,22 @@ class MenuController extends Controller
     }
 
     public function getMenuItemWithUserPermissions(Request $request)
-{
-    $userId = $request->input('user_id');
-    $user = User::with('usersGroup.menuItems')->find($userId);
-    $menuItems = MenuItem::get()->toTree();
+    {
+        $userId = $request->input('user_id');
+        $user = User::with('usersGroup.menuItems')->find($userId);
+        $menuItems = MenuItem::get()->toTree();
 
-    // Direct user permissions
-    $userPermissions = Permission::where('user_id', $userId)
-                                 ->pluck('menu_item_id')
-                                 ->toArray();
+        $userPermissions = Permission::where('user_id', $userId)
+                                    ->pluck('menu_item_id')
+                                    ->toArray();
 
-    // Group permissions
-    $groupPermissions = optional($user->usersGroup)->menuItems->pluck('id')->toArray() ?? [];
+        $groupPermissions = optional($user->usersGroup)->menuItems->pluck('id')->toArray() ?? [];
 
-    // Combine and remove duplicates
-    $allPermissions = array_unique(array_merge($userPermissions, $groupPermissions));
+        $allPermissions = array_unique(array_merge($userPermissions, $groupPermissions));
 
-    $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $allPermissions);
-    return response()->json($formattedMenuItems);
-}
+        $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $allPermissions);
+        return response()->json($formattedMenuItems);
+    }
 
 
     protected function formatForJsTree($menuItems)
@@ -236,7 +257,6 @@ class MenuController extends Controller
     public function formatForJsTreeUserPermissions($menuItems, $userId = null)
     {
         $formatted = [];
-        // Retrieve permissions for a specific user
         $permissions = $userId ? Permission::where('user_id', $userId)
                                        ->pluck('menu_item_id')
                                        ->toArray() : [];
