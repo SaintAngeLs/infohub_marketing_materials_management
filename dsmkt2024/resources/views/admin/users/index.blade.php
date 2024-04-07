@@ -14,11 +14,19 @@
                     <a href="{{ route('menu.users.create') }}" class="btn">Dodaj użytkownika</a>
                 </p>
 
-                <table class="table-auto w-full">
+                <table class="w-full">
                     <thead>
                         <tr>
-                            <th>Nazwisko Imię</th>
-                            <th>Grupa</th>
+                            <th>
+                                <a href="{{ route('menu.users', ['sort' => 'name', 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc']) }}">
+                                    Nazwisko Imię
+                                </a>
+                            </th>
+                            <th>
+                                <a href="{{ route('menu.users', ['sort' => 'group', 'order' => request('order', 'asc') == 'asc' ? 'desc' : 'asc']) }}">
+                                    Grupa
+                                </a>
+                            </th>
                             <th>Status</th>
                         </tr>
                     </thead>

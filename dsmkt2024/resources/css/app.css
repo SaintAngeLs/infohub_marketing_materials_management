@@ -696,7 +696,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 /* table files*/
 
 .right-col table{
-	width: 660px;
+	/* width: 660px; */
 	margin-top: 20px;
 	text-align: left;
 	letter-spacing: 0;
@@ -1633,6 +1633,9 @@ input[type="submit"].table-button-2{
     align-items: center;
     width: 100%;
 }
+
+
+
 #menu-tree-files .js-tree-node-files {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -1648,8 +1651,6 @@ input[type="submit"].table-button-2{
 }
 
 
-
-
 .js-tree-node-files {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -1663,6 +1664,31 @@ input[type="submit"].table-button-2{
 #menu-tree-files .js-tree-files-node-info {
     display: block;
     width: 100%;
+}
+
+#menu-tree-permissions .js-tree-node-content,  #menu-tree-permissions-user .js-tree-node-content {
+    display: grid;
+    grid-template-columns: 11fr 1fr;
+    gap: 10px;
+    height: 20px;
+    align-items: center;
+    width: 100%;
+}
+
+#menu-tree-permissions .js-tree-node-content .checkbox-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+#menu-tree-permissions .jstree-anchor,  #menu-tree-permissions-user .jstree-anchor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#menu-tree-permissions .jstree-anchor .jstree-checkbox, #menu-tree-permissions-user .jstree-anchor .jstree-checkbox  {
+    margin-left: auto;
 }
 
 .jstree-default .jstree-anchor {

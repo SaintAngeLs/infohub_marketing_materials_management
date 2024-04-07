@@ -14,6 +14,7 @@ class UploadFromPCStrategy implements FileUploadStrategy
         $filename = $validated['name'] . '.' . $uploadedFile->getClientOriginalExtension();
         $directory = 'menu_files/' . $validated['menu_id'];
         $filePath = $uploadedFile->storeAs($directory, $filename, 'public');
+        $file->file_source = 'file_pc';
         $file->path = $filePath;
     }
 }

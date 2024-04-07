@@ -22,28 +22,6 @@ $(document).ready(function() {
         updateNodePadding(data.instance);
     }).on('open_node.jstree', function (e, data) {
         updateNodePadding(data.instance, data.node.id);
-    }).on("move_node.jstree", function (e, data) {
-        var newParent = data.parent;
-        var nodeId = data.node.id;
-        var newPosition = data.position;
-
-        var postData = {
-            id: nodeId,
-            parent_id: newParent === "#" ? null : newParent,
-            position: newPosition
-        };
-        $.ajax({
-            url: '/menu/update-tree-structure',
-            type: 'POST',
-            data: postData,
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-            success: function(response) {
-                console.log("Tree structure updated successfully.");
-            },
-            error: function(xhr) {
-                console.error("Error updating tree structure.");
-            }
-        });
     });
 
     $(document).on('change', '#menu-tree-permissions-user .menu-item-checkbox', function() {
@@ -51,7 +29,6 @@ $(document).ready(function() {
         var userId = $('#user-id').val();
         console.log(userId);
         var isChecked = $(this).is(':checked');
-
 
         var action = isChecked ? 'assign' : 'remove';
 
