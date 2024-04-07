@@ -13,6 +13,7 @@
                         <input type="hidden" id="group-id" value="{{ $group->id }}">
                     @endif
 
+                 
                     <div class="menu-tree-component" id="menu-tree-permissions"></div>
 
                     <div class="mt-4">

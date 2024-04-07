@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\CustomKernel;
+use App\Models\MenuItems\MenuItem;
 use App\Models\UserAuthentication;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
@@ -32,10 +33,11 @@ class AppServiceProvider extends ServiceProvider
             \Log::debug('User menu view composer is running.');
             if (Auth::check()) {
                 $user = Auth::user();
-                $menuItems = $user->accessibleMenuItems()->get();
-                \Log::debug('menuItems', $menuItems->toArray());
+                $menuItems = $user->getAccessibleMenuItemsAsTree();
+                \Log::debug('Unique Menu Items: ', $menuItems->toArray());
                 $view->with('menuItems', $menuItems);
             }
+
         });
     }
 }

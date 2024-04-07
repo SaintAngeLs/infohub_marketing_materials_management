@@ -27,6 +27,8 @@ use App\Http\Controllers\ProfileController;
 // use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\Admin\UsersController;
 
+use App\Http\Controllers\Search\SearchController;
+use App\Http\Controllers\User\Account\UserAccountManagementController;
 use App\Http\Controllers\User\Account\UserAccountViewController;
 use App\Http\Controllers\User\MenuItemNotifications\MenuItemNotificationsViewController;
 use App\Http\Controllers\User\MenuItemNotifications\MenuItemNotificationsController;
@@ -36,20 +38,10 @@ use App\Http\Middleware;
 
 
 Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        return view('auth.login');
-    });
-
-    Route::get('/user/set-password/{user}', [PasswordSetupController::class, 'showSetPasswordForm'])
-        ->name('user.set-password')
-        ->middleware('signed');
-
-    Route::post('/user/update-password/{user}', [PasswordSetupController::class, 'updatePassword'])
-        ->name('user.update-password');
-
-    Route::post('/access-request', [ApplicationManagementController::class, 'storeAccessRequest'])
-        ->name('access-request.store');
-
+    Route::get('/', function () { return view('auth.login'); });
+    Route::get('/user/set-password/{user}', [PasswordSetupController::class, 'showSetPasswordForm'])->name('user.set-password')->middleware('signed');
+    Route::post('/user/update-password/{user}', [PasswordSetupController::class, 'updatePassword'])->name('user.update-password');
+    Route::post('/access-request', [ApplicationManagementController::class, 'storeAccessRequest'])->name('access-request.store');
     Route::get('/access-request-thank-you', function () { return view('thank-you'); })->name('thank-you');
 
 });
@@ -57,8 +49,12 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/my-account', [UserAccountViewController::class, 'index'])->name('user.my-account');
     Route::get('/user/notifications', [MenuItemNotificationsViewController::class, 'index'])->name('user.notifications');
-    Route::get('/user/change-password', [UserAccountViewController::class, 'index'])->name('user.change-password');
+    Route::get('/user/change-password', [UserAccountViewController::class, 'showChangePasswordForm'])->name('user.change-password');
+    Route::post('/user/change-password', [UserAccountManagementController::class, 'changePassword'])->name('user.change-password.post');
     Route::get('/user/get-menu-items-user-notifications', [MenuItemNotificationsController::class, 'getMenuItemsNotifications'])->name('user.get-menu-items-user-notifications');
+
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
+
 });
 
 Route::middleware('auth')->group(function () {
@@ -82,11 +78,7 @@ Route::middleware('admin')->group(function () {
         Route::get('/structure', [MenuController::class, 'index'])->name('structure');
         Route::get('/autos', [AutosController::class, 'index'])->name('autos');
         Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
-
-        Route::get('/files', function () {
-            return view('admin.files.index');
-        })->name('files');
-
+        Route::get('/files', function () { return view('admin.files.index'); })->name('files');
         Route::get('/statistics', [StatisticsViewController::class, 'index'])->name('statistics');
         Route::get('/statistics/entries', [StatisticsManagementController::class, 'showMenuEntries'])->name('statistics.entries');
         Route::get('/statistics/downloads', [StatisticsManagementController::class, 'showDownloads'])->name('statistics.downloads');
@@ -161,6 +153,11 @@ Route::middleware('admin')->group(function () {
             // Route::post('/update-user-permission', [PermissionController::class, 'updateUserPermission'])->name('permission.updateUser');
             Route::post('/update-group-permission', [PermissionManagementController::class, 'updateGroupPermission'])->name('permissions.updateGroup');
             Route::post('/update-user-permission', [PermissionManagementController::class, 'updateUserPermission'])->name('permissions.updateUser');
+
+            Route::get('/copy/from-user/{targetUserId}', [PermissionViewController::class, 'copyFromUser'])->name('copy.from.user');
+            Route::post('/copy/copy-user-permissions', [PermissionManagementController::class, 'copyUserPermissions'])->name('copy.copyUserPermissions');
+
+            Route::get('/copy/from-group', [PermissionViewController::class, 'copyFromGroup'])->name('copy.from.group');
         });
 
         Route::prefix('autos')->name('autos.')->group(function () {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\UsersGroup;
+use Illuminate\Support\Facades\Log;
 
 class PermissionViewController extends Controller
 {
@@ -18,14 +19,16 @@ class PermissionViewController extends Controller
     {
         $user = null;
         $isEdit = false;
+        $targetUserId = null;
 
         if ($userId !== null) {
             $user = User::find($userId);
             $isEdit = true;
+            $targetUserId = $userId;
         }
-
-        return view('admin.users.edit-permissions', compact('user', 'isEdit'));
+        return view('admin.users.edit-permissions', compact('user', 'isEdit', 'targetUserId'));
     }
+
 
     public function editGroupPermissions($groupId = null)
     {
@@ -42,5 +45,19 @@ class PermissionViewController extends Controller
         }
         return view('admin.groups.edit-permissions', compact('group', 'isEdit'));
     }
+    public function copyFromUser($targetUserId)
+    {
+        // Log and fetch users as before
+        Log::info("Accessing copy permissions page for target user ID: $targetUserId");
+        $users = User::all(); // Assuming you're fetching all users to display in your view
+        return view('admin.users.copy-from-user', compact('users', 'targetUserId'));
+    }
+
+    public function copyFromGroup()
+    {
+        $groups = UsersGroup::all();
+        return view('admin.users.copy-from-group', compact('groups'));
+    }
+
 
 }

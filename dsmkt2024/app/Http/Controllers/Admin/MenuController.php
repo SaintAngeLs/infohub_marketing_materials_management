@@ -154,13 +154,26 @@ class MenuController extends Controller
     }
 
     public function getMenuItemWithUserPermissions(Request $request)
-    {
-        Log::info('getMenuItemWithUserPermissions',$request->all());
-        $userId = $request->input('user_id');
-        $menuItems = MenuItem::get()->toTree();
-        $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $userId);
-        return response()->json($formattedMenuItems);
-    }
+{
+    $userId = $request->input('user_id');
+    $user = User::with('usersGroup.menuItems')->find($userId);
+    $menuItems = MenuItem::get()->toTree();
+
+    // Direct user permissions
+    $userPermissions = Permission::where('user_id', $userId)
+                                 ->pluck('menu_item_id')
+                                 ->toArray();
+
+    // Group permissions
+    $groupPermissions = optional($user->usersGroup)->menuItems->pluck('id')->toArray() ?? [];
+
+    // Combine and remove duplicates
+    $allPermissions = array_unique(array_merge($userPermissions, $groupPermissions));
+
+    $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $allPermissions);
+    return response()->json($formattedMenuItems);
+}
+
 
     protected function formatForJsTree($menuItems)
     {

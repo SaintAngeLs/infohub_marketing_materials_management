@@ -41,5 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./accessRequest_validation');
     import('./menu_tab_create_validation');
     import('./menu_tree_user_notifications');
+    import('./user_permissions_copy');
     // import('./concessios_component_validation');
 });

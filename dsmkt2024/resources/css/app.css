@@ -622,7 +622,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 
 #content .right-col{
 	width: 1400px;
-	float: right;
+	/* float: right; */
 	margin-top: 25px;
 }
 
@@ -1919,3 +1919,26 @@ input[type="submit"].table-button-2{
 	font-family: 'CitroenLight', 'Arial', sans-serif;
 	font-weight: normal;
   }
+
+
+#content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.left-col, .search-col, .right-col {
+    margin: 10px;
+}
+.search-col {
+    order: 3;
+    flex-grow: 1;
+}
+.right-col {
+    order: 2;
+    flex-basis: 60%;
+}
+.left-col {
+    order: 1;
+    flex-basis: 20%;
+}
+

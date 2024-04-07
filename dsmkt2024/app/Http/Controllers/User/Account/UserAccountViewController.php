@@ -18,4 +18,9 @@ class UserAccountViewController extends Controller
         $user = Auth::user();
         return view('user.profile.profile', compact('user'));
     }
+
+    public function showChangePasswordForm()
+    {
+        return view('user.profile.change-password');
+    }
 }
