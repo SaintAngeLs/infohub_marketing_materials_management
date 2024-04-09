@@ -38,9 +38,9 @@ class UserManagementController extends Controller
             'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'users_groups_id' => 'required|exists:users_groups,id',
-            'address' => 'required|string|max:255',
-            'code' => 'required|string|max:10',
-            'city' => 'required|string|max:100',
+            // 'address' => 'required|string|max:255',
+            // 'code' => 'required|string|max:10',
+            // 'city' => 'required|string|max:100',
             'phone' => 'required|string|max:12',
         ];
 
@@ -82,18 +82,21 @@ class UserManagementController extends Controller
 
     public function update(Request $request, $userId)
     {
+        Log::info("User udpate request", $request->all());
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $userId,
             'users_groups_id' => 'required|exists:users_groups,id',
-            'address' => 'required|string|max:255',
-            'code' => 'required|string|max:10',
-            'city' => 'required|string|max:100',
+            'status' => 'required|string|max:255',
             'phone' => 'required|string|max:12',
         ]);
 
+        Log::info("User update validated data", $validatedData);
+
         try {
             $user = $this->userService->updateUser($userId, $validatedData);
+            Log::info("User updated successfully", ['userID' => $userId]);
             $groupPermissions = UsersGroup::find($validatedData['users_groups_id'])->menuItems;
             $user->accessibleMenuItems()->sync($groupPermissions->pluck('id'));
             $this->statisticsService->logUserActivity(auth()->id(), [
@@ -101,8 +104,9 @@ class UserManagementController extends Controller
                 'post_string' => $request->except('_token'),
                 'query_string' => $request->getQueryString(),
             ]);
-            return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+            return redirect()->route('menu.users.index')->with('success', 'User updated successfully.');
         } catch (\Exception $e) {
+            Log::error("Error updating user", ['error' => $e->getMessage(), 'userID' => $userId]);
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }

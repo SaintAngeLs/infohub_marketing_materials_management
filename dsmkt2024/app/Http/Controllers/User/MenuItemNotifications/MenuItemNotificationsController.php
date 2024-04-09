@@ -37,9 +37,9 @@ class MenuItemNotificationsController extends Controller
 
             $checkboxesHtml = <<<HTML
                 <div class='notification-preferences'>
-                    <input type='radio' name='notification_preferences[{$item->id}]' value='0' {$checkedNever}> Nigdy
-                    <input type='radio' name='notification_preferences[{$item->id}]' value='1' {$checkedDaily}> Raz dziennie
-                    <input type='radio' name='notification_preferences[{$item->id}]' value='2' {$checkedOnChange}> Przy każdej zmianie
+                    <input type='radio' onclick="updateNotificationPreference({$item->id}, 0);" name='notification_preferences[{$item->id}]' value='0' {$checkedNever}> Nigdy
+                    <input type='radio' onclick="updateNotificationPreference({$item->id}, 1);" name='notification_preferences[{$item->id}]' value='1' {$checkedDaily}> Raz dziennie
+                    <input type='radio' onclick="updateNotificationPreference({$item->id}, 2);" name='notification_preferences[{$item->id}]' value='2' {$checkedOnChange}> Przy każdej zmianie
                 </div>
             HTML;
 

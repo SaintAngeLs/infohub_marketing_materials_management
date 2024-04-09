@@ -15,6 +15,8 @@
     </div>
 
     <div class="mt-4">
+        <h1 class="text-xl font-bold mb-4">Statystyki wejść na zakładki ({{ $formattedFrom }} - {{ $formattedTo }})</h1>
+        <div>Total views: {{ $totalViews }}</div>
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
@@ -26,7 +28,11 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($menuViewCounts as $viewCount)
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $viewCount->menuItem->name ?? 'N/A' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <a href="{{ route('menu.statistics.menuItemDetails', $viewCount->menu_item_id) }}">
+                            {{ $viewCount->menuItem->name ?? 'N/A' }}
+                        </a>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $viewCount->views }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ number_format(($viewCount->views / $totalViews) * 100, 2) }}%</td>
                 </tr>

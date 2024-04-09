@@ -111,6 +111,7 @@ $(document).ready(function() {
 
             this.on("success", function(file, response) {
                 console.log(response);
+                window.location.href = '/menu/files';
             });
             this.on("error", function(file, response) {
                 console.error(response);
@@ -246,7 +247,6 @@ $(document).ready(function() {
             // Process the file upload queue, which will also submit the form data
             myDropzone.processQueue();
         } else {
-            // Directly submit the form without files
             $.ajax({
                 url: $('#file-upload-component form').attr('action'),
                 type: $('#file-upload-component form').attr('method'),
@@ -255,11 +255,10 @@ $(document).ready(function() {
                 contentType: false,
                 success: function(response) {
                     console.log('Success:', response);
-                    // Handle successful submission here
+                    window.location.href = '/menu/files';
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error:', textStatus, errorThrown);
-                    // Handle errors here
                 }
             });
         }

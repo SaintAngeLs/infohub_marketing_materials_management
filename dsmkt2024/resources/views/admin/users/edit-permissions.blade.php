@@ -13,6 +13,11 @@
                         <input type="hidden" id="user-id" value="{{ $user->id }}">
                     @endif
 
+                    <div class="mt-4 flex justify-between">
+                        <a href="{{ route('menu.permissions.copy.from.user', ['targetUserId' => $user->id ?? null]) }}" class="btn btn-secondary mx-2">{{ __('Kopijuj uprawnienia od użytkownika') }}</a>
+                    </div>
+
+
                     <div class="menu-tree-component" id="menu-tree-permissions-user"></div>
 
                     <div class="mt-4">

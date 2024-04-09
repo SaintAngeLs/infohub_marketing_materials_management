@@ -62,8 +62,8 @@
     <div class="form-group">
         <label for="status">STATUS UŻYTKOWNIKA*</label>
         <select name="status" id="status" class="form-control {{ $errors->has('status') ? 'is-invalid' : '' }}" required>
-            <option value="active" {{ (old('status') == 'active') ? 'selected' : '' }}>Użytkownik aktywny</option>
-            <option value="inactive" {{ (old('status') == 'inactive') ? 'selected' : '' }}>Użytkownik nieaktywny</option>
+            <option value="1" @if(old('status', $isEdit ? $user->active : null) == '1') selected @endif>Użytkownik aktywny</option>
+            <option value="0" @if(old('status', $isEdit ? $user->active : null) == '0') selected @endif>Użytkownik nieaktywny</option>
         </select>
         @error('status')
             <div class="invalid-feedback">{{ $message }}</div>

@@ -8,15 +8,12 @@
                     <p class="content-tab-name">
                         {{ __('Użytkownicy / Edytuj użytkownika') }}
                     </p>
-                    <p  class="table-button">
-                        <a href="{{ route('menu.users.create') }}" class="btn">Dodaj użyktownika</a>
-                    </p>
 
                     @include('components.users-form-component.user-form-component')
-                    
+
                     @php
-                        $isEdit = isset($group);
-                        $formAction = $isEdit ? route('menu.users.group.update', $group->id) : route('menu.users.group.store');
+                        $isEdit = isset($user) && !empty($user->id);
+                        $formAction = $isEdit ? route('menu.users.update', $user->id) : route('menu.users.store');
                     @endphp
 
                 </div>

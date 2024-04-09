@@ -41,16 +41,6 @@
         </div>
     @endauth
 </div>
-    @auth
-        <div class="clearfix"></div>
-
-        <form id="searchbox" onsubmit="return false;">
-            <input id="search" name="query" type="text" placeholder="szukaj" value="">
-            <input class="submit" type="submit" value="Szukaj" onclick="searchMe();">
-            <div class="clearfix"></div>
-        </form>
-    @endauth
-
 <script>
 function searchMe() {
     var q = $.trim($('#search').val());

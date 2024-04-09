@@ -6,4 +6,5 @@ interface IPermissionService
 {
     public function updateGroupPermission($menuId, $groupId, $action);
     public function updateUserPermission($menuId, $userId, $action);
+    public function copyUserPermissions($sourceUserId, $targetUserId);
 }

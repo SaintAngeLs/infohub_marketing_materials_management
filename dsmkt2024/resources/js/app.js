@@ -27,7 +27,9 @@ window.Alpine = Alpine;
 Alpine.start();
 
 
+
 document.addEventListener('DOMContentLoaded', () => {
+    import('./global/menu_group_permissions')
     import('./menu_tree');
     import('./menu_delete');
     import('./concessios_component_validation');
@@ -41,5 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./accessRequest_validation');
     import('./menu_tab_create_validation');
     import('./menu_tree_user_notifications');
+    import('./user_permissions_copy');
+    import('./statistics_component');
     // import('./concessios_component_validation');
 });

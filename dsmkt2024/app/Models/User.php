@@ -83,7 +83,14 @@ class User extends Authenticatable
 
     public function accessibleMenuItems()
     {
-        return $this->belongsToMany(MenuItem::class, 'menu_item_user', 'user_id', 'menu_item_id')->withTimestamps();
+        return $this->belongsToMany(MenuItem::class, 'menu_item_user', 'user_id', 'menu_item_id')->where('status', 1)->withTimestamps();
+    }
+
+    public function getAccessibleMenuItemsAsTree()
+    {
+        $allPermissions = $this->getAllPermissionsAttribute()->pluck('id')->toArray();
+
+        return MenuItem::whereIn('id', $allPermissions)->get()->toTree();
     }
 
     /**
@@ -111,9 +118,17 @@ class User extends Authenticatable
     public function getAllPermissionsAttribute()
     {
         $userPermissions = $this->accessibleMenuItems->pluck('id')->toArray();
-
         $groupPermissions = $this->usersGroup ? $this->usersGroup->menuItems->pluck('id')->toArray() : [];
+        $allPermissions = array_unique(array_merge($userPermissions, $groupPermissions));
 
-        return array_unique(array_merge($userPermissions, $groupPermissions));
+        // Optionally, handle the logic to merge or differentiate permissions here
+
+        return MenuItem::whereIn('id', $allPermissions)->get();
+    }
+
+
+    public function groups()
+    {
+        return $this->belongsToMany(UsersGroup::class, 'user_group_user', 'user_id', 'group_id');
     }
 }

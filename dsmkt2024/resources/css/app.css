@@ -1,9 +1,8 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import '~bootstrap/dist/css/bootstrap.min.css';
-
-
 
 
 html, body{
@@ -379,8 +378,8 @@ h3{
     font-size: 0.875rem;
 }
 .user-info p {
-    padding-top: 18px;
-    font-weight: bold	;
+    /* padding-top: 18px; */
+    font-weight: bold;
 }
 .user-info p span {
     color: #9D8C83;
@@ -622,7 +621,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 
 #content .right-col{
 	width: 1400px;
-	float: right;
+	/* float: right; */
 	margin-top: 25px;
 }
 
@@ -696,7 +695,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 /* table files*/
 
 .right-col table{
-	width: 660px;
+	/* width: 660px; */
 	margin-top: 20px;
 	text-align: left;
 	letter-spacing: 0;
@@ -1633,6 +1632,9 @@ input[type="submit"].table-button-2{
     align-items: center;
     width: 100%;
 }
+
+
+
 #menu-tree-files .js-tree-node-files {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -1648,8 +1650,6 @@ input[type="submit"].table-button-2{
 }
 
 
-
-
 .js-tree-node-files {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -1663,6 +1663,31 @@ input[type="submit"].table-button-2{
 #menu-tree-files .js-tree-files-node-info {
     display: block;
     width: 100%;
+}
+
+#menu-tree-permissions .js-tree-node-content,  #menu-tree-permissions-user .js-tree-node-content {
+    display: grid;
+    grid-template-columns: 11fr 1fr;
+    gap: 10px;
+    height: 20px;
+    align-items: center;
+    width: 100%;
+}
+
+#menu-tree-permissions .js-tree-node-content .checkbox-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+#menu-tree-permissions .jstree-anchor,  #menu-tree-permissions-user .jstree-anchor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#menu-tree-permissions .jstree-anchor .jstree-checkbox, #menu-tree-permissions-user .jstree-anchor .jstree-checkbox  {
+    margin-left: auto;
 }
 
 .jstree-default .jstree-anchor {
@@ -1919,3 +1944,26 @@ input[type="submit"].table-button-2{
 	font-family: 'CitroenLight', 'Arial', sans-serif;
 	font-weight: normal;
   }
+
+
+#content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.left-col, .search-col, .right-col {
+    margin: 10px;
+}
+.search-col {
+    order: 3;
+    flex-grow: 1;
+}
+.right-col {
+    order: 2;
+    flex-basis: 60%;
+}
+.left-col {
+    order: 1;
+    flex-basis: 20%;
+}
+

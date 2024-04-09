@@ -7,6 +7,7 @@ $(document).ready(function() {
     const deleteConfirmationModalElement = document.querySelector('#deleteConfirmationModal');
     const deleteConfirmationModal = new Modal(deleteConfirmationModalElement);
     const subTabWarningElement = document.getElementById('subTabWarning');
+    const confirmDeleteButton = document.getElementById('confirmDelete');
     const menuItemId = deleteButton.getAttribute('data-menu-item-id');
 
     deleteButton.addEventListener('click', function() {
@@ -21,5 +22,27 @@ $(document).ready(function() {
                 deleteConfirmationModal.show();
             })
             .catch(error => console.error('Error:', error));
+    });
+
+    confirmDeleteButton.addEventListener('click', function() {
+        fetch(`/menu/menu-items/${menuItemId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/menu/structure';
+            } else {
+                alert('Failed to delete the menu item.');
+            }
+        })
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+            deleteConfirmationModal.hide();
+        });
     });
 });

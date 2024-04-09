@@ -67,7 +67,7 @@ class FileController extends Controller
                     'post_string' => json_encode($request->all()),
                     'query_string' => $queryString,
                 ]);
-                $this->userService->notifyUserAboutFileChange($file->menu_id, "A file in your subscribed menu item has been updated.");
+                $this->userService->notifyUserAboutFileChange($file->menu_id, "Zainicjowano listę zmian plików.");
             }
             return back()->with('success', 'File uploaded successfully.');
         } catch (\Exception $e) {
@@ -321,9 +321,39 @@ class FileController extends Controller
 
     private function detectFileChanges(File $file, array $validated): bool
     {
-        return $file->name !== $validated['name'] ||
-               $file->path !== $validated['file'] ||
-               $file->auto_id !== $validated['auto_id'];
+        Log::info("Validated data in the detectFileChanges is", $validated);
+
+        $hasChanges = false;
+
+        if ($file->name !== $validated['name'] || $file->auto_id !== (isset($validated['auto_id']) ? $validated['auto_id'] : null)) {
+            $hasChanges = true;
+        }
+
+        switch ($validated['file_source']) {
+            case 'file_pc':
+                if (isset($validated['file']) || $validated['file'] instanceof \Illuminate\Http\UploadedFile) {
+                    $hasChanges = true;
+                }
+                break;
+            case 'file_external':
+                if (isset($validated['file_url']) || $file->path !== $validated['file_url']) {
+                    $hasChanges = true;
+                }
+                break;
+            case 'file_server':
+                if (isset($validated['server_file']) || $file->path !== $validated['server_file']) {
+                    $hasChanges = true;
+                }
+                break;
+            default:
+                Log::warning("Unknown file source: " . $validated['file_source']);
+                break;
+        }
+
+        return $hasChanges;
     }
+
+
+
 
 }
