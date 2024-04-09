@@ -1,3 +1,28 @@
+// window.updateUserPermission =  function updateUserPermission(checkboxElement, menuItemId, userId) {
+//     const isChecked = checkboxElement.checked;
+//     const action = isChecked ? 'assign' : 'remove';
+
+//     $.ajax({
+//         url: '/menu/permissions/update-user-permission',
+//         method: 'POST',
+//         data: {
+//             menu_id: menuItemId,
+//             user_id: userId,
+//             action: action,
+//             _token: $('meta[name="csrf-token"]').attr('content')
+//         },
+//         success: function(response) {
+//             alert('Permissions updated successfully.');
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error updating permissions:', error);
+//             // Optionally, revert the checkbox state if the update fails
+//             checkboxElement.checked = !isChecked;
+//         }
+//     });
+// }
+
+
 $(document).ready(function() {
     var userId = $('#user-id').val();
     console.log(userId);

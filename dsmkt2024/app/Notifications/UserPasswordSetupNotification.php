@@ -43,9 +43,11 @@ class UserPasswordSetupNotification extends Notification
         );
 
         return (new MailMessage)
-                    ->line('You are receiving this email because an account was created for you.')
-                    ->action('Set Password', $url)
-                    ->line('If you did not request an account, no further action is required.');
+                ->subject('DS MKT -- logowanie')
+                ->markdown('emails.set_password', [
+                    'url' => $url,
+                    'user' => $this->user,
+                ]);
     }
     /**
      * Get the array representation of the notification.

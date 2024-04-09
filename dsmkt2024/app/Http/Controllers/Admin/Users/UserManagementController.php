@@ -38,9 +38,9 @@ class UserManagementController extends Controller
             'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'users_groups_id' => 'required|exists:users_groups,id',
-            'address' => 'required|string|max:255',
-            'code' => 'required|string|max:10',
-            'city' => 'required|string|max:100',
+            // 'address' => 'required|string|max:255',
+            // 'code' => 'required|string|max:10',
+            // 'city' => 'required|string|max:100',
             'phone' => 'required|string|max:12',
         ];
 

@@ -79,8 +79,6 @@ class MenuController extends Controller
 
         if (!empty($request['owners'])) {
             Log::debug('Attempting to sync owners', ['Owners' => $request['owners']]);
-
-            // Assuming $validatedData['owners'] is an array of user IDs
             $menuItem->owners()->sync($request['owners']);
 
             Log::debug('Owners synced');

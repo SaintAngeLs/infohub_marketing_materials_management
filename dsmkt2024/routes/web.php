@@ -84,6 +84,9 @@ Route::middleware('admin')->group(function () {
         Route::get('/statistics/downloads', [StatisticsManagementController::class, 'showDownloads'])->name('statistics.downloads');
         Route::get('/statistics/logins', [StatisticsManagementController::class, 'showLogins'])->name('statistics.logins');
         Route::get('/statistics/download-excel', [StatisticsManagementController::class, 'downloadExcel'])->name('statistics.download-excel');
+        Route::get('/statistics/file-details/{fileId}', [StatisticsManagementController::class, 'fileDetails'])->name('statistics.file-downloads-details');
+        Route::get('/statistics/user/{userId}/logins/details', [StatisticsManagementController::class, 'userLoginsDetails'])->name('statistics.user.logins.details');
+        Route::get('/statistics/menu-item-details/{menuItemId}', [StatisticsManagementController::class, 'menuItemDetails'])->name('statistics.menuItemDetails');
 
 
         Route::get('/create', [MenuController::class, 'create'])->name('create');
