@@ -1,7 +1,7 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="items-center justify-center bg-cover bg-no-repeat bg-center login-block text-center">
+<div class="w-full items-center justify-center bg-cover bg-no-repeat bg-center login-block text-center">
     <h1>MATERIAŁY REKLAMOWE DS</h1>
     <h2>Przypomnienie hasła</h2>
     <h2>Wyślemy Ci link resetujący, jeżeli konto istnieje</h2>

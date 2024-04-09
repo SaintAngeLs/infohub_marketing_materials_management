@@ -15,20 +15,32 @@
         @include('admin.statistics.partials.filter-form')
     </div>
     <div class="mt-4">
-        <table class="min-w-full divide-y divide-gray-200">
+        <h1 class="text-xl font-bold mb-4">Statystyki logowań ({{ $from }} - {{ $to }})</h1>
+        <div>Total Logins: {{ $totalLogins }}</div>
+        <table class="min-w-full divide-y divide-gray-200 mt-4">
             <thead class="bg-gray-50">
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imię / Nazwisko</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grupa</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liczba logowań</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Współczynnik proporcji</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($logins as $login)
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $login->fingerprint }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $login->ip }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $login->user->name ?? 'N/A' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        @if (!empty($login['user_id']))
+                            <a href="{{ route('menu.statistics.user.logins.details', ['userId' => $login['user_id']]) }}">
+                                {{ $login['name'] }} {{ $login['surname'] }}
+                            </a>
+                        @else
+                            {{ $login['name'] }} {{ $login['surname'] }} (User ID missing)
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $login['user_group'] }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $login['login_count'] }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ number_format($login['login_count'] / $totalLogins * 100, 2) }}%</td>
                 </tr>
                 @endforeach
             </tbody>

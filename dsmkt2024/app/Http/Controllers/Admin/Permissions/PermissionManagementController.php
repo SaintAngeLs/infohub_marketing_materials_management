@@ -50,7 +50,7 @@ class PermissionManagementController extends Controller
             'user_id' => 'required|integer',
             'action' => 'required|in:assign,remove',
         ]);
-
+        Log::debug('Permission update in the service');
         $this->permissionService->updateUserPermission(
             $validated['menu_id'],
             $validated['user_id'],

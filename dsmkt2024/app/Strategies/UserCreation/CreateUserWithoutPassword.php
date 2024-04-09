@@ -12,8 +12,8 @@ class CreateUserWithoutPassword implements UserCreationStrategy
     public function createUser(array $userData)
     {
         Log::Info("CreateUserWithouPassword", $userData);
-        unset($userData['password']); // Ensure password key is not set
-        $user = User::create($userData); // Create the user once
+        unset($userData['password']);
+        $user = User::create($userData);
 
         // Send notification
         $user->notify(new UserPasswordSetupNotification($user));

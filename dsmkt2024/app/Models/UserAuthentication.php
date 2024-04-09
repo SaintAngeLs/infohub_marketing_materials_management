@@ -15,6 +15,9 @@ class UserAuthentication extends Model
         'fingerprint',
     ];
 
+    protected $casts = [
+        'fingerprint' => 'datetime',
+    ];
     public $timestamps = false;
 
     protected $dates = ['fingerprint'];

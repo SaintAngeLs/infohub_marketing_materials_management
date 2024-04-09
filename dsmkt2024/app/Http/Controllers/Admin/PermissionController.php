@@ -83,6 +83,7 @@ class PermissionController extends Controller
         Log::info('Permission was updated');
         return response()->json(['message' => 'Group permissions updated successfully.']);
     }
+
     public function updateUserPermission(Request $request)
     {
         Log::info('updateUserPermission', $request->all());

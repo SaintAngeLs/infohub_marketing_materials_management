@@ -14,7 +14,6 @@
                     @endif
 
                     <div class="mt-4 flex justify-between">
-                        <!-- Modified to be a link with dynamic targetUserId -->
                         <a href="{{ route('menu.permissions.copy.from.user', ['targetUserId' => $user->id ?? null]) }}" class="btn btn-secondary mx-2">{{ __('Kopijuj uprawnienia od użytkownika') }}</a>
                     </div>
 
