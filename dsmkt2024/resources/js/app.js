@@ -28,7 +28,7 @@ Alpine.start();
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
     import('./global/menu_group_permissions')
     import('./menu_tree');
     import('./menu_delete');
@@ -46,4 +46,4 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./user_permissions_copy');
     import('./statistics_component');
     // import('./concessios_component_validation');
-});
+// });

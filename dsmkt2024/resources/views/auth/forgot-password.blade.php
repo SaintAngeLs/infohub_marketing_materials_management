@@ -46,7 +46,7 @@
                 <a href="{{ route('login') }}" class="text-blue-500 hover:text-blue-600 font-semibold">Zalogój się</a>.
             </p>
             <p>
-                Nie masz konta? <a href="{{ route('register') }}" class="text-blue-500 hover:text-blue-600 font-semibold">Zarejestruj się</a>.
+                Nie posiadasz jeszcze konta <a href="{{ route('register') }}" class="text-blue-500 hover:text-blue-600 font-semibold">zarejestruj się</a>.
             </p>
         </div>
     </div>

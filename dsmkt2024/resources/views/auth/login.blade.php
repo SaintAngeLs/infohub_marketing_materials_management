@@ -4,14 +4,12 @@
     <h2>MATERIAŁY REKLAMOWE DS</h2>
     <h4>Logowanie</h4>
     <div class="login-box text-left">
-        <!-- Session Status -->
         @if (session('status'))
             <div class="mb-4 font-medium text-sm text-green-600">
                 {{ session('status') }}
             </div>
         @endif
 
-        <!-- Display Errors -->
         @if ($errors->any())
             <div class="mb-4">
                 <ul class="mt-3 list-disc list-inside text-sm text-red-600">
@@ -22,11 +20,9 @@
             </div>
         @endif
 
-        <!-- Form Starts Here -->
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <!-- Email Address -->
             <div class="form-group">
                 <x-input-label for="email" :value="__('Login')" />
                 <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Wpisz login"/>
@@ -35,7 +31,6 @@
                 @enderror
             </div>
 
-            <!-- Password -->
             <div class="form-group mt-4">
                 <x-input-label for="password" :value="__('Hasło')" />
                 <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" placeholder="Wpisz hasło"/>
@@ -47,25 +42,11 @@
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
                     {{ __('Przypomnij hasło') }}
                 </a>
-
-
             </div>
 
-            {{-- <!-- Remember Me Checkbox -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div> --}}
-
-            <!-- Submission Button -->
             <div class="flex items-center justify-center  mt-4">
-                {{-- <x-primary-button class="ml-3 login-button ">
-                    {{ __('Zalogój się') }}
-                </x-primary-button> --}}
                 <button type="submit" class="login-button">
-                    {{ __('Zalogój się') }}
+                    {{ __('Zaloguj się') }}
                 </button>
             </div>
         </form>

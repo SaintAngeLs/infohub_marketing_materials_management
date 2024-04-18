@@ -13,7 +13,7 @@
         <!-- Production CSS -->
         <link rel="stylesheet" href="{{ App\Helpers\AssetHelper::asset('resources/css/app.css') }}">
         <!-- Production JS -->
-        <script src="{{ App\Helpers\AssetHelper::asset('resources/js/app.js') }}" defer></script>
+        <script type="module" src="{{ App\Helpers\AssetHelper::asset('resources/js/app.js') }}" defer></script>
     @else
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif

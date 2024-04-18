@@ -37,7 +37,7 @@
                 @endforelse --}}
 
                 @if(isset($selectedMenuItem))
-                    <h3>Files for {{ $selectedMenuItem->name }}</h3>
+                    <h3>Pliki zakładki {{ $selectedMenuItem->name }}</h3>
                     <table class="table">
                         <thead>
                             <tr>
@@ -55,7 +55,7 @@
                                     <td>{{ $file->extension }}</td>
                                     <td>{{  \App\Helpers\FormatBytes::formatBytes($file->weight) }}</td>
                                     <td>{{ $file->updated_at->format('d.m.Y H:i:s') }}</td>
-                                    <td><a href="{{ route('files.download', $file->id) }}">Download</a></td>
+                                    <td><a href="{{ route('files.download', $file->id) }}">Pobierz</a></td>
                                 </tr>
                             @empty
                                 <tr><td colspan="5">Brak plików</td></tr>

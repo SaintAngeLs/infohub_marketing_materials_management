@@ -203,15 +203,13 @@ h3{
 }
 
 .login-button {
-    /* Style your button to match the Figma design */
-    background-color: #000; /* Example: black background */
-    color: #fff; /* Example: white text */
+    background-color: #000;
+    color: rgba(26, 27, 27, 1);
     border: none;
     padding: 10px 40px;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 25px;
     transition: background-color 0.3s ease;
-    /* Add other styles such as border-radius or box-shadow as needed */
 }
 
 .login-button:hover {
@@ -1567,7 +1565,7 @@ input[type="submit"].table-button-2{
 
 #menu-tree .jstree-anchor, #menu-tree-permissions .jstree-anchor, #menu-tree-permissions-user .jstree-anchor {
     padding: 10px;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     gap: 10px;
     height: 60px
@@ -1598,7 +1596,7 @@ input[type="submit"].table-button-2{
 
 #menu-tree-files .jstree-anchor {
     padding: 10px;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     gap: 10px;
     min-height: 60px
@@ -1617,7 +1615,7 @@ input[type="submit"].table-button-2{
 /* Node content styling */
 .js-tree-node-content {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
     gap: 10px;
     height: 60px;
     align-items: center;
