@@ -121,8 +121,6 @@ class User extends Authenticatable
         $groupPermissions = $this->usersGroup ? $this->usersGroup->menuItems->pluck('id')->toArray() : [];
         $allPermissions = array_unique(array_merge($userPermissions, $groupPermissions));
 
-        // Optionally, handle the logic to merge or differentiate permissions here
-
         return MenuItem::whereIn('id', $allPermissions)->get();
     }
 
@@ -131,4 +129,5 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(UsersGroup::class, 'user_group_user', 'user_id', 'group_id');
     }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models\MenuItems;
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Models\UsersGroup;
 use Fureev\Trees\Config\Base;
 use Fureev\Trees\Contracts\TreeConfigurable;
@@ -75,5 +76,10 @@ class MenuItem extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 1);
+    }
+
+    public function notificationPreferences()
+    {
+        return $this->hasMany(UserNotification::class, 'menu_item_id');
     }
 }

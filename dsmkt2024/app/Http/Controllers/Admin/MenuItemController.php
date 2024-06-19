@@ -28,18 +28,6 @@ class MenuItemController extends Controller
         return view('menu.index', compact('menuItems'));
     }
 
-    /**
-     * Store data from request parameters
-     * If 'parent_id' is provided and not empty, find the parent item and append the new item to it
-     * Append the new menu item to the found parent item
-     * If parent item is not found, return with an error
-     * If parent item is not found, return with an error
-     * If 'parent_id' is not provided or empty, it means "No Parent" is selected
-     * Check if there's already a root item
-     * If no root exists, save the new item as root
-     * If a root already exists, return with an error
-     * @param request
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -246,7 +234,7 @@ class MenuItemController extends Controller
             $menuItem->parent_id = $newParentId === 'NULL' || $newParentId === '0' ? null : $newParentId;
             $menuItem->save();
         }
-        
+
     }
 
 

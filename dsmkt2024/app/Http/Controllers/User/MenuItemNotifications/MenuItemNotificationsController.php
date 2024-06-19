@@ -46,7 +46,7 @@ class MenuItemNotificationsController extends Controller
             $nodeContent = <<<HTML
                 <div class='js-tree-node-content' data-node-id="{$item->id}">
                     <span class='node-name'>{$item->name}</span>
-                    <span class=''>$checkboxesHtml</span>
+                    <span class=''>$checkbo xesHtml</span>
                 </div>
             HTML;
 
