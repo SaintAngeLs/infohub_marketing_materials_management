@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use ZipArchive;
 use App\Contracts\IStatistics;
 use App\Http\Controllers\Controller;
 use App\Models\Auto;
@@ -277,7 +278,13 @@ class FileController extends Controller
         $this->statisticsService->logDownload(auth()->id(), $fileId);
 
         return response()->download($filePath, basename($filePath), [
-            'Content-Type' => mime_content_type($filePath)
+            'Content-Type' => mime_content_type($filePath),
+            'Content-Disposition' => 'attachment; filename="'.basename($filePath).'"',
+            'Content-Transfer-Encoding' => 'binary',
+            'Expires' => '0',
+            'Cache-Control' => 'must-revalidate',
+            'Pragma' => 'public',
+            'Content-Length' => filesize($filePath),
         ]);
     }
 
@@ -352,6 +359,70 @@ class FileController extends Controller
 
         return $hasChanges;
     }
+
+    public function downloadMultiple(Request $request)
+    {
+        $fileIds = $request->input('files');
+        if (empty($fileIds)) {
+            return redirect()->back()->with('error', 'No files selected.');
+        }
+
+        $files = File::whereIn('id', $fileIds)->get();
+        if ($files->isEmpty()) {
+            return redirect()->back()->with('error', 'No files found.');
+        }
+
+        $zip = new ZipArchive;
+        $zipFileName = 'downloads_' . time() . '.zip';
+        $zipStoragePath = storage_path('app/public/' . $zipFileName);
+        $zipPublicDir = public_path('downloads');
+        $zipPublicPath = $zipPublicDir . '/' . $zipFileName;
+
+        // Ensure the public downloads directory exists
+        if (!file_exists($zipPublicDir)) {
+            mkdir($zipPublicDir, 0777, true);
+        }
+
+        Log::info('Attempting to create ZIP file at: ' . $zipStoragePath);
+
+        if ($zip->open($zipStoragePath, ZipArchive::CREATE) === TRUE) {
+            foreach ($files as $file) {
+                $filePath = storage_path('app/public/' . $file->path);
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, basename($filePath));
+                    Log::info('Added file to ZIP: ' . $filePath);
+                } else {
+                    Log::warning('File not found: ' . $filePath);
+                }
+            }
+
+            $zip->close();
+            Log::info('ZIP file created at: ' . $zipStoragePath);
+
+            if (file_exists($zipStoragePath) && filesize($zipStoragePath) > 0) {
+                if (copy($zipStoragePath, $zipPublicPath)) {
+                    unlink($zipStoragePath); // Remove the file from storage path after moving
+                    Log::info('ZIP file moved to public path: ' . $zipPublicPath);
+                    return response()->download($zipPublicPath)->deleteFileAfterSend(true);
+                } else {
+                    Log::error('Failed to move ZIP file from ' . $zipStoragePath . ' to ' . $zipPublicPath);
+                    return redirect()->back()->with('error', 'Failed to move ZIP file.');
+                }
+            } else {
+                Log::error('ZIP file does not exist or is empty: ' . $zipStoragePath);
+                return redirect()->back()->with('error', 'ZIP file creation failed or ZIP file is empty.');
+            }
+        } else {
+            Log::error('Failed to create ZIP file: ' . $zipStoragePath);
+            return redirect()->back()->with('error', 'Failed to create ZIP file.');
+        }
+    }
+
+
+
+
+
+
 
 
 
