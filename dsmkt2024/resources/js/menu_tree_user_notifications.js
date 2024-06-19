@@ -2,38 +2,38 @@ $(document).ready(function() {
     var userId = $('#user-id').val();
     console.log(userId);
 
-    // function bindRadioButtons() {
-    //     // Remove any previously bound handlers to avoid duplicates
-    //     $('#menu-tree-notifications').off('change.radioEvent', '.notification-preferences input[type="radio"]');
+    function bindRadioButtons() {
+        // Remove any previously bound handlers to avoid duplicates
+        $('#menu-tree-notifications').off('change.radioEvent', '.notification-preferences input[type="radio"]');
 
-    //     // Reattach the event handler
-    //     $('#menu-tree-notifications').on('change.radioEvent', '.notification-preferences input[type="radio"]', function(e) {
-    //         e.stopImmediatePropagation(); // Use stopImmediatePropagation to ensure no other handlers are triggered
-    //         e.stopPropagation();
-    //         var menuItemId = $(this).closest('.js-tree-node-content').data('node-id');
-    //         var frequency = $(this).val();
+        // Reattach the event handler
+        $('#menu-tree-notifications').on('change.radioEvent', '.notification-preferences input[type="radio"]', function(e) {
+            e.stopImmediatePropagation(); // Use stopImmediatePropagation to ensure no other handlers are triggered
+            e.stopPropagation();
+            var menuItemId = $(this).closest('.js-tree-node-content').data('node-id');
+            var frequency = $(this).val();
 
-    //         // Your AJAX call remains the same
-    //         $.ajax({
-    //             url: '/user/update-menu-item-notification',
-    //             method: 'POST',
-    //             data: {
-    //                 menu_item_id: menuItemId,
-    //                 frequency: frequency,
-    //                 _token: $('meta[name="csrf-token"]').attr('content')
-    //             },
-    //             success: function(response) {
-    //                 alert('Notification preference updated successfully.');
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 console.error('Error updating notification preference:', error);
-    //             }
-    //         });
-    //     });
-    // }
-    // $(document).on('change', '.notification-preferences input[type="radio"]', function() {
-    //     alert("Radio button clicked!");
-    // });
+            // Your AJAX call remains the same
+            $.ajax({
+                url: '/user/update-menu-item-notification',
+                method: 'POST',
+                data: {
+                    menu_item_id: menuItemId,
+                    frequency: frequency,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    alert('Notification preference updated successfully.');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error updating notification preference:', error);
+                }
+            });
+        });
+    }
+    $(document).on('change', '.notification-preferences input[type="radio"]', function() {
+        alert("Radio button clicked!");
+    });
 
 
     $('#menu-tree-notifications').jstree({
@@ -95,7 +95,7 @@ $(document).ready(function() {
     //     });
     // });
 
-   
+
 
     // function bindRadioChangeEvent() {
     //     $('#menu-tree-notifications').off('change', '.notification-preferences input[type="radio"]').on('change', '.notification-preferences input[type="radio"]', function() {

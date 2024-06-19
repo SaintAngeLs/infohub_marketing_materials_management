@@ -18,6 +18,10 @@ class MenuItemNotificationsViewController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('user.notifications.index', compact('user'));
+        $menuItems = MenuItem::with(['children', 'notificationPreferences' => function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        }])->get()->toTree();
+
+        return view('user.notifications.index', compact('user', 'menuItems'));
     }
 }

@@ -576,7 +576,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 /* content */
 
 #content{
-	width: 1700px;
+	/* width: 1700px; */
 	margin: 0 auto;
 	padding-bottom: 70px;
 }
