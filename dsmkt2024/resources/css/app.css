@@ -70,7 +70,7 @@ a:active, a:focus{
     font-weight: normal;
     src: url("../fonts/citroen_light-webfont.eot#iefix") format("embedded-opentype"), url("../fonts/citroen_light-webfont.ttf") format("truetype");
 }
-/*
+
 @font-face {
     font-family: 'citroenbold';
     src: url('../fonts/citroen_bold-webfont.eot');
@@ -93,7 +93,7 @@ a:active, a:focus{
 
 }
 
-/*
+
 @-moz-document url-prefix() {
 	@font-face {
 	    font-family: 'citroenbold';
@@ -117,7 +117,7 @@ a:active, a:focus{
 	    src: url("../fonts/Citroen Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Citroen Regular.ttf") format("truetype");
 	}
 }
-*/
+
 /* site beginning */
 
 #main-wrapper{
