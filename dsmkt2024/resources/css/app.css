@@ -613,7 +613,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 /* columns */
 
 #content .left-col{
-	width: 260px;
+	/*width: 260px;*/
 	padding-right: 30px;
 	float: left;
 	margin-top: 25px;
@@ -658,7 +658,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 
 .left-col ul ul{
 	border-top: none;
-	padding: 10px 0 10px 35px;
+	padding: 5px 0 5px 10px;
 }
 
 #content .left-col ul li a span{
@@ -1966,4 +1966,80 @@ input[type="submit"].table-button-2{
     order: 1;
     flex-basis: 20%;
 }
+
+.menu-container h2, .menu-container h2 a {
+    display: block;
+    padding: 5px 5px;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+
+.menu-container h2{
+    border-top: 1px solid #DDDDDD;
+}
+
+.menu-container ul, .menu-container li {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu-container .menu-list, .menu-container .sub-menu {
+    margin: 0;
+}
+
+.menu-container .sub-menu {
+    margin-left: 20px;
+    /*border-left: 1px solid #e0e0e0; */
+    padding-left: 10px;
+}
+
+.menu-container a:hover {
+    color: #cf2128;
+    background-color: #e8e8e8;
+}
+
+.menu-container .menu-item h2 {
+    margin-top: 10px;
+}
+
+
+
+/* Base table styling */
+.table-auto {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+.table-auto th, .table-auto td {
+    padding: 10px;
+    border: 1px solid #e2e2e2;
+    text-align: left;
+    font-size: 16px;
+}
+
+.table-auto th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+/* Indentation for each level in the hierarchical view */
+.pl-4 { padding-left: 16px; }
+.pl-8 { padding-left: 32px; }
+.pl-12 { padding-left: 48px; }
+.pl-16 { padding-left: 64px; }
+
+/* Additional styling for subtables to ensure they are visually part of the main table but slightly indented */
+.subtable {
+    margin-left: 20px; /* Indent subtables to create a visual hierarchy */
+    border-left: 2px solid #f0f0f0; /* Adds a subtle border to the left to distinguish levels */
+    width: calc(100% - 20px); /* Adjust width to account for left margin */
+}
+
+
+
 

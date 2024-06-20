@@ -24,17 +24,22 @@
     <div class="container mx-auto sm:px-6 lg:px-8">
         <div class="bg-white shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900">
-
                 <p class="text-lg font-semibold">{{ __('My Account / Email Notification Changes') }}</p>
-
-                <input type="hidden" id="user-id" value="{{ $user->id }}">
-
-                <table class="w-full mt-4 table-auto">
+                <table class="table-auto w-full mt-4">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Never</th>
+                        <th>Daily</th>
+                        <th>On Change</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     @foreach($menuItems as $menuItem)
                         @include('partials.menuItemRow', ['menuItem' => $menuItem, 'level' => 0])
                     @endforeach
+                    </tbody>
                 </table>
-
                 <div class="mt-4 flex justify-end">
                     <button class="btn btn-primary">{{ __('Save Changes') }}</button>
                     <a href="{{ url()->previous() }}" class="btn btn-secondary ml-2">{{ __('Cancel') }}</a>
