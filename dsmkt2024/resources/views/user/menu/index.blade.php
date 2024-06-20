@@ -4,7 +4,12 @@
     <div class="max-w-9xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-900">
-                <p class="content-tab-name">{{ __('Menu') }}</p>
+                <p class="content-tab-name">
+                    {{ __('Menu') }} /
+                    @if(isset($selectedMenuItem))
+                        <span>{{ $selectedMenuItem->name }}</span>
+                    @endif
+                </p>
                 @if(isset($selectedMenuItem))
                     <h3>Files for {{ $selectedMenuItem->name }}</h3>
                     <form id="download-form" method="POST" action="{{ route('files.downloadMultiple') }}">
