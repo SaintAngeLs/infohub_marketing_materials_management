@@ -12,7 +12,7 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Select</th>
+                                <th><input type="checkbox" id="select-all" /></th>
                                 <th>Name</th>
                                 <th>Type</th>
                                 <th>Size</th>
@@ -45,9 +45,17 @@
     </div>
 
     <script>
+        document.getElementById('select-all').addEventListener('click', function(event) {
+            var isChecked = event.target.checked;
+            var checkboxes = document.querySelectorAll('#download-form input[type="checkbox"][name="files[]"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+            });
+        });
+
         function downloadSelectedFiles() {
             var form = document.getElementById('download-form');
-            var checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+            var checkboxes = form.querySelectorAll('input[type="checkbox"][name="files[]"]:checked');
             if (checkboxes.length > 0) {
                 form.submit();
             } else {
