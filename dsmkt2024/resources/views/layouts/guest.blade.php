@@ -42,6 +42,7 @@
             </div>
         </div>
         <div id="banner"></div>
+        <div id="progress-bar"></div>
         <div id="content">
 
                 @yield('content')

@@ -21,6 +21,7 @@
         "dropzone": "^6.0.0-beta.2",
         "jquery": "^3.7.1",
         "jquery-validation": "^1.20.0",
-        "jstree": "^3.3.16"
+        "jstree": "^3.3.16",
+        "nprogress": "^0.2.0"
     }
 }

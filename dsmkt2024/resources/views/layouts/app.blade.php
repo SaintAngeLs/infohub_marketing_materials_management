@@ -29,9 +29,30 @@
             background-size: cover;
             background-position: center calc(80%);
         }
+
+        #custom-progress-bar {
+            position: relative;
+            height: 4px;
+            background: #ccc;
+        }
+
     </style>
+    <script src="https://unpkg.com/nprogress/nprogress.js"></script>
+    <script>
+        NProgress.configure({
+            showSpinner: false,
+            trickleSpeed: 200,
+            easing: 'ease',
+            parent: '#custom-progress-bar',
+            speed: 500
+        });
+    </script>
 </head>
-<body>
+<body onload="NProgress.done();">
+<script>
+    NProgress.start();
+</script>
+
 <script>
     function searchMe() {
         var query = document.getElementById('search').value;
@@ -50,6 +71,7 @@
         </div>
     </div>
     <div id="banner"></div>
+    <div id="custom-progress-bar"></div>
     <div id="content-wrapper">
         <div id="content">
             <div class="clearfix"></div>
@@ -82,9 +104,7 @@
 </div>
 @include('partials.footer')
 
-<!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- AJAX Navigation Script -->
 <script>
     $(document).ready(function() {
         $('a.ajax-link').on('click', function(e) {
@@ -98,6 +118,7 @@
             location.reload();
         });
     });
+
 </script>
 </body>
 </html>
