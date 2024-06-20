@@ -30,14 +30,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('partials.user_menu', function ($view) {
-            \Log::debug('User menu view composer is running.');
             if (Auth::check()) {
                 $user = Auth::user();
                 $menuItems = $user->getAccessibleMenuItemsAsTree();
-                \Log::debug('Unique Menu Items: ', $menuItems->toArray());
                 $view->with('menuItems', $menuItems);
             }
-
         });
     }
 }
