@@ -2004,3 +2004,42 @@ input[type="submit"].table-button-2{
 .menu-container .menu-item h2 {
     margin-top: 10px;
 }
+
+
+
+/* Base table styling */
+.table-auto {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+.table-auto th, .table-auto td {
+    padding: 10px;
+    border: 1px solid #e2e2e2;
+    text-align: left;
+    font-size: 16px;
+}
+
+.table-auto th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+/* Indentation for each level in the hierarchical view */
+.pl-4 { padding-left: 16px; }
+.pl-8 { padding-left: 32px; }
+.pl-12 { padding-left: 48px; }
+.pl-16 { padding-left: 64px; }
+
+/* Additional styling for subtables to ensure they are visually part of the main table but slightly indented */
+.subtable {
+    margin-left: 20px; /* Indent subtables to create a visual hierarchy */
+    border-left: 2px solid #f0f0f0; /* Adds a subtle border to the left to distinguish levels */
+    width: calc(100% - 20px); /* Adjust width to account for left margin */
+}
+
+
+
+
