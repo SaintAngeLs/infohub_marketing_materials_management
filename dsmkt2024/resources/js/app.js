@@ -45,5 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./menu_tree_user_notifications');
     import('./user_permissions_copy');
     import('./statistics_component');
+    import('./login_validation');
     // import('./concessios_component_validation');
 });
