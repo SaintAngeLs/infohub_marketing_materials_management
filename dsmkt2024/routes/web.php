@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/files/download/{id}', [FileController::class, 'download'])->name('files.download');
     Route::post('/user/update-menu-item-notification',  [MenuItemNotificationsController::class, 'updateNotificationPreference'])->name('user.notification-preference.update');
     Route::get('/user/get-menu-items-user-notifications', [MenuItemNotificationsController::class, 'getMenuItemsNotifications'])->name('user.get-menu-items-user-notifications');
-
+    Route::post('/files/downloadMultiple', [FileController::class, 'downloadMultiple'])->name('files.downloadMultiple');
 });
 
 Route::middleware('admin')->group(function () {

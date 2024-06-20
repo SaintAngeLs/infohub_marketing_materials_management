@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use ZipArchive;
 use App\Contracts\IStatistics;
 use App\Http\Controllers\Controller;
 use App\Models\Auto;
@@ -147,7 +148,6 @@ class FileController extends Controller
 
         Log::info('The request in the fileUpload', $request->all());
         $fileSource = $validated['file_source'];
-        // Strategy initialization
         $strategy = null;
 
         Log::info('Validated data:', $validated);
@@ -172,7 +172,6 @@ class FileController extends Controller
                 }
                 break;
         }
-        // Log::debug("Selected strategy: " . get_class($strategy));
         if ($strategy !== null) {
             $strategy->upload($request, $file, $validated);
             if ($request->hasFile('file')) {
@@ -208,7 +207,6 @@ class FileController extends Controller
             $file->weight = $validated['weight'];
         }
 
-        // Update the extension if a file is uploaded
         if ($request && $request->hasFile('file')) {
             $file->extension = $request->file('file')->getClientOriginalExtension();
         }
@@ -353,7 +351,34 @@ class FileController extends Controller
         return $hasChanges;
     }
 
+    public function downloadMultiple(Request $request)
+    {
+        $fileIds = $request->input('files');
+        if (empty($fileIds)) {
+            return redirect()->back()->with('error', 'No files selected.');
+        }
 
+        $files = File::whereIn('id', $fileIds)->get();
+        if ($files->isEmpty()) {
+            return redirect()->back()->with('error', 'No files found.');
+        }
 
+        $zip = new ZipArchive;
+        $zipFileName = 'downloads_' . time() . '.zip';
+        $zipPath = public_path('downloads/' . $zipFileName);
 
+        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+            foreach ($files as $file) {
+                $filePath = storage_path('app/public/' . $file->path);
+                if (file_exists($filePath)) {
+                    $zip->addFile($filePath, basename($filePath));
+                }
+            }
+            $zip->close();
+
+            return response()->download($zipPath);
+        } else {
+            return redirect()->back()->with('error', 'Failed to create zip file.');
+        }
+    }
 }

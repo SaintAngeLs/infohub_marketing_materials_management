@@ -10,9 +10,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @if(app()->environment('production'))
-        <!-- Production CSS -->
         <link rel="stylesheet" href="{{ App\Helpers\AssetHelper::asset('resources/css/app.css') }}">
-        <!-- Production JS -->
         <script src="{{ App\Helpers\AssetHelper::asset('resources/js/app.js') }}" defer></script>
     @else
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -20,47 +18,44 @@
     @stack('scripts')
 
     <style type="text/css">
-    #banner {
-        width: 100%;
-        min-width: 960px;
-        height: 200px;
-        margin: 0 auto;
-        background: url('{{ asset("/img/banners/banner_original.jpeg") }}') no-repeat center;
-        display: block;
-        background-color:#1A1B1B;
-        background-size: cover;
-        background-position: center calc(80%);
-    }
-
-
+        #banner {
+            width: 100%;
+            min-width: 960px;
+            height: 200px;
+            margin: 0 auto;
+            background: url('{{ asset("/img/banners/banner_original.jpeg") }}') no-repeat center;
+            display: block;
+            background-color:#1A1B1B;
+            background-size: cover;
+            background-position: center calc(80%);
+        }
     </style>
 </head>
-
 <body>
-    <script>
-        function searchMe() {
+<script>
+    function searchMe() {
         var query = document.getElementById('search').value;
         if(query.length < 2) {
             alert('Please enter at least 2 characters');
             return false;
         }
         window.location.href = `/search?query=${encodeURIComponent(query)}`;
-
         return false;
     }
-    </script>
-    <div id="main-wrapper">
-        <div id="top-wrapper">
-            <div id="top">
-                @include('partials.top_content')
-            </div>
+</script>
+<div id="main-wrapper">
+    <div id="top-wrapper">
+        <div id="top">
+            @include('partials.top_content')
         </div>
-        <div id="banner"></div>
+    </div>
+    <div id="banner"></div>
+    <div id="content-wrapper">
         <div id="content">
             <div class="clearfix"></div>
             <div class="left-col">
                 @php
-                    $isAdminPanel = Auth::user()->isAdmin() && (Str::startsWith(Route::currentRouteName(), 'menu.') || request()->routeIs('menu')  || session('isAdminPanel'));
+                    $isAdminPanel = Auth::check() && Auth::user()->isAdmin() && (Str::startsWith(Route::currentRouteName(), 'menu.') || request()->routeIs('menu')  || session('isAdminPanel'));
                 @endphp
 
                 @if($isAdminPanel)
@@ -68,23 +63,41 @@
                 @else
                     @include('partials.user_menu')
                 @endif
-
             </div>
             <div class="right-col">
                 @yield('content')
             </div>
             @auth
-            <div class="search-col">
-                <form id="searchbox" action="{{ route('search') }}" method="GET" class="search-box">
-                    <input id="search" name="query" type="text" placeholder="szukaj" value="">
-                    <input class="submit" type="submit" value="Szukaj">
-                </form>
-            </div>
+                <div class="search-col">
+                    <form id="searchbox" action="{{ route('search') }}" method="GET" class="search-box">
+                        <input id="search" name="query" type="text" placeholder="szukaj" value="">
+                        <input class="submit" type="submit" value="Szukaj">
+                    </form>
+                </div>
             @endauth
             <div class="clearfix"></div>
         </div>
-        <div class="push"></div>
     </div>
-    @include('partials.footer')
+    <div class="push"></div>
+</div>
+@include('partials.footer')
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- AJAX Navigation Script -->
+<script>
+    $(document).ready(function() {
+        $('a.ajax-link').on('click', function(e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            $('#content').load(url + ' #content > *');
+            history.pushState(null, '', url);
+        });
+
+        $(window).on('popstate', function() {
+            location.reload();
+        });
+    });
+</script>
 </body>
 </html>

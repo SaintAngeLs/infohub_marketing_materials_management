@@ -29,7 +29,6 @@
 
                 <input type="hidden" id="user-id" value="{{ $user->id }}">
 
-                <!-- Notification settings table -->
                 <table class="w-full mt-4 table-auto">
                     @foreach($menuItems as $menuItem)
                         @include('partials.menuItemRow', ['menuItem' => $menuItem, 'level' => 0])
