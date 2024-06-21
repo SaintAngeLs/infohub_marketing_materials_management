@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\MenuItem;
 
 use App\Contracts\IApplication;
 use App\Contracts\IStatistics;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\MenuItems\MenuItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

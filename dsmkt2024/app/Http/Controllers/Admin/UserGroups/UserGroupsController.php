@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\UserGroups;
 
 use App\Contracts\IStatistics;
 use App\Http\Controllers\Controller;
-use App\Models\Branch;
-use App\Models\User;
 use App\Models\UsersGroup;
 use Illuminate\Http\Request;
 
