@@ -30,6 +30,13 @@ class MenuController extends Controller
     public function index()
     {
         $menuItems = MenuItem::getOrderedMenuItems();
+
+        return view('admin.menu.index');
+    }
+
+    public function indexFiles()
+    {
+        $menuItems = MenuItem::getOrderedMenuItems();
         $formattedMenuItems = $this->formatMenuItemsWithFilesForTable($menuItems);
 
         // Log the formatted menu items
