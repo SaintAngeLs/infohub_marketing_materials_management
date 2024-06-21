@@ -77,15 +77,15 @@ class MenuController extends Controller
         Log::debug('Attempting to sync owners');
         Log::debug('Before syncing owners', ['Owners' => $request->owners]);
 
-        if (!empty($request['owners'])) {
-            Log::debug('Attempting to sync owners', ['Owners' => $request['owners']]);
-            $menuItem->owners()->sync($request['owners']);
-
-            Log::debug('Owners synced');
-        } else {
-            Log::debug('No owners provided, detaching any existing relations');
-            $menuItem->owners()->detach();
-        }
+//        if (!empty($request->input('owners'))) {
+//            Log::debug('Attempting to sync owners', ['Owners' => $request->input('owners')]);
+//            $menuItem->owners()->sync($request->input('owners'));
+//
+//            Log::debug('Owners synced');
+//        } else {
+//            Log::debug('No owners provided, detaching any existing relations');
+//            $menuItem->owners()->detach();
+//        }
 
         $validatedData = $request->validate([
             'type' => 'required|string',
@@ -101,10 +101,12 @@ class MenuController extends Controller
         $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
 
         if ($request->has('owners')) {
-            $menuItem->owners()->sync($request->input('owners'));
+            $owners = $request->input('owners'); // already an array
+            $menuItem->owners()->sync($owners);
         } else {
             $menuItem->owners()->detach();
         }
+
 
         $menuItem->fill($validatedData);
 

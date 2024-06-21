@@ -42,7 +42,7 @@
                     <label for="owners">Opiekuny/Administratorzy:</label>
                     <div class="picklist-container">
                         <div class="picklist">
-                            <h5>Użytkownicy</h5>
+                            <h5>Wszyscy użytkownicy</h5>
                             <ul id="all-users" class="picklist-list">
                                 @foreach($users as $user)
                                     @if(!$isEdit || !in_array($user->id, $menuItem->owners->pluck('id')->toArray()))
@@ -66,7 +66,7 @@
                             </ul>
                         </div>
                     </div>
-                    <input type="hidden" name="owners" id="owners-input">
+                    <input type="hidden" name="owners[]" id="owners-input">
                 </div>
             </div>
 
@@ -83,7 +83,6 @@
                     <div class="invalid-feedback"></div>
                 </div>
 
-
                 <div class="form-group">
                     <label for="menu_banner">Przypisanie banera:</label>
                     <select id="menu_banner" name="banner">
@@ -93,7 +92,6 @@
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
-
         </div>
         <div class="form-actions d-flex justify-content-end">
             <div class="mr-auto">
@@ -113,13 +111,71 @@
                 </div>
             </div>
         </div>
-
     </form>
 </div>
+
 @include('components.menu-form-component.menu-delete-modal')
+
 <style>
+    .table-button a, .table-button-2 a {
+        text-transform: uppercase;
+        font-size: 16px;
+        color: #9D8C83;
+        height: 26px;
+        line-height: 26px;
+        padding: 0 16px;
+        border: 1px solid #594A41;
+        font-family: 'CitroenLight', 'Arial', sans-serif;
+        font-weight: normal;
+        display: inline-block;
+        text-align: center;
+        background: none;
+        cursor: pointer;
+        text-decoration: none;
+    }
 
+    .table-button a:hover, .table-button-2 a:hover {
+        background-color: #594A41;
+        color: white;
+    }
 
+    .picklist-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .picklist {
+        width: 45%;
+        margin: 0 10px;
+    }
+
+    .picklist-list {
+        border: 1px solid #ccc;
+        min-height: 200px;
+        list-style: none;
+        padding: 10px;
+    }
+
+    .picklist-item {
+        padding: 5px;
+        cursor: pointer;
+        background-color: #f9f9f9;
+        margin-bottom: 5px;
+    }
+
+    .picklist-item:hover {
+        background-color: #e9e9e9;
+    }
+
+    .picklist-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .picklist-buttons .btn {
+        margin: 5px 0;
+    }
 </style>
 
 <script>
@@ -135,21 +191,17 @@
         }
 
         document.getElementById('add-button').addEventListener('click', function () {
-            Array.from(allUsersList.querySelectorAll('.picklist-item')).forEach(item => {
-                if (item.classList.contains('selected')) {
-                    selectedOwnersList.appendChild(item);
-                    item.classList.remove('selected');
-                }
+            Array.from(allUsersList.querySelectorAll('.picklist-item.selected')).forEach(item => {
+                selectedOwnersList.appendChild(item);
+                item.classList.remove('selected');
             });
             updateOwnersInput();
         });
 
         document.getElementById('remove-button').addEventListener('click', function () {
-            Array.from(selectedOwnersList.querySelectorAll('.picklist-item')).forEach(item => {
-                if (item.classList.contains('selected')) {
-                    allUsersList.appendChild(item);
-                    item.classList.remove('selected');
-                }
+            Array.from(selectedOwnersList.querySelectorAll('.picklist-item.selected')).forEach(item => {
+                allUsersList.appendChild(item);
+                item.classList.remove('selected');
             });
             updateOwnersInput();
         });
@@ -169,4 +221,3 @@
         updateOwnersInput();
     });
 </script>
-
