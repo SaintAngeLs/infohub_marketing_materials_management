@@ -23,7 +23,11 @@
                 <tbody>
                 @foreach($menuItem['files'] as $file)
                     <tr>
-                        <td>{{ $file['status'] }}</td>
+                        <td>
+                            <button class="btn btn-sm toggle-file-status" data-file-id="{{ $file['id'] }}">
+                                {{ $file['status'] ? 'Aktywny' : 'Nieaktywny' }}
+                            </button>
+                        </td>
                         <td><a href="#" class="file-link" data-file-id="{{ $file['id'] }}">{{ $file['name'] }}</a></td>
                         <td>{{ $file['extension'] }}</td>
                         <td>{{ $file['size'] }}</td>
@@ -47,3 +51,7 @@
         @include('partials.menu_item_file', ['menuItem' => $childMenuItem])
     @endforeach
 @endif
+
+<script>
+
+</script>
