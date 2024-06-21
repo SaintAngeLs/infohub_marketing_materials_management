@@ -2,39 +2,34 @@
 
 use App\Http\Controllers\Admin\Applications\ApplicationManagementController;
 use App\Http\Controllers\Admin\Applications\ApplicationViewController;
-use App\Http\Controllers\Admin\ApplicationsController;
 use App\Http\Controllers\Admin\Autos\AutosManagementController;
 use App\Http\Controllers\Admin\Autos\AutosViewController;
 use App\Http\Controllers\Admin\AutosController;
 use App\Http\Controllers\Admin\Concessions\ConcessionsManagementController;
 use App\Http\Controllers\Admin\Concessions\ConcessionsViewController;
-use App\Http\Controllers\Admin\ConcessionsController;
 use App\Http\Controllers\Admin\FileController;
-use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\Menu\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\Permissions\PermissionManagementController;
 use App\Http\Controllers\Admin\Permissions\PermissionViewController;
 use App\Http\Controllers\Admin\ReportsController;
-
 use App\Http\Controllers\Admin\Statistics\StatisticsManagementController;
 use App\Http\Controllers\Admin\Statistics\StatisticsViewController;
 use App\Http\Controllers\Admin\UserGroupsController;
+use App\Http\Controllers\Admin\Users\PasswordSetupController;
 use App\Http\Controllers\Admin\Users\UserManagementController;
 use App\Http\Controllers\Admin\Users\UserViewController;
-use App\Http\Controllers\Admin\Users\PasswordSetupController;
 use App\Http\Controllers\ProfileController;
-// use App\Http\Controllers\Admin\StatisticsController;
-use App\Http\Controllers\Admin\UsersController;
-
 use App\Http\Controllers\Search\SearchController;
 use App\Http\Controllers\User\Account\UserAccountManagementController;
 use App\Http\Controllers\User\Account\UserAccountViewController;
-use App\Http\Controllers\User\MenuItemNotifications\MenuItemNotificationsViewController;
 use App\Http\Controllers\User\MenuItemNotifications\MenuItemNotificationsController;
+use App\Http\Controllers\User\MenuItemNotifications\MenuItemNotificationsViewController;
 use App\Http\Controllers\User\UserMenu\UserMenuViewController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware;
+
+// use App\Http\Controllers\Admin\StatisticsController;
 
 
 Route::middleware('guest')->group(function () {

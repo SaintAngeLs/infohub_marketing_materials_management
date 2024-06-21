@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 
 interface IMenuItemService
 {
-    public function getAllMenuItems();
-    public function createMenuItem(array $data);
-    public function updateMenuItem(int $id, array $data);
-    public function deleteMenuItem(int $id);
+    public function getMenuItemsToSelect(MenuItem $menuItem = null);
+    public function getUsersWithOwners(MenuItem $menuItem = null);
+    public function updateMenuItemOwners(MenuItem $menuItem, $ownerIds);
+    public function deleteSubMenuItems(MenuItem $menuItem);
+    public function updateTreeStructure(MenuItem $menuItem, $newParentId);
 }

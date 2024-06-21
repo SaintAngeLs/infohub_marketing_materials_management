@@ -1,30 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Menu;
 
 use App\Contracts\IApplication;
+use App\Contracts\IMenuItemService;
 use App\Contracts\IStatistics;
 use App\Helpers\FormatBytes;
+use App\Http\Controllers\Admin\GroupPermission;
 use App\Http\Controllers\Controller;
-use App\Models\ExtendedUser;
-use App\Models\GroupPermission;
 use App\Models\MenuItems\MenuItem;
 use App\Models\Permission;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class MenuController extends Controller
 {
     protected $applicationService;
     protected $statisticsService;
+    protected $menuItemService;
 
-    public function __construct(IApplication $applicationService, IStatistics $statisticsService)
+    public function __construct(IApplication $applicationService, IStatistics $statisticsService, IMenuItemService $menuItemService)
     {
         $this->applicationService = $applicationService;
         $this->statisticsService = $statisticsService;
+        $this->menuItemService = $menuItemService;
     }
+
     public function index()
     {
         $menuItems = MenuItem::getOrderedMenuItems();
@@ -33,45 +35,23 @@ class MenuController extends Controller
 
     public function create()
     {
-        $menuItemsToSelect = MenuItem::all();
+        $menuItemsToSelect = $this->menuItemService->getMenuItemsToSelect();
         $users = User::where('active', 1)->get();
         return view('admin.menu.create', compact('menuItemsToSelect', 'users'));
     }
 
-
     public function edit(MenuItem $menuItem)
     {
-        $menuItemsToSelect = MenuItem::all()->except($menuItem->id);
-        $users = User::where('active', 1)->get();
-        $currentOwners = $menuItem->owners->pluck('id')->toArray();
-        $nonOwners = $users->whereNotIn('id', $currentOwners);
+        $menuItemsToSelect = $this->menuItemService->getMenuItemsToSelect($menuItem);
+        $usersData = $this->menuItemService->getUsersWithOwners($menuItem);
 
-        return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users', 'currentOwners', 'nonOwners'));
+        return view('admin.menu.edit', array_merge(['menuItemsToSelect' => $menuItemsToSelect, 'menuItem' => $menuItem], $usersData));
     }
 
-
-
-    public function destroy(Request $request, MenuItem $menuItem)
+    public function destroy(MenuItem $menuItem)
     {
-        $this->deleteSubMenuItems($menuItem);
-
-        $menuItem->delete();
-
+        $this->menuItemService->deleteSubMenuItems($menuItem);
         return response()->json(['success' => 'Menu item and all associated data have been deleted.']);
-    }
-
-    protected function deleteSubMenuItems(MenuItem $menuItem)
-    {
-        foreach ($menuItem->children as $child) {
-            $this->deleteSubMenuItems($child);
-        }
-
-        $directory = "menu_files/{$menuItem->id}";
-        if (Storage::disk('public')->exists($directory)) {
-            Storage::disk('public')->deleteDirectory($directory);
-        }
-
-        $menuItem->delete();
     }
 
     public function update(Request $request, MenuItem $menuItem)
@@ -79,66 +59,33 @@ class MenuController extends Controller
         Log::debug('Update function', $request->all());
         Log::debug($menuItem->toArray());
 
-//        Log::debug('Attempting to sync owners');
-//        Log::debug('Before syncing owners', ['Owners' => $request->owners]);
-//
-//        if (!empty($request->input('owners'))) {
-//            Log::debug('Attempting to sync owners', ['Owners' => $request->input('owners')]);
-//            $menuItem->owners()->sync($request->input('owners'));
-//
-//            Log::debug('Owners synced');
-//        } else {
-//            Log::debug('No owners provided, detaching any existing relations');
-//            $menuItem->owners()->detach();
-//        }
+        $validatedData = $this->validateMenuItem($request);
 
-        $validatedData = $request->validate([
+        // Update owners
+        $this->menuItemService->updateMenuItemOwners($menuItem, $request->input('owners', '[]'));
+
+        $menuItem->fill($validatedData);
+        $menuItem->save();
+
+        $this->updateMenuItemPermissions($menuItem, $request->input('menu_permissions', []));
+        $this->menuItemService->updateTreeStructure($menuItem, $validatedData['parent_id']);
+
+        $this->logUserActivity($request);
+
+        return redirect()->route('menu.structure')->with('success', 'Menu item updated successfully.');
+    }
+
+    protected function validateMenuItem(Request $request)
+    {
+        return $request->validate([
             'type' => 'required|string',
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:menu_items,id',
-//            'owners' => 'nullable|array',
             'visibility_start' => 'nullable|date',
             'visibility_end' => 'nullable|date',
             'banner' => 'required|string',
             'menu_permissions' => 'nullable|array',
         ]);
-
-        $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
-
-        // Decode and validate owner IDs if provided
-        $ownerIds = json_decode($request->input('owners', '[]'), true);
-        if (is_array($ownerIds)) {
-            $ownerIds = array_map('intval', array_filter($ownerIds));
-            Log::debug('Decoded and filtered owner IDs', ['owner_ids' => $ownerIds]);
-        } else {
-            Log::error('Invalid owners field format', ['owners' => $request->input('owners')]);
-            return response()->json(['error' => 'Invalid owners data provided'], 422);
-        }
-
-        // Sync or detach owners based on provided valid IDs
-        if (!empty($ownerIds)) {
-            $menuItem->owners()->sync($ownerIds);
-            Log::info('Owners synced successfully');
-        } else {
-            $menuItem->owners()->detach();
-            Log::info('All owners detached due to empty input');
-        }
-
-        $menuItem->fill($validatedData);
-
-        $menuItem->save();
-
-        $this->updateMenuItemPermissions($menuItem, $request->input('menu_permissions', []));
-
-        $this->updateTreeStructureAfterMenuUpdate($menuItem, $validatedData['parent_id']);
-
-        $this->statisticsService->logUserActivity(auth()->id(), [
-            'uri' => $request->path(),
-            'post_string' => $request->except('_token'),
-            'query_string' => $request->getQueryString(),
-        ]);
-
-        return redirect()->route('menu.structure')->with('success', 'Menu item updated successfully.');
     }
 
     protected function updateMenuItemPermissions(MenuItem $menuItem, array $permissions)
@@ -146,18 +93,13 @@ class MenuController extends Controller
         $menuItem->users()->sync($permissions);
     }
 
-    protected function updateTreeStructureAfterMenuUpdate(MenuItem $menuItem, $newParentId)
+    protected function logUserActivity(Request $request)
     {
-        if (is_null($newParentId)) {
-            if (!$menuItem->isRoot()) {
-                $menuItem->makeRoot();
-            }
-        } else {
-            $newParent = MenuItem::find($newParentId);
-            if ($newParent) {
-                $menuItem->appendTo($newParent)->save();
-            }
-        }
+        $this->statisticsService->logUserActivity(auth()->id(), [
+            'uri' => $request->path(),
+            'post_string' => $request->except('_token'),
+            'query_string' => $request->getQueryString(),
+        ]);
     }
 
     public function toggleStatus(Request $request, $menuItem)
@@ -172,6 +114,7 @@ class MenuController extends Controller
 
         return response()->json(['success' => true]);
     }
+
     public function getMenuItems()
     {
         $menuItems = MenuItem::getOrderedMenuItems();
@@ -185,6 +128,7 @@ class MenuController extends Controller
         $formattedMenuItems = $this->formatMenuItemsWithFilesForJsTree($menuItems);
         return response()->json($formattedMenuItems);
     }
+
     public function getMenuItemWithGroupPermissions(Request $request)
     {
         Log::info($request->all());
@@ -201,8 +145,8 @@ class MenuController extends Controller
         $menuItems = MenuItem::get()->toTree();
 
         $userPermissions = Permission::where('user_id', $userId)
-                                    ->pluck('menu_item_id')
-                                    ->toArray();
+            ->pluck('menu_item_id')
+            ->toArray();
 
         $groupPermissions = optional($user->usersGroup)->menuItems->pluck('id')->toArray() ?? [];
 
@@ -212,7 +156,6 @@ class MenuController extends Controller
         return response()->json($formattedMenuItems);
     }
 
-
     protected function formatForJsTree($menuItems)
     {
         $formatted = [];
@@ -221,19 +164,19 @@ class MenuController extends Controller
             $ownerNames = $item->owners->pluck('name')->implode('<br>');
             $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
             $visibilityTime = $item->start && $item->end
-                            ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
-                            : 'N/A';
+                ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
+                : 'N/A';
 
-        $nodeContent = <<<HTML
-            <span class='js-tree-node-content' data-node-id="{$item->id}">
-                <span class='node-name'>{$item->name}</span>
-                <span class='node-details-status'>($status)</span>
-                <span class='node-details-ownerName'>{$ownerNameDisplay}</span>
-                <span class='node-details-visibilityTime'>{$visibilityTime}</span>
-            </span>
-        HTML;
+            $nodeContent = <<<HTML
+                <span class='js-tree-node-content' data-node-id="{$item->id}">
+                    <span class='node-name'>{$item->name}</span>
+                    <span class='node-details-status'>($status)</span>
+                    <span class='node-details-ownerName'>{$ownerNameDisplay}</span>
+                    <span class='node-details-visibilityTime'>{$visibilityTime}</span>
+                </span>
+            HTML;
 
-        $formattedItem = [
+            $formattedItem = [
                 'id' => $item->id,
                 'text' => $nodeContent,
                 'children' => $item->children->isEmpty() ? [] : $this->formatForJsTree($item->children),
@@ -247,8 +190,8 @@ class MenuController extends Controller
     {
         $formatted = [];
         $permissions = !is_null($groupId) ? GroupPermission::where('user_group_id', $groupId)
-                                   ->pluck('menu_item_id')
-                                   ->toArray() : [];
+            ->pluck('menu_item_id')
+            ->toArray() : [];
         Log::info($permissions);
 
         foreach ($menuItems as $item) {
@@ -280,8 +223,8 @@ class MenuController extends Controller
     {
         $formatted = [];
         $permissions = $userId ? Permission::where('user_id', $userId)
-                                       ->pluck('menu_item_id')
-                                       ->toArray() : [];
+            ->pluck('menu_item_id')
+            ->toArray() : [];
         Log::info('formatForJsTreeUserPermissions', $permissions);
         foreach ($menuItems as $item) {
             $checked = in_array($item->id, $permissions) ? "checked='checked'" : "";
@@ -316,20 +259,20 @@ class MenuController extends Controller
             $ownerNames = $item->owners->pluck('name')->implode(',');
             $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
             $visibilityTime = $item->start && $item->end
-                            ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
-                            : 'N/A';
+                ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
+                : 'N/A';
             $files = $item->files;
             $fileDetails = '';
             foreach ($files as $file) {
-                    $status = $file->status ? "<span class='toggle-file-status' data-file-id='{$file->id}' style='cursor:pointer;'>Wł</span>"
-                                            : "<span class='toggle-file-status' data-file-id='{$file->id}' style='cursor:pointer;'>Wył</span>";
-                    $lastUpdate = $file->updated_at ? $file->updated_at->format('d.m.Y H:i:s') : 'N/A';
-                    $fileExtension = $file->extension ?? 'unknown';
-                    $fileSize = FormatBytes::formatBytes($file->weight);
-                    $start = $file->start ? $file->start->format('d.m.Y') : '-';
-                    $end = $file->end ? $file->end->format('d.m.Y') : '-';
-                    $visibility = "$start - $end";
-                    $fileDetails .= <<<HTML
+                $status = $file->status ? "<span class='toggle-file-status' data-file-id='{$file->id}' style='cursor:pointer;'>Wł</span>"
+                    : "<span class='toggle-file-status' data-file-id='{$file->id}' style='cursor:pointer;'>Wył</span>";
+                $lastUpdate = $file->updated_at ? $file->updated_at->format('d.m.Y H:i:s') : 'N/A';
+                $fileExtension = $file->extension ?? 'unknown';
+                $fileSize = FormatBytes::formatBytes($file->weight);
+                $start = $file->start ? $file->start->format('d.m.Y') : '-';
+                $end = $file->end ? $file->end->format('d.m.Y') : '-';
+                $visibility = "$start - $end";
+                $fileDetails .= <<<HTML
 
                         <span>$status</span>
                         <span><a href='#' class='file-link' data-file-id='{$file->id}'>{$file->name}</a></span>
@@ -371,5 +314,4 @@ class MenuController extends Controller
         }
         return $formatted;
     }
-
 }
