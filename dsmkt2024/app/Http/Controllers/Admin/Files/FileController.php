@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Files;
 
 use App\Contracts\IFileService;
 use App\Contracts\IStatistics;

@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\Autos\AutosViewController;
 use App\Http\Controllers\Admin\AutosController;
 use App\Http\Controllers\Admin\Concessions\ConcessionsManagementController;
 use App\Http\Controllers\Admin\Concessions\ConcessionsViewController;
-use App\Http\Controllers\Admin\FileController;
+use App\Http\Controllers\Admin\Files\FileController;
 use App\Http\Controllers\Admin\Menu\MenuController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\PermissionController;
