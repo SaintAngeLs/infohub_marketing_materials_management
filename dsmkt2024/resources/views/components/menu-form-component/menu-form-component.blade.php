@@ -40,12 +40,33 @@
 
                 <div class="form-group">
                     <label for="owners">Opiekuny/Administratorzy:</label>
-                    <select id="owners" name="owners[]" multiple>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}" @if($isEdit && in_array($user->id, $menuItem->owners->pluck('id')->toArray())) selected @endif>{{ $user->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="invalid-feedback"></div>
+                    <div class="picklist-container">
+                        <div class="picklist">
+                            <h5>Użytkownicy</h5>
+                            <ul id="all-users" class="picklist-list">
+                                @foreach($users as $user)
+                                    @if(!$isEdit || !in_array($user->id, $menuItem->owners->pluck('id')->toArray()))
+                                        <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="picklist-buttons">
+                            <button type="button" id="add-button" class="btn btn-secondary">&gt;</button>
+                            <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
+                        </div>
+                        <div class="picklist">
+                            <h5>Opiekuny/Administratorzy</h5>
+                            <ul id="selected-owners" class="picklist-list">
+                                @if($isEdit)
+                                    @foreach($menuItem->owners as $user)
+                                        <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+                    <input type="hidden" name="owners" id="owners-input">
                 </div>
             </div>
 
@@ -96,5 +117,113 @@
     </form>
 </div>
 @include('components.menu-form-component.menu-delete-modal')
+<style>
+    .table-button a, .table-button-2 a {
+        text-transform: uppercase;
+        font-size: 16px;
+        color: #9D8C83;
+        height: 26px;
+        line-height: 26px;
+        padding: 0 16px;
+        border: 1px solid #594A41;
+        font-family: 'CitroenLight', 'Arial', sans-serif;
+        font-weight: normal;
+        display: inline-block;
+        text-align: center;
+        background: none;
+        cursor: pointer;
+        text-decoration: none;
+    }
 
+    .table-button a:hover, .table-button-2 a:hover {
+        background-color: #594A41;
+        color: white;
+    }
+
+    .picklist-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .picklist {
+        width: 45%;
+        margin: 0 10px;
+    }
+
+    .picklist-list {
+        border: 1px solid #ccc;
+        min-height: 200px;
+        list-style: none;
+        padding: 10px;
+    }
+
+    .picklist-item {
+        padding: 5px;
+        cursor: pointer;
+        background-color: #f9f9f9;
+        margin-bottom: 5px;
+    }
+
+    .picklist-item:hover {
+        background-color: #e9e9e9;
+    }
+
+    .picklist-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .picklist-buttons .btn {
+        margin: 5px 0;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const allUsersList = document.getElementById('all-users');
+        const selectedOwnersList = document.getElementById('selected-owners');
+        const ownersInput = document.getElementById('owners-input');
+
+        function updateOwnersInput() {
+            const ownerIds = Array.from(selectedOwnersList.querySelectorAll('.picklist-item'))
+                .map(item => item.getAttribute('data-user-id'));
+            ownersInput.value = ownerIds.join(',');
+        }
+
+        document.getElementById('add-button').addEventListener('click', function () {
+            Array.from(allUsersList.querySelectorAll('.picklist-item')).forEach(item => {
+                if (item.classList.contains('selected')) {
+                    selectedOwnersList.appendChild(item);
+                    item.classList.remove('selected');
+                }
+            });
+            updateOwnersInput();
+        });
+
+        document.getElementById('remove-button').addEventListener('click', function () {
+            Array.from(selectedOwnersList.querySelectorAll('.picklist-item')).forEach(item => {
+                if (item.classList.contains('selected')) {
+                    allUsersList.appendChild(item);
+                    item.classList.remove('selected');
+                }
+            });
+            updateOwnersInput();
+        });
+
+        allUsersList.addEventListener('click', function (event) {
+            if (event.target.classList.contains('picklist-item')) {
+                event.target.classList.toggle('selected');
+            }
+        });
+
+        selectedOwnersList.addEventListener('click', function (event) {
+            if (event.target.classList.contains('picklist-item')) {
+                event.target.classList.toggle('selected');
+            }
+        });
+
+        updateOwnersInput();
+    });
+</script>
 
