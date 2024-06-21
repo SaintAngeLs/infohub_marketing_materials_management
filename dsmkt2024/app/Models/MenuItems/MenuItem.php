@@ -49,7 +49,7 @@ class MenuItem extends Model
 
     public function owners()
     {
-        return $this->belongsToMany(User::class, 'menu_owners', 'menu_item_id', 'user_id');
+        return $this->belongsToMany(User::class, 'menu_owners', 'menu_item_id', 'user_id')->withTimestamps();
     }
 
 
@@ -70,7 +70,6 @@ class MenuItem extends Model
 
     public static function getOrderedMenuItems()
     {
-        // This method assumes you have a scope or a method to fetch items in their correct order
         return MenuItem::orderBy('parent_id')->orderBy('position')->get()->toTree();
     }
 

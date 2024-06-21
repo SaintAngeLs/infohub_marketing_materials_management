@@ -45,9 +45,7 @@
                             <h5>Wszyscy użytkownicy</h5>
                             <ul id="all-users" class="picklist-list">
                                 @foreach($users as $user)
-                                    @if(!$isEdit || !in_array($user->id, $menuItem->owners->pluck('id')->toArray()))
-                                        <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
-                                    @endif
+                                    <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -56,17 +54,11 @@
                             <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
                         </div>
                         <div class="picklist">
-                            <h5>Opiekuny/Administratorzy</h5>
-                            <ul id="selected-owners" class="picklist-list">
-                                @if($isEdit)
-                                    @foreach($menuItem->owners as $user)
-                                        <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
-                                    @endforeach
-                                @endif
-                            </ul>
+                            <h5>Selected Owners</h5>
+                            <ul id="selected-owners" class="picklist-list"></ul>
                         </div>
                     </div>
-                    <input type="hidden" name="owners[]" id="owners-input">
+                    <input type="hidden" name="owners" id="owners-input">
                 </div>
             </div>
 
@@ -187,23 +179,23 @@
         function updateOwnersInput() {
             const ownerIds = Array.from(selectedOwnersList.querySelectorAll('.picklist-item'))
                 .map(item => item.getAttribute('data-user-id'));
-            ownersInput.value = ownerIds.join(',');
+            ownersInput.value = JSON.stringify(ownerIds);
         }
 
         document.getElementById('add-button').addEventListener('click', function () {
             Array.from(allUsersList.querySelectorAll('.picklist-item.selected')).forEach(item => {
                 selectedOwnersList.appendChild(item);
                 item.classList.remove('selected');
+                updateOwnersInput();
             });
-            updateOwnersInput();
         });
 
         document.getElementById('remove-button').addEventListener('click', function () {
             Array.from(selectedOwnersList.querySelectorAll('.picklist-item.selected')).forEach(item => {
                 allUsersList.appendChild(item);
                 item.classList.remove('selected');
+                updateOwnersInput();
             });
-            updateOwnersInput();
         });
 
         allUsersList.addEventListener('click', function (event) {
@@ -218,6 +210,6 @@
             }
         });
 
-        updateOwnersInput();
+        updateOwnersInput(); // Initial update to sync any pre-selected owners
     });
 </script>
