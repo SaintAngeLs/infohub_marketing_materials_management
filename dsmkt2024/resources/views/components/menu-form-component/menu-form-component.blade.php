@@ -118,65 +118,8 @@
 </div>
 @include('components.menu-form-component.menu-delete-modal')
 <style>
-    .table-button a, .table-button-2 a {
-        text-transform: uppercase;
-        font-size: 16px;
-        color: #9D8C83;
-        height: 26px;
-        line-height: 26px;
-        padding: 0 16px;
-        border: 1px solid #594A41;
-        font-family: 'CitroenLight', 'Arial', sans-serif;
-        font-weight: normal;
-        display: inline-block;
-        text-align: center;
-        background: none;
-        cursor: pointer;
-        text-decoration: none;
-    }
 
-    .table-button a:hover, .table-button-2 a:hover {
-        background-color: #594A41;
-        color: white;
-    }
 
-    .picklist-container {
-        display: flex;
-        align-items: center;
-    }
-
-    .picklist {
-        width: 45%;
-        margin: 0 10px;
-    }
-
-    .picklist-list {
-        border: 1px solid #ccc;
-        min-height: 200px;
-        list-style: none;
-        padding: 10px;
-    }
-
-    .picklist-item {
-        padding: 5px;
-        cursor: pointer;
-        background-color: #f9f9f9;
-        margin-bottom: 5px;
-    }
-
-    .picklist-item:hover {
-        background-color: #e9e9e9;
-    }
-
-    .picklist-buttons {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .picklist-buttons .btn {
-        margin: 5px 0;
-    }
 </style>
 
 <script>
