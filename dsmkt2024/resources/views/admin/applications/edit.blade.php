@@ -3,7 +3,9 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-900">
-                <p class="content-tab-name">{{ __('Zgłoszenia / Szczegóły zgłoszenia') }}</p>
+                <p class="content-tab-name">
+                    <a href="{{ route('menu.users.applications.view') }}" class="text-blue-600 hover:text-blue-900">{{ __('Zgłoszenia') }}</a> / {{ __('Szczegóły zgłoszenia') }}
+                </p>
 
                 <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div><strong>Nazwa firmy:</strong> {{ $application->company_name }}</div>

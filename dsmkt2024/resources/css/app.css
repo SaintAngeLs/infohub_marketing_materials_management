@@ -613,7 +613,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 /* columns */
 
 #content .left-col{
-	/*width: 260px;*/
+	min-width: 260px;
 	padding-right: 30px;
 	float: left;
 	margin-top: 25px;
