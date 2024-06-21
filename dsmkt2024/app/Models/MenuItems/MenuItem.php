@@ -52,6 +52,7 @@ class MenuItem extends Model
         return $this->belongsToMany(User::class, 'menu_owners', 'menu_item_id', 'user_id');
     }
 
+
     public function files()
     {
         return $this->hasMany(\App\Models\File::class, 'menu_id');

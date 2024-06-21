@@ -100,6 +100,12 @@ class MenuController extends Controller
 
         $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
 
+        if ($request->has('owners')) {
+            $menuItem->owners()->sync($request->input('owners'));
+        } else {
+            $menuItem->owners()->detach();
+        }
+
         $menuItem->fill($validatedData);
 
         $menuItem->save();

@@ -95,7 +95,6 @@
 
     </form>
 </div>
-
 @include('components.menu-form-component.menu-delete-modal')
 
 
