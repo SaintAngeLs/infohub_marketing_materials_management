@@ -76,13 +76,21 @@
         </div>
         <div class="form-actions d-flex justify-content-end">
             <div class="mr-auto">
-                <button type="submit" class="btn btn-primary ">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</button>
+                <div class="table-button">
+                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="btn">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</a>
+                </div>
                 @if($isEdit)
-                    <button type="button" class="btn btn-danger" id="delete-menu-item" data-menu-item-id="{{ $menuItem->id }}">Usuń zakładkę</button>
+                    <div class="table-button-2 ml-2">
+                        <a href="#" id="delete-menu-item" data-menu-item-id="{{ $menuItem->id }}" class="btn ">Usuń zakładkę</a>
+                    </div>
                 @endif
-                <button type="reset" class="btn btn-secondary ml-2">Wyczyść</button>
+                <div class="table-button-2 ml-2">
+                    <a href="{{ route('menu.structure') }}" class="btn">{{ __('Anuluj') }}</a>
+                </div>
+                <div class="table-button-2 ml-2">
+                    <a href="#" onclick="event.preventDefault(); this.closest('form').reset();" class="btn">Wyczyść</a>
+                </div>
             </div>
-
         </div>
 
     </form>
