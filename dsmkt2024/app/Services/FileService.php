@@ -9,6 +9,7 @@ use App\Models\File;
 use App\Models\MenuItems\MenuItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File as FileFacade;
 use Illuminate\Support\Facades\Storage;
 use App\Strategies\FileUpload\UploadFromPCStrategy;
 use App\Strategies\FileUpload\UploadFromUrlStrategy;
@@ -242,5 +243,27 @@ class FileService implements IFileService
         } else {
             return redirect()->back()->with('error', 'Failed to create zip file.');
         }
+    }
+
+    public function getDirectoryStructure()
+    {
+        $specificFolderPath = storage_path('app/public/ftp_upload');
+        $secureStructure = [];
+
+        if (FileFacade::isDirectory($specificFolderPath)) {
+            $files = FileFacade::files($specificFolderPath);
+            foreach ($files as $file) {
+                $fileName = $file->getFilename();
+                $relativeFilePath = 'ftp_upload/' . $fileName;
+                $fileId = md5($relativeFilePath);
+
+                $secureStructure['ftp_upload'][] = [
+                    'id' => $fileId,
+                    'name' => $fileName,
+                ];
+            }
+        }
+
+        return response()->json($secureStructure);
     }
 }

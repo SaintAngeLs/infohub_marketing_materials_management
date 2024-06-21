@@ -126,4 +126,9 @@ class FileController extends Controller
     {
         return $this->fileService->downloadMultipleFiles($request);
     }
+    public function getDirectoryStructure()
+    {
+        return $this->fileService->getDirectoryStructure();
+    }
+
 }

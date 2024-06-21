@@ -18,4 +18,5 @@ interface IFileService
     public function toggleStatus(File $file);
     public function detectFileChanges(File $file, array $validated): bool;
     public function downloadMultipleFiles(Request $request);
+    public function getDirectoryStructure();
 }
