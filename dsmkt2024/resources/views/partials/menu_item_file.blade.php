@@ -8,14 +8,13 @@
 <tr>
     <td colspan="5">
         @if(count($menuItem['files']) > 0)
-            <table class="table table-bordered">
+            <table class="table file-table">
                 <thead>
                 <tr>
                     <th>Status</th>
                     <th>Nazwa</th>
                     <th>Rozszerzenie</th>
                     <th>Rozmiar</th>
-                    <th>Widoczność</th>
                     <th>Ostatnia aktualizacja</th>
                     <th>Akcje</th>
                 </tr>
@@ -31,7 +30,6 @@
                         <td><a href="#" class="file-link" data-file-id="{{ $file['id'] }}">{{ $file['name'] }}</a></td>
                         <td>{{ $file['extension'] }}</td>
                         <td>{{ $file['size'] }}</td>
-                        <td>{{ $file['visibility'] }}</td>
                         <td>{{ $file['lastUpdate'] }}</td>
                         <td>
                             <button onclick="downloadFile({{ $file['id'] }})" class="btn btn-sm download-file-btn">pobierz</button>
@@ -51,7 +49,3 @@
         @include('partials.menu_item_file', ['menuItem' => $childMenuItem])
     @endforeach
 @endif
-
-<script>
-
-</script>
