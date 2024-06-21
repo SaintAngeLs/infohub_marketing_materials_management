@@ -107,4 +107,10 @@ $(document).ready(function() {
             }
         });
     });
+
+    $(document).on('click', '.toggle-files', function(e) {
+        e.preventDefault();
+        var targetId = $(this).data('toggle');
+        $('#' + targetId).toggle();
+    });
 });
