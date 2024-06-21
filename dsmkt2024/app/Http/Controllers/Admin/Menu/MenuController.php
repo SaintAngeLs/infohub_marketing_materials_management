@@ -30,9 +30,13 @@ class MenuController extends Controller
     public function index()
     {
         $menuItems = MenuItem::getOrderedMenuItems();
-        return view('admin.menu.index', compact('menuItems'));
-    }
+        $formattedMenuItems = $this->formatMenuItemsWithFilesForTable($menuItems);
 
+        // Log the formatted menu items
+        Log::debug('Formatted Menu Items:', ['formattedMenuItems' => $formattedMenuItems]);
+
+        return view('admin.files.index', compact('formattedMenuItems'));
+    }
     public function create()
     {
         $menuItemsToSelect = $this->menuItemService->getMenuItemsToSelect();
@@ -311,6 +315,49 @@ class MenuController extends Controller
                 'children' => $item->children->isEmpty() ? [] : $this->formatMenuItemsWithFilesForJsTree($item->children),
             ];
             $formatted[] = $formattedItem;
+        }
+        return $formatted;
+    }
+
+    protected function formatMenuItemsWithFilesForTable($menuItems)
+    {
+        $formatted = [];
+        foreach ($menuItems as $item) {
+            $status = $item->status ? 'Aktywny' : 'Nieaktywny';
+            $ownerNames = $item->owners->pluck('name')->implode(',');
+            $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
+            $visibilityTime = $item->start && $item->end
+                ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
+                : 'N/A';
+            $files = $item->files;
+            $fileDetails = [];
+            foreach ($files as $file) {
+                $status = $file->status ? "Wł" : "Wył";
+                $lastUpdate = $file->updated_at ? $file->updated_at->format('d.m.Y H:i:s') : 'N/A';
+                $fileExtension = $file->extension ?? 'unknown';
+                $fileSize = FormatBytes::formatBytes($file->weight);
+                $start = $file->start ? $file->start->format('d.m.Y') : '-';
+                $end = $file->end ? $file->end->format('d.m.Y') : '-';
+                $visibility = "$start - $end";
+                $fileDetails[] = [
+                    'status' => $status,
+                    'name' => $file->name,
+                    'extension' => $fileExtension,
+                    'size' => $fileSize,
+                    'visibility' => $visibility,
+                    'lastUpdate' => $lastUpdate,
+                    'id' => $file->id,
+                ];
+            }
+            $formatted[] = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'status' => $status,
+                'owners' => $ownerNameDisplay,
+                'visibility' => $visibilityTime,
+                'files' => $fileDetails,
+                'children' => $item->children->isEmpty() ? [] : $this->formatMenuItemsWithFilesForTable($item->children),
+            ];
         }
         return $formatted;
     }

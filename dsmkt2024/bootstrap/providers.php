@@ -11,4 +11,5 @@ return [
     App\Providers\StatisticsServiceProvider::class,
     App\Providers\MenuItemServiceProvider::class,
     App\Providers\FileServiceProvider::class,
+    App\Providers\MenuItemTreeElementServiceProvider::class,
 ];
