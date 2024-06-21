@@ -73,7 +73,7 @@ Route::middleware('admin')->group(function () {
         Route::get('/structure', [MenuController::class, 'index'])->name('structure');
         Route::get('/autos', [AutosController::class, 'index'])->name('autos');
         Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
-        Route::get('/files', function () { return view('admin.files.index'); })->name('files');
+        Route::get('/files', [MenuController::class, 'index'])->name('files');
         Route::get('/statistics', [StatisticsViewController::class, 'index'])->name('statistics');
         Route::get('/statistics/entries', [StatisticsManagementController::class, 'showMenuEntries'])->name('statistics.entries');
         Route::get('/statistics/downloads', [StatisticsManagementController::class, 'showDownloads'])->name('statistics.downloads');
