@@ -9,5 +9,6 @@ return [
     App\Providers\AutoServiceProvider::class,
     App\Providers\EmailServiceProvider::class,
     App\Providers\StatisticsServiceProvider::class,
-    App\Providers\MenuItemServiceProvider::class
+    App\Providers\MenuItemServiceProvider::class,
+    App\Providers\FileServiceProvider::class,
 ];
