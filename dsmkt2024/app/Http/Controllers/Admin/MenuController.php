@@ -43,8 +43,13 @@ class MenuController extends Controller
     {
         $menuItemsToSelect = MenuItem::all()->except($menuItem->id);
         $users = User::where('active', 1)->get();
-        return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users'));
+        $currentOwners = $menuItem->owners->pluck('id')->toArray();
+        $nonOwners = $users->whereNotIn('id', $currentOwners);
+
+        return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users', 'currentOwners', 'nonOwners'));
     }
+
+
 
     public function destroy(Request $request, MenuItem $menuItem)
     {

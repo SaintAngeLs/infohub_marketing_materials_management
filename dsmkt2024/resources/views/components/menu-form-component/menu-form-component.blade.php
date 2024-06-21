@@ -44,7 +44,7 @@
                         <div class="picklist">
                             <h5>Wszyscy użytkownicy</h5>
                             <ul id="all-users" class="picklist-list">
-                                @foreach($users as $user)
+                                @foreach($nonOwners as $user)
                                     <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
                                 @endforeach
                             </ul>
@@ -55,7 +55,13 @@
                         </div>
                         <div class="picklist">
                             <h5>Selected Owners</h5>
-                            <ul id="selected-owners" class="picklist-list"></ul>
+                            <ul id="selected-owners" class="picklist-list">
+                                @foreach($users as $user)
+                                    @if(in_array($user->id, $currentOwners ?? []))
+                                        <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                     <input type="hidden" name="owners" id="owners-input">
