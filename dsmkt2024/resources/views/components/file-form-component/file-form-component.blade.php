@@ -124,11 +124,18 @@
         </div>
 
         {{-- Submit Button --}}
-        {{-- Submit and Delete Buttons --}}
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">{{ $submitButtonText }}</button>
+
+        <div class="mt-6 flex justify-between">
+            <div class="table-button">
+                <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="btn">{{ $submitButtonText }}</a>
+            </div>
+            <div class="table-button-2">
+                <a href="{{ route('menu.autos.index') }}" class="btn">Anuluj</a>
+            </div>
             @if($isEdit)
-                <button type="button" class="btn btn-danger" id="deleteFileButton">Usuń Plik</button>
+                <div class="table-button-2">
+                    <a href="#" id="deleteFileButton" class="btn btn-danger">Usuń Plik</a>
+                </div>
             @endif
         </div>
     </form>
