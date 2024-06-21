@@ -60,5 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./statistics_component');
     import('./login_validation');
     import('./progress_bar');
+    import('./owners_pickers');
     // import('./concessios_component_validation');
 });
