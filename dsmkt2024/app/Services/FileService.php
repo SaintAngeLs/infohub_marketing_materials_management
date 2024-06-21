@@ -247,7 +247,7 @@ class FileService implements IFileService
 
     public function getDirectoryStructure()
     {
-        $specificFolderPath = storage_path('app/public/ftp_upload');
+        $specificFolderPath = storage_path(env('FTP_UPLOAD_PATH', 'app/public/ftp_upload'));
         $secureStructure = [];
 
         if (FileFacade::isDirectory($specificFolderPath)) {
