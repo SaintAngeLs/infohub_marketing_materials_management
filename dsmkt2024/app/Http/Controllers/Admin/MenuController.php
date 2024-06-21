@@ -43,8 +43,13 @@ class MenuController extends Controller
     {
         $menuItemsToSelect = MenuItem::all()->except($menuItem->id);
         $users = User::where('active', 1)->get();
-        return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users'));
+        $currentOwners = $menuItem->owners->pluck('id')->toArray();
+        $nonOwners = $users->whereNotIn('id', $currentOwners);
+
+        return view('admin.menu.edit', compact('menuItemsToSelect', 'menuItem', 'users', 'currentOwners', 'nonOwners'));
     }
+
+
 
     public function destroy(Request $request, MenuItem $menuItem)
     {
@@ -74,24 +79,24 @@ class MenuController extends Controller
         Log::debug('Update function', $request->all());
         Log::debug($menuItem->toArray());
 
-        Log::debug('Attempting to sync owners');
-        Log::debug('Before syncing owners', ['Owners' => $request->owners]);
-
-        if (!empty($request['owners'])) {
-            Log::debug('Attempting to sync owners', ['Owners' => $request['owners']]);
-            $menuItem->owners()->sync($request['owners']);
-
-            Log::debug('Owners synced');
-        } else {
-            Log::debug('No owners provided, detaching any existing relations');
-            $menuItem->owners()->detach();
-        }
+//        Log::debug('Attempting to sync owners');
+//        Log::debug('Before syncing owners', ['Owners' => $request->owners]);
+//
+//        if (!empty($request->input('owners'))) {
+//            Log::debug('Attempting to sync owners', ['Owners' => $request->input('owners')]);
+//            $menuItem->owners()->sync($request->input('owners'));
+//
+//            Log::debug('Owners synced');
+//        } else {
+//            Log::debug('No owners provided, detaching any existing relations');
+//            $menuItem->owners()->detach();
+//        }
 
         $validatedData = $request->validate([
             'type' => 'required|string',
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:menu_items,id',
-            'owners' => 'nullable|array',
+//            'owners' => 'nullable|array',
             'visibility_start' => 'nullable|date',
             'visibility_end' => 'nullable|date',
             'banner' => 'required|string',
@@ -99,6 +104,25 @@ class MenuController extends Controller
         ]);
 
         $validatedData['parent_id'] = $validatedData['parent_id'] === 'NULL' ? null : $validatedData['parent_id'];
+
+        // Decode and validate owner IDs if provided
+        $ownerIds = json_decode($request->input('owners', '[]'), true);
+        if (is_array($ownerIds)) {
+            $ownerIds = array_map('intval', array_filter($ownerIds));
+            Log::debug('Decoded and filtered owner IDs', ['owner_ids' => $ownerIds]);
+        } else {
+            Log::error('Invalid owners field format', ['owners' => $request->input('owners')]);
+            return response()->json(['error' => 'Invalid owners data provided'], 422);
+        }
+
+        // Sync or detach owners based on provided valid IDs
+        if (!empty($ownerIds)) {
+            $menuItem->owners()->sync($ownerIds);
+            Log::info('Owners synced successfully');
+        } else {
+            $menuItem->owners()->detach();
+            Log::info('All owners detached due to empty input');
+        }
 
         $menuItem->fill($validatedData);
 

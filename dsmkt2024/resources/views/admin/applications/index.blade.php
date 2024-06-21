@@ -3,6 +3,9 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-900">
+                <p class="content-tab-name">
+                    {{ __('Zgłoszenia') }}
+                </p>
                 <h1 class="text-2xl font-semibold mb-4">{{ __('Zgłoszenia') }}</h1>
 
                 {{-- <div class="mb-4">
@@ -19,7 +22,7 @@
                             <th scope="col" class="px-6 py-3">Telefon</th>
                             <th scope="col" class="px-6 py-3">Data zgłoszenia</th>
                             <th scope="col" class="px-6 py-3">Status</th>
-                            <th scope="col" class="px-6 py-3" colspan="3">Akcje</th>
+                            <th scope="col" class="px-6 py-3">Akcje</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -39,20 +42,16 @@
                                         <span class="bg-red-200 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Odrzucono</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4">
-                                    <p class="table-button">
+                                <td class="px-6 py-4 space-y-2">
+                                    <div class="table-button">
                                         <a href="{{ route('menu.users.applications.accept', $application->id) }}" class="btn ">Akceptuj</a>
-                                    </p>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <p class="table-button">
+                                    </div>
+                                    <div class="table-button">
                                         <a href="{{ route('menu.users.applications.reject', $application->id) }}" class="btn ">Odrzuć</a>
-                                    </p>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <p class="table-button">
+                                    </div>
+                                    <div class="table-button">
                                         <a href="{{ route('menu.users.applications.details', $application->id) }}" class="btn ">Szczegóły</a>
-                                    </p>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
