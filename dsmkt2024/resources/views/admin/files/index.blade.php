@@ -26,7 +26,7 @@
                             </thead>
                             <tbody>
                             @foreach($formattedMenuItems as $menuItem)
-                                @include('partials.menu_item_file', ['menuItem' => $menuItem])
+                                @include('partials.menu_item_file', ['menuItem' => $menuItem, 'depth' => 0])
                             @endforeach
                             </tbody>
                         </table>

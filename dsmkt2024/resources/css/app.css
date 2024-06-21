@@ -2073,3 +2073,20 @@ input[type="submit"].table-button-2{
 .picklist-buttons .btn {
     margin: 5px 0;
 }
+
+.table.file-table {
+    border: none;
+}
+
+.table.file-table th,
+.table.file-table td {
+    border: none;
+}
+
+.table.file-table thead th {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.files-row {
+    display: none;
+}
