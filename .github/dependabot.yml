@@ -6,10 +6,10 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/dsmkt2024"
+    directory: "/infohub2024"
     schedule:
       interval: "weekly"
   - package-ecosystem: "composer"
-    directory: "/dsmkt2024"
+    directory: "/infohub2024"
     schedule:
       interval: "weekly"
