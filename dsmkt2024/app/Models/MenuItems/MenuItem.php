@@ -6,11 +6,14 @@ use App\Models\UserNotification;
 use App\Models\UsersGroup;
 use Fureev\Trees\Config\Base;
 use Fureev\Trees\Contracts\TreeConfigurable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Fureev\Trees\NestedSetTrait;
 
 class MenuItem extends Model
 {
+    use HasFactory;
+
     use NestedSetTrait;
 
     protected $fillable = [
@@ -49,8 +52,9 @@ class MenuItem extends Model
 
     public function owners()
     {
-        return $this->belongsToMany(User::class, 'menu_owners', 'menu_item_id', 'user_id');
+        return $this->belongsToMany(User::class, 'menu_owners', 'menu_item_id', 'user_id')->withTimestamps();
     }
+
 
     public function files()
     {
@@ -69,7 +73,6 @@ class MenuItem extends Model
 
     public static function getOrderedMenuItems()
     {
-        // This method assumes you have a scope or a method to fetch items in their correct order
         return MenuItem::orderBy('parent_id')->orderBy('position')->get()->toTree();
     }
 

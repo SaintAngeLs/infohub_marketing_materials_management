@@ -79,7 +79,9 @@
                     <input type="text" name="file_url" placeholder="URL pliku" />
                 </div>
                 <div class="file-source" style="display: none;" id="input_server_file">
-                    <button type="button" id="browseServerFilesButton" class="btn btn-primary">Przeglądaj zasoby serwera</button>
+                    <div class="table-button">
+                        <a  id="browseServerFilesButton" class="btn">Przeglądaj zasoby serwera</a>
+                    </div>
                     @include('components.file-form-component.serwer-upload-modal')
                     <input type="text" id="selectedFileName" class="form-control mt-2" readonly placeholder="Nazwa wybranego pliku">
                     <input type="hidden" name="server_file" id="server_file_input" value="">
@@ -124,11 +126,18 @@
         </div>
 
         {{-- Submit Button --}}
-        {{-- Submit and Delete Buttons --}}
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">{{ $submitButtonText }}</button>
+
+        <div class="mt-6 flex justify-between">
+            <div class="table-button">
+                <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="btn">{{ $submitButtonText }}</a>
+            </div>
+            <div class="table-button-2">
+                <a href="{{ route('menu.autos.index') }}" class="btn">Anuluj</a>
+            </div>
             @if($isEdit)
-                <button type="button" class="btn btn-danger" id="deleteFileButton">Usuń Plik</button>
+                <div class="table-button-2">
+                    <a href="#" id="deleteFileButton" class="btn btn-danger">Usuń Plik</a>
+                </div>
             @endif
         </div>
     </form>

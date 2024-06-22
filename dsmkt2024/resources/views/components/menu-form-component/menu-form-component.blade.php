@@ -40,12 +40,31 @@
 
                 <div class="form-group">
                     <label for="owners">Opiekuny/Administratorzy:</label>
-                    <select id="owners" name="owners[]" multiple>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}" @if($isEdit && in_array($user->id, $menuItem->owners->pluck('id')->toArray())) selected @endif>{{ $user->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="invalid-feedback"></div>
+                    <div class="picklist-container">
+                        <div class="picklist">
+                            <h5>Wszyscy użytkownicy</h5>
+                            <ul id="all-users" class="picklist-list">
+                                @foreach($nonOwners as $user)
+                                    <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="picklist-buttons">
+                            <button type="button" id="add-button" class="btn btn-secondary">&gt;</button>
+                            <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
+                        </div>
+                        <div class="picklist">
+                            <h5>Selected Owners</h5>
+                            <ul id="selected-owners" class="picklist-list">
+                                @foreach($users as $user)
+                                    @if(in_array($user->id, $currentOwners ?? []))
+                                        <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <input type="hidden" name="owners" id="owners-input">
                 </div>
             </div>
 
@@ -62,7 +81,6 @@
                     <div class="invalid-feedback"></div>
                 </div>
 
-
                 <div class="form-group">
                     <label for="menu_banner">Przypisanie banera:</label>
                     <select id="menu_banner" name="banner">
@@ -72,22 +90,26 @@
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
-
         </div>
         <div class="form-actions d-flex justify-content-end">
             <div class="mr-auto">
-                <button type="submit" class="btn btn-primary ">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</button>
+                <div class="table-button">
+                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="btn">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</a>
+                </div>
                 @if($isEdit)
-                    <button type="button" class="btn btn-danger" id="delete-menu-item" data-menu-item-id="{{ $menuItem->id }}">Usuń zakładkę</button>
+                    <div class="table-button-2 ml-2">
+                        <a href="#" id="delete-menu-item" data-menu-item-id="{{ $menuItem->id }}" class="btn ">Usuń zakładkę</a>
+                    </div>
                 @endif
-                <button type="reset" class="btn btn-secondary ml-2">Wyczyść</button>
+                <div class="table-button-2 ml-2">
+                    <a href="{{ route('menu.structure') }}" class="btn">{{ __('Anuluj') }}</a>
+                </div>
+                <div class="table-button-2 ml-2">
+                    <a href="#" onclick="event.preventDefault(); this.closest('form').reset();" class="btn">Wyczyść</a>
+                </div>
             </div>
-
         </div>
-
     </form>
 </div>
 
 @include('components.menu-form-component.menu-delete-modal')
-
-

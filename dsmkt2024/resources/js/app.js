@@ -20,13 +20,26 @@ window.Dropzone = Dropzone;
 
 import 'jquery-validation';
 
-// import './menu_tree';
+import 'nprogress';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 Alpine.start();
 
+// NProgress.configure({
+//     showSpinner: false,
+//     trickleSpeed: 200,
+//     easing: 'ease',
+//     parent: '#custom-progress-bar',
+//     speed: 500
+// });
+//
 
+// Bind NProgress to global AJAX events
+// $(document).ajaxStart(NProgress.start);
+// $(document).ajaxStop(NProgress.done);
 
 document.addEventListener('DOMContentLoaded', () => {
     import('./global/menu_group_permissions')
@@ -46,5 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./user_permissions_copy');
     import('./statistics_component');
     import('./login_validation');
+    import('./progress_bar');
+    import('./owners_pickers');
     // import('./concessios_component_validation');
 });

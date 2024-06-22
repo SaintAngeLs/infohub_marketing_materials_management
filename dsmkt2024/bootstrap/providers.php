@@ -8,5 +8,8 @@ return [
     App\Providers\ApplicationServiceProvider::class,
     App\Providers\AutoServiceProvider::class,
     App\Providers\EmailServiceProvider::class,
-    App\Providers\StatisticsServiceProvider::class
+    App\Providers\StatisticsServiceProvider::class,
+    App\Providers\MenuItemServiceProvider::class,
+    App\Providers\FileServiceProvider::class,
+    App\Providers\MenuItemTreeElementServiceProvider::class,
 ];

@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Models\MenuItems\MenuItem;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
 class UsersGroup extends Model
 {
+    use HasFactory;
+
     protected $table = 'users_groups';
     protected $fillable = ['name'];
 

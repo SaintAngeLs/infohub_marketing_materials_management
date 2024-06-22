@@ -5,9 +5,10 @@
         <div class="bg-white dark:bg-gray-100 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-900">
                 <p class="content-tab-name">
-                    {{ isset($auto) ? 'Samochody / Edytuj samochód / ' . $auto->name : 'Samochody / Edytuj samochód' }}
+                    <a href="{{ route('menu.autos.index') }}">Samochody</a> /
+                    {{ isset($auto) ? 'Edytuj samochód / ' . $auto->name : 'Edytuj samochód' }}
                 </p>
-                
+
                 @include('components.autos-component.autos-form-component', ['auto' => $auto])
             </div>
         </div>

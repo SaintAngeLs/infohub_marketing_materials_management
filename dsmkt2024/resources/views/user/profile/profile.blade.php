@@ -8,12 +8,12 @@
                 <p class="content-tab-name">{{ __('Moje konto') }}</p>
 
                 <div class="flex space-x-4">
-                    <div class="mt-4">
-                        <a href="{{ route('user.notifications') }}" class="btn btn-primary">Powiadomienia e-mail o zmianach</a>
+                    <div class="table-button mt-4">
+                        <a href="{{ route('user.notifications') }}" class="btn">Powiadomienia e-mail o zmianach</a>
                     </div>
 
-                    <div class="mt-4">
-                        <a href="{{ route('user.change-password') }}" class="btn btn-secondary">Zmiana hasła</a>
+                    <div class="table-button-2 mt-4">
+                        <a href="{{ route('user.change-password') }}" class="btn">Zmiana hasła</a>
                     </div>
                 </div>
             </div>

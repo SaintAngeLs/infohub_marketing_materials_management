@@ -16,6 +16,12 @@
         @enderror
     </div>
 
-    <button type="submit" class="btn btn-primary">{{ $isEdit ? 'Zaktualizuj' : 'Dodaj' }}</button>
-    <a href="{{ route('menu.autos.index') }}" class="btn btn-secondary">Anuluj</a>
+    <div class="mt-6 flex justify-between">
+        <div class="table-button">
+            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="btn">{{ $isEdit ? 'Zaktualizuj' : 'Dodaj' }}</a>
+        </div>
+        <div class="table-button-2">
+            <a href="{{ route('menu.autos.index') }}" class="btn">Anuluj</a>
+        </div>
+    </div>
 </form>
