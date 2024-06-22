@@ -102,7 +102,7 @@ class FileController extends Controller
         }
     }
 
-    public function deleteFile($id)
+    public function delete($id)
     {
         $file = File::findOrFail($id);
         $this->fileService->deleteFile($file);
