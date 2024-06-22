@@ -21,16 +21,17 @@ class PermissionManagementController extends Controller
 
     public function updateGroupPermission(Request $request)
     {
+        Log::debug('Received data:', $request->all());
+
         $validated = $request->validate([
-            'menu_id' => 'required|integer',
-            'group_id' => 'required|integer',
-            'action' => 'required|in:assign,remove',
+            'group_id' => 'required|integer|exists:users_groups,id',
+            'permissions' => 'required|array',
+            'permissions.*' => 'integer|exists:menu_items,id',
         ]);
 
-        $this->permissionService->updateGroupPermission(
-            $validated['menu_id'],
+        $this->permissionService->updateGroupPermissions(
             $validated['group_id'],
-            $validated['action']
+            $validated['permissions']
         );
 
         $this->statisticsService->logUserActivity(auth()->id(), [

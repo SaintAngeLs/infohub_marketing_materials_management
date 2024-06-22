@@ -126,6 +126,7 @@ Route::middleware('admin')->group(function () {
             Route::post('/usergroups/store', [UserGroupsController::class, 'store'])->name('group.store');
             Route::get('/usergroups/edit/{id}', [UserGroupsController::class, 'edit'])->name('group.edit');
             Route::get('/usergroups/{groupId}/permissions/edit', [PermissionViewController::class, 'editGroupPermissions'])->name('group.permissions.edit');
+            Route::post('/permissions/save', [MenuController::class, 'savePermissions'])->name('group.permissions.save');
 
             Route::get('applications/view', [ApplicationViewController::class, 'index'])->name('applications.view');
             Route::patch('/applications/update-status/{id}', [ApplicationManagementController::class, 'updateStatus'])->name('applications.updateStatus');

@@ -6,12 +6,8 @@
                 <div class="p-6 text-gray-900 dark:text-gray-900">
 
                     <p class="content-tab-name">
-                        {{ __('Grupy / Edutuj grupę') }}
+                    {{ __('Grupy / Edutuj grupę') }}
                     <p class="content-tab-name">
-
-                    {{-- <p  class="table-button">
-                        <a href="{{ route('menu.users.group.create') }}" class="btn">Dodaj nową grupę</a>
-                    </p> --}}
 
                     @include('components.groups-component.group-form-component', ['group' => $userGroup])
                 </div>

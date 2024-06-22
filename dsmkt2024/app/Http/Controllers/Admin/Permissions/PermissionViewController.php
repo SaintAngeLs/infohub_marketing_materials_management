@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Permissions;
 
 use App\Http\Controllers\Controller;
+use App\Models\MenuItems\MenuItem;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\UsersGroup;
@@ -14,6 +15,7 @@ class PermissionViewController extends Controller
     {
         return view('admin.users.permissions');
     }
+
 
     public function editUserPermissions($userId = null)
     {
@@ -43,8 +45,30 @@ class PermissionViewController extends Controller
                 return redirect()->route('admin.groups.index')->with('error', 'Group not found.');
             }
         }
-        return view('admin.groups.edit-permissions', compact('group', 'isEdit'));
+
+        $menuItems = MenuItem::getOrderedMenuItems();
+        $permissions = $group ? $group->permissions->pluck('menu_item_id')->toArray() : [];
+        $formattedMenuItems = $this->formatMenuItemsForPermissionsTable($menuItems, $permissions);
+
+        return view('admin.groups.edit-permissions', compact('group', 'isEdit', 'formattedMenuItems', 'groupId'));
     }
+
+
+    protected function formatMenuItemsForPermissionsTable($menuItems, $permissions)
+    {
+        $formatted = [];
+        foreach ($menuItems as $item) {
+            $checked = in_array($item->id, $permissions) ? "checked" : "";
+            $formatted[] = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'checked' => $checked,
+                'children' => $item->children->isEmpty() ? [] : $this->formatMenuItemsForPermissionsTable($item->children, $permissions),
+            ];
+        }
+        return $formatted;
+    }
+
     public function copyFromUser($targetUserId)
     {
         // Log and fetch users as before

@@ -53,7 +53,7 @@ $(document).ready(function() {
     });
 
 
-    
+
 
     function updateNodePadding(instance, nodeId) {
         var selector = nodeId ? '#' + nodeId + ' > .jstree-children' : '#menu-tree .jstree-node';
@@ -69,4 +69,32 @@ $(document).on('click', '.node-name', function(e) {
     e.stopPropagation();
     var nodeId = $(this).closest('.jstree-node').attr('id');
     window.location.href = '/menu/edit/' + nodeId;
+});
+
+
+$(document).ready(function() {
+    $('#save-permissions').click(function() {
+        var groupId = $('#group-id').val();
+        var permissions = [];
+        $('input[name="menu_permissions[]"]:checked').each(function() {
+            permissions.push($(this).val());
+        });
+
+        $.ajax({
+            url: '/menu/permissions/update-group-permission',
+            type: 'POST',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            data: {
+                group_id: groupId,
+                permissions: permissions
+            },
+            success: function(response) {
+                alert('Uprawnienia zapisane pomyślnie.');
+                window.location.href = '/menu/users/usergroups';
+            },
+            error: function(xhr) {
+                alert('Błąd podczas zapisywania uprawnień.');
+            }
+        });
+    });
 });
