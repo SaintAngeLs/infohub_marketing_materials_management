@@ -73,6 +73,7 @@ class FileController extends Controller
         }
     }
 
+
     public function update(Request $request, File $file)
     {
         $validated = $this->fileService->validateRequest($request, false);

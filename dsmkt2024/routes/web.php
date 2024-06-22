@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/files/downloadMultiple', [FileController::class, 'downloadMultiple'])->name('files.downloadMultiple');
 });
 
-Route::middleware('admin')->group(function () {
+Route::middleware('admin',  'verified')->group(function () {
 
     Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 
@@ -147,7 +147,7 @@ Route::middleware('admin')->group(function () {
             Route::get('/get-menu-items-user-permissions', [MenuController::class, 'getMenuItemWithUserPermissions']);
         });
 
-        Route::prefix('permissions')->name('permissions.')->middleware(['auth', 'verified'])->group(function () {
+        Route::prefix('permissions')->name('permissions.')->group(function () {
             Route::get('/update-or-create-user-permission', [PermissionController::class, 'assignOrUpdateUserPermission'])->name('permission.user.assign');
             Route::get('/update-or-create-group-permission', [PermissionController::class, 'assignOrUpdateGroupPermissions'])->name('permission.group.assign');
             // Route::post('/update-group-permission', [PermissionController::class, 'updateGroupPermission'])->name('permission.updateGroup');

@@ -21,66 +21,106 @@ class PermissionManagementController extends Controller
 
     public function updateGroupPermission(Request $request)
     {
-        Log::debug('Received data:', $request->all());
+        Log::info('Received request data:', $request->all());
 
-        $validated = $request->validate([
-            'group_id' => 'required|integer|exists:users_groups,id',
-            'permissions' => 'required|array',
-            'permissions.*' => 'integer|exists:menu_items,id',
-        ]);
+        try {
+            $validated = $request->validate([
+                'group_id' => 'required|integer|exists:users_groups,id',
+                'permissions' => 'required|array',
+                'permissions.*' => 'integer|exists:menu_items,id',
+            ]);
 
-        $this->permissionService->updateGroupPermissions(
-            $validated['group_id'],
-            $validated['permissions']
-        );
+            Log::info('Validated data:', $validated);
 
-        $this->statisticsService->logUserActivity(auth()->id(), [
-            'uri' => $request->path(),
-            'post_string' => $request->except('_token'),
-            'query_string' => $request->getQueryString(),
-        ]);
+            $this->permissionService->updateGroupPermissions(
+                $validated['group_id'],
+                $validated['permissions']
+            );
 
-        return response()->json(['message' => 'Group permissions updated successfully.']);
+            $this->statisticsService->logUserActivity(auth()->id(), [
+                'uri' => $request->path(),
+                'post_string' => json_encode($request->except('_token')),
+                'query_string' => $request->getQueryString(),
+            ]);
+
+            $response = response()->json(['message' => 'Group permissions updated successfully.']);
+            Log::info('Response:', ['content' => $response->getContent()]);
+
+            return $response;
+        } catch (\Exception $e) {
+            Log::error('Error in updateGroupPermission:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
     }
 
     public function updateUserPermission(Request $request)
     {
-        Log::debug('updateGroupPermission', $request->all());
-        $validated = $request->validate([
-            'menu_id' => 'required|integer',
-            'user_id' => 'required|integer',
-            'action' => 'required|in:assign,remove',
-        ]);
-        Log::debug('Permission update in the service');
-        $this->permissionService->updateUserPermission(
-            $validated['menu_id'],
-            $validated['user_id'],
-            $validated['action']
-        );
+        Log::info('Received request data:', $request->all());
 
-        $this->statisticsService->logUserActivity(auth()->id(), [
-            'uri' => $request->path(),
-            'post_string' => $request->except('_token'),
-            'query_string' => $request->getQueryString(),
-        ]);
+        try {
+            $validated = $request->validate([
+                'menu_id' => 'required|integer',
+                'user_id' => 'required|integer',
+                'action' => 'required|in:assign,remove',
+            ]);
 
-        return response()->json(['message' => 'User permissions updated successfully.']);
+            Log::info('Validated data:', $validated);
+
+            $this->permissionService->updateUserPermission(
+                $validated['menu_id'],
+                $validated['user_id'],
+                $validated['action']
+            );
+
+            $this->statisticsService->logUserActivity(auth()->id(), [
+                'uri' => $request->path(),
+                'post_string' => json_encode($request->except('_token')),
+                'query_string' => $request->getQueryString(),
+            ]);
+
+            $response = response()->json(['message' => 'User permissions updated successfully.']);
+            Log::info('Response:', ['content' => $response->getContent()]);
+
+            return $response;
+        } catch (\Exception $e) {
+            Log::error('Error in updateUserPermission:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
     }
 
     public function copyUserPermissions(Request $request)
     {
-        Log::info("copyUserPermissions", $request->all());
-        $validated = $request->validate([
-            'source_user_id' => 'required|integer',
-            'target_user_id' => 'required|integer',
-        ]);
+        Log::info("Received request data:", $request->all());
 
-        $this->permissionService->copyUserPermissions(
-            $validated['source_user_id'],
-            $validated['target_user_id']
-        );
+        try {
+            $validated = $request->validate([
+                'source_user_id' => 'required|integer',
+                'target_user_id' => 'required|integer',
+            ]);
 
-        return back()->with('success', 'Permissions copied successfully.');
+            Log::info('Validated data:', $validated);
+
+            $this->permissionService->copyUserPermissions(
+                $validated['source_user_id'],
+                $validated['target_user_id']
+            );
+
+            $response = back()->with('success', 'Permissions copied successfully.');
+            Log::info('Response:', ['content' => $response]);
+
+            return $response;
+        } catch (\Exception $e) {
+            Log::error('Error in copyUserPermissions:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return back()->withErrors(['error' => 'An error occurred']);
+        }
     }
-
 }
