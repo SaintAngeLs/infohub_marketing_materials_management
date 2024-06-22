@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "80ce0f6a0d4a5c67e419dbc137542d4f",
+    "content-hash": "ef9ea23bf8445b592e657e23956d402f",
     "packages": [
         {
             "name": "brick/math",
@@ -522,16 +522,16 @@
         },
         {
             "name": "efureev/laravel-trees",
-            "version": "v4.0.0",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/efureev/laravel-trees.git",
-                "reference": "546a731521cfb7f81d10f27a9b79515ed022976d"
+                "reference": "f741e68885d3508f94582e4d871e0b57b94b85a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/efureev/laravel-trees/zipball/546a731521cfb7f81d10f27a9b79515ed022976d",
-                "reference": "546a731521cfb7f81d10f27a9b79515ed022976d",
+                "url": "https://api.github.com/repos/efureev/laravel-trees/zipball/f741e68885d3508f94582e4d871e0b57b94b85a2",
+                "reference": "f741e68885d3508f94582e4d871e0b57b94b85a2",
                 "shasum": ""
             },
             "require": {
@@ -573,9 +573,9 @@
             ],
             "support": {
                 "issues": "https://github.com/efureev/laravel-trees/issues",
-                "source": "https://github.com/efureev/laravel-trees/tree/v4.0.0"
+                "source": "https://github.com/efureev/laravel-trees/tree/v5.0.0"
             },
-            "time": "2024-03-14T20:42:23+00:00"
+            "time": "2024-06-06T20:24:49+00:00"
         },
         {
             "name": "efureev/support",
