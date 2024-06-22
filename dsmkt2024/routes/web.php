@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/files/downloadMultiple', [FileController::class, 'downloadMultiple'])->name('files.downloadMultiple');
 });
 
-Route::middleware('admin')->group(function () {
+Route::middleware('admin',  'verified')->group(function () {
 
     Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 
@@ -73,7 +73,7 @@ Route::middleware('admin')->group(function () {
         Route::get('/structure', [MenuController::class, 'index'])->name('structure');
         Route::get('/autos', [AutosController::class, 'index'])->name('autos');
         Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
-        Route::get('/files', [MenuController::class, 'index'])->name('files');
+        Route::get('/files', [MenuController::class, 'indexFiles'])->name('files');
         Route::get('/statistics', [StatisticsViewController::class, 'index'])->name('statistics');
         Route::get('/statistics/entries', [StatisticsManagementController::class, 'showMenuEntries'])->name('statistics.entries');
         Route::get('/statistics/downloads', [StatisticsManagementController::class, 'showDownloads'])->name('statistics.downloads');
@@ -106,7 +106,7 @@ Route::middleware('admin')->group(function () {
         Route::post('/files/store', [FileController::class, 'store'])->name('files.store');
         Route::get('/file/edit/{file}', [FileController::class, 'edit'])->name('file.edit');
         Route::patch('/files/{file}', [FileController:: class, 'update'])->name('file.update');
-        Route::get('/files/delete/{id}', [FileController::class, 'delete'])->name('files.delete');
+        Route::delete('/files/delete/{id}', [FileController::class, 'delete'])->name('files.delete');
         Route::get('/files/download/{file}', [FileController::class, 'download'])->name('files.download');
         Route::get('/files/directory-structure', [FileController::class, 'getDirectoryStructure']);
         Route::post('/file/toggle-status/{id}', [FileController::class, 'toggleStatus'])->name('file.toggleStatus');
@@ -126,6 +126,7 @@ Route::middleware('admin')->group(function () {
             Route::post('/usergroups/store', [UserGroupsController::class, 'store'])->name('group.store');
             Route::get('/usergroups/edit/{id}', [UserGroupsController::class, 'edit'])->name('group.edit');
             Route::get('/usergroups/{groupId}/permissions/edit', [PermissionViewController::class, 'editGroupPermissions'])->name('group.permissions.edit');
+            Route::post('/permissions/save', [MenuController::class, 'savePermissions'])->name('group.permissions.save');
 
             Route::get('applications/view', [ApplicationViewController::class, 'index'])->name('applications.view');
             Route::patch('/applications/update-status/{id}', [ApplicationManagementController::class, 'updateStatus'])->name('applications.updateStatus');
@@ -146,7 +147,7 @@ Route::middleware('admin')->group(function () {
             Route::get('/get-menu-items-user-permissions', [MenuController::class, 'getMenuItemWithUserPermissions']);
         });
 
-        Route::prefix('permissions')->name('permissions.')->middleware(['auth', 'verified'])->group(function () {
+        Route::prefix('permissions')->name('permissions.')->group(function () {
             Route::get('/update-or-create-user-permission', [PermissionController::class, 'assignOrUpdateUserPermission'])->name('permission.user.assign');
             Route::get('/update-or-create-group-permission', [PermissionController::class, 'assignOrUpdateGroupPermissions'])->name('permission.group.assign');
             // Route::post('/update-group-permission', [PermissionController::class, 'updateGroupPermission'])->name('permission.updateGroup');

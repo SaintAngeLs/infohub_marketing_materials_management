@@ -1,66 +1,115 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DS-MKT
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Public Access Before Login
+The following views are available before user authentication:
+- Login View
+- Registration View
+- Password Reminder View
 
-## About Laravel
+### Features to be Enhanced
+- Addition of a footer with:
+    1. Social media links
+    2. User manual and help desk contact email
+    3. Copyright notice
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- The site needs to be optimized for responsiveness and mobile device handling.
+- Easy logo replacement and redirection of unauthorized users to a general page.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## User/Administrator Panel
+Access to the user panel is available to all logged-in users. Access to the administrator panel is exclusively for users with administrator privileges (`user_group_id=1`) or caretakers assigned in the menu (`menu_owners` table).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Top Menu
+- **My Account**
+    - Email notifications about changes (each user can set notifications for changes in file content within specific categories).
+- **Change Password**
+- **User Panel/Administrator Panel** (visible only to administrators and caretakers)
+- **Logout**
 
-## Learning Laravel
+### Search
+Search functionality considers user permissions and searches within the database of files.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Banner
+Displays a random image from the gallery or one assigned to a specific section as defined by the administrator in the panel.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## User Panel
+- Users see a menu structure consistent with their assigned permissions and can browse and download files within available tabs.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Administrator Panel
+### Concessions - Dealership Salons
+- List
+- Add New Concession
+    - Name*
+    - Address*
+    - Postal Code*
+    - City*
+    - Phone*
+    - Email instead of FAX (* required)
+- Edit Concession
 
-## Laravel Sponsors
+### Users
+- List, edit, add, and manage user permissions
+    - Groups (ability to edit group permissions)
+    - Requests (accept user registrations)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Menu Structure
+- Add new tab
+    - Define tab type (main, subordinate)
+    - Tab name
+    - Assign caretakers/administrators (optional)
+    - Tab visibility date range (optional)
+    - Assign banner (random or dedicated)
+    - Option to delete
+        - Confirmation prompt
+        - Alert if the section contains subtabs or files
+- Edit existing tabs
+- Change order - list/tree view
+- Toggle parameter (active/inactive)
 
-### Premium Partners
+### Cars (Managing Car Models)
+### Files (File Management)
+- Add file to a tab
+    - File name
+    - Option to upload file
+    - File visibility date range (optional)
+    - Keywords - tags (space-separated) (optional)
+    - Assign to a car model (optional)
+- Update file
+    - Option to upload a new file (old file is removed from the server)
+- Toggle parameter (active/inactive)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Statistics
+- Downloads
+    - Today
+    - Yesterday
+    - Last 7 days
+    - Last 30 days
+    - Advanced - user-defined date range
+    - Generate data from the selected range to xls
+- Logins
+- Page Visits
 
-## Contributing
+### Automated Reports (sent on the 1st of each month to):
+- Administrators
+    - List of users not logged in for the last 30, 90, 180 days
+    - List of files not downloaded in the last 30, 90, 180 days
+    - Introduce exceptions for specific users or files
+- Caretakers
+    - List of files not downloaded in the last 30, 90, 180 days
+    - Introduce exceptions for specific files
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Development Plan
+- Base site structure with basic authentication
+- Code “Menu Structure” and import data from the old service
+- Code “Concessions” and import data from the old service
+- Code “Users”
+    - Manage access via group and individual user
+    - Handle user requests
+    - Import data from the old service
+- Code “Files” functionality and import data from the old service (including files)
+- Code “Statistics” functionality
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Pre-Development Information Needed
+- How you want to handle (what plugins, libraries, methodology):
+    1. Menu structure (e.g., laravel-tree or something else like https://www.jstree.com/ for the frontend)
+    2. User access
+    3. File uploads (e.g., plupload, dropzone, or another)

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\IPermissionService;
 use App\Models\GroupPermission;
 use App\Models\Permission;
+use App\Models\UsersGroup;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -79,5 +80,19 @@ class PermissionService implements IPermissionService
                 ]);
             }
         });
+    }
+
+
+    /**
+     * Update permissions for a group.
+     *
+     * @param integer $groupId Group ID
+     * @param array $permissions Array of menu item IDs
+     * @return void
+     */
+    public function updateGroupPermissions($groupId, $permissions)
+    {
+        $group = UsersGroup::findOrFail($groupId);
+        $group->permissions()->sync($permissions);
     }
 }

@@ -73,6 +73,7 @@ class FileController extends Controller
         }
     }
 
+
     public function update(Request $request, File $file)
     {
         $validated = $this->fileService->validateRequest($request, false);
@@ -101,7 +102,7 @@ class FileController extends Controller
         }
     }
 
-    public function deleteFile($id)
+    public function delete($id)
     {
         $file = File::findOrFail($id);
         $this->fileService->deleteFile($file);

@@ -30,6 +30,13 @@ class MenuController extends Controller
     public function index()
     {
         $menuItems = MenuItem::getOrderedMenuItems();
+
+        return view('admin.menu.index');
+    }
+
+    public function indexFiles()
+    {
+        $menuItems = MenuItem::getOrderedMenuItems();
         $formattedMenuItems = $this->formatMenuItemsWithFilesForTable($menuItems);
 
         // Log the formatted menu items
@@ -159,6 +166,19 @@ class MenuController extends Controller
         $formattedMenuItems = $this->formatForJsTreeUserPermissions($menuItems, $allPermissions);
         return response()->json($formattedMenuItems);
     }
+
+    public function getMenuItemPermissions($groupId = null)
+    {
+        $menuItems = MenuItem::getOrderedMenuItems();
+        $permissions = !is_null($groupId) ? GroupPermission::where('user_group_id', $groupId)
+            ->pluck('menu_item_id')
+            ->toArray() : [];
+
+        $formattedMenuItems = $this->formatMenuItemsForPermissionsTable($menuItems, $permissions);
+
+        return view('admin.menu.permissions', compact('formattedMenuItems', 'groupId'));
+    }
+
 
     protected function formatForJsTree($menuItems)
     {
@@ -357,6 +377,21 @@ class MenuController extends Controller
                 'visibility' => $visibilityTime,
                 'files' => $fileDetails,
                 'children' => $item->children->isEmpty() ? [] : $this->formatMenuItemsWithFilesForTable($item->children),
+            ];
+        }
+        return $formatted;
+    }
+
+    protected function formatMenuItemsForPermissionsTable($menuItems, $permissions)
+    {
+        $formatted = [];
+        foreach ($menuItems as $item) {
+            $checked = in_array($item->id, $permissions) ? "checked" : "";
+            $formatted[] = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'checked' => $checked,
+                'children' => $item->children->isEmpty() ? [] : $this->formatMenuItemsForPermissionsTable($item->children, $permissions),
             ];
         }
         return $formatted;

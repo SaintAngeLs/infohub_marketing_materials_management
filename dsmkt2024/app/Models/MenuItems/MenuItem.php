@@ -6,11 +6,14 @@ use App\Models\UserNotification;
 use App\Models\UsersGroup;
 use Fureev\Trees\Config\Base;
 use Fureev\Trees\Contracts\TreeConfigurable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Fureev\Trees\NestedSetTrait;
 
 class MenuItem extends Model
 {
+    use HasFactory;
+
     use NestedSetTrait;
 
     protected $fillable = [
