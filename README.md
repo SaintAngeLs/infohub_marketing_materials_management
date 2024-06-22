@@ -1,4 +1,5 @@
-# DS-MKT
+# InfoHub - Marketing Materials Management System
+<hr>
 
 ## Public Access Before Login
 The following views are available before user authentication:
