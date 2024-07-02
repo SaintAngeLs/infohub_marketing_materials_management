@@ -33,11 +33,7 @@ $(document).ready(function() {
                 type: $(form).attr('method'),
                 data: $(form).serialize(),
                 success: function(response) {
-                    if(response.status === 'success') {
-                        window.location.href = "{{ route('password.thankyou') }}";
-                    } else {
-                        alert('Failed to send reset link. Please try again.');
-                    }
+                    window.location.href = "password/thankyou";
                 },
                 error: function(xhr) {
                     var errors = xhr.responseJSON.errors;

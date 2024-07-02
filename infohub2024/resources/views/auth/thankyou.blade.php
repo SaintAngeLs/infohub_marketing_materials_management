@@ -1,4 +1,3 @@
-<?php
 @extends('layouts.guest')
 
 @section('content')
@@ -9,6 +8,11 @@
             <div class="login-box text-left">
                 <p class="mt-4 text-sm text-green-600">
                     Wysłaliśmy email z linkiem do resetowania hasła. Dziękujemy.
+                </p>
+                <p class="mt-4 text-sm">
+                    <a href="{{ route('login') }}" class="text-blue-500 hover:text-blue-600 font-semibold">
+                        Powrót do strony logowania
+                    </a>
                 </p>
             </div>
 
