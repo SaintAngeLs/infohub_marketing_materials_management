@@ -41,9 +41,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($menuItems as $menuItem)
-                        @include('partials.menuItemRow', ['menuItem' => $menuItem, 'level' => 0])
-                    @endforeach
+                    @if($menuItems->isEmpty())
+                        <tr>
+                            <td colspan="4" class="text-center">{{ __('Brak elementów menu') }}</td>
+                        </tr>
+                    @else
+                        @foreach($menuItems as $menuItem)
+                            @include('partials.menuItemRow', ['menuItem' => $menuItem, 'level' => 0])
+                        @endforeach
+                    @endif
                     </tbody>
                 </table>
                 <div class="mt-4 flex justify-end">
