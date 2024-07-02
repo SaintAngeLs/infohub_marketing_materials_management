@@ -61,5 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     import('./login_validation');
     import('./progress_bar');
     import('./owners_pickers');
+    import('./forgot_password_form');
     // import('./concessios_component_validation');
 });
