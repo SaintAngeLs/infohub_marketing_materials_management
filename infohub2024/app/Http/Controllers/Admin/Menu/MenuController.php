@@ -198,10 +198,15 @@ class MenuController extends Controller
         $formatted = [];
         foreach ($menuItems as $item) {
             $status = $item->status ? 'Aktywny' : 'Nieaktywny';
-            $ownerNames = $item->owners->pluck('name')->implode('<br>');
+            $ownerNames = $item->owners->map(function($owner) {
+                $userGroup = $owner->usersGroup->name ?? 'brak grupy';
+                $branch = $owner->branch->name ?? 'brak koncesji';
+                return "{$owner->name} {$owner->surname} ({$userGroup}) -- {$branch}";
+            })->implode('<br>');
+
             $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
             $visibilityTime = $item->start && $item->end
-                ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
+                ? $item->start->format('d.m.y') . ' do ' . $item->end->format('d.m.Y')
                 : 'N/A';
 
             $nodeContent = <<<HTML
