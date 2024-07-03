@@ -45,7 +45,8 @@
                             <h5>Wszyscy użytkownicy</h5>
                             <ul id="all-users" class="picklist-list">
                                 @foreach($nonOwners as $user)
-                                    <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
+                                    <pre>{{ json_encode($user, JSON_PRETTY_PRINT) }}</pre>
+                                    <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }} {{ $user->surname }}</li>
                                 @endforeach
                             </ul>
                         </div>
@@ -54,7 +55,7 @@
                             <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
                         </div>
                         <div class="picklist">
-                            <h5>Selected Owners</h5>
+                            <h5>Opiekuny/Administratorzy</h5>
                             <ul id="selected-owners" class="picklist-list">
                                 @foreach($users as $user)
                                     @if(in_array($user->id, $currentOwners ?? []))
