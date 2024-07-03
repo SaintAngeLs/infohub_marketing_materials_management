@@ -12,7 +12,21 @@
                         <a href="{{ route('menu.create') }}" class="btn">Dodaj nową zakładkę</a>
                     </p>
 
-                    <div class="menu-tree-component" id="menu-tree"></div>
+                    <div class="menu-tree-component">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Nazwa</th>
+                                <th>Status</th>
+                                <th>Właściciele</th>
+                                <th>Widoczność</th>
+                            </tr>
+                            </thead>
+                            <tbody id="menu-tree">
+                            <!-- Tree will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -25,6 +25,7 @@
                 <div class="form-group">
                     <label for="name">Nazwa zakładki:</label>
                     <input type="text" id="name" name="name" value="{{ $isEdit ? $menuItem->name : '' }}" required>
+                    <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group">
@@ -111,7 +112,7 @@
         <div class="form-actions d-flex justify-content-between">
             <div>
                 <div class="table-button">
-                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="btn">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</a>
+                    <a href="#" id="submit-form-button" class="btn">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</a>
                 </div>
             </div>
             <div class="d-flex">

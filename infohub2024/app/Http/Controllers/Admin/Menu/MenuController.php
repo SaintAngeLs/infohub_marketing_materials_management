@@ -70,6 +70,35 @@ class MenuController extends Controller
         return response()->json(['success' => 'Menu item and all associated data have been deleted.']);
     }
 
+    public function store(Request $request)
+    {
+        Log::debug('Store function', $request->all());
+
+        $validatedData = $this->validateMenuItem($request);
+        Log::debug('Validated_data:', $validatedData);
+
+        $menuItem = new MenuItem();
+        $menuItem->start = $validatedData['visibility_start'];
+        $menuItem->end = $validatedData['visibility_end'];
+
+        unset($validatedData['visibility_start']);
+        unset($validatedData['visibility_end']);
+
+        $menuItem->fill($validatedData);
+        $menuItem->save();
+
+        $this->menuItemService->updateMenuItemOwners($menuItem, $request->input('owners', '[]'));
+
+        $this->updateMenuItemPermissions($menuItem, $request->input('menu_permissions', []));
+        $this->menuItemService->updateTreeStructure($menuItem, $validatedData['parent_id']);
+
+        $this->logUserActivity($request);
+
+        return redirect()->route('menu.structure')->with('success', 'Menu item created successfully.');
+    }
+
+
+
     public function update(Request $request, MenuItem $menuItem)
     {
         Log::debug('Update function', $request->all());

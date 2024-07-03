@@ -88,10 +88,11 @@ Route::middleware('admin',  'verified')->group(function () {
         Route::get('/edit/{menuItem}', [MenuController::class, 'edit'])->name('edit');
         Route::post('/toggle-status/{menuItem}', [MenuController::class, 'toggleStatus'])->name('toggleStatus');
 
-        Route::post('/menu-items', [MenuItemController::class, 'store'])->name('menu-items.store');
+//        Route::post('/menu-items', [MenuItemController::class, 'store'])->name('menu-items.store');
         Route::get('/get-menu-items', [MenuController::class, 'getMenuItems']);
         Route::get('/get-menu-items-with-files', [MenuController::class, 'getMenuItemsWithFiles']);
 
+        Route::post('/menu-items', [MenuController::class, 'store'])->name('menu-items.store');
         Route::patch('/menu-items/{menuItem}', [MenuController::class, 'update'])->name('menu-items.update');
         Route::post('/menu-items/update-order', [MenuItemController::class, 'updateOrder'])->name('menu-items.update-order');
         Route::post('/menu-items/update-type', [MenuItemController::class, 'updateType'])->name('menu-items.update-type');
