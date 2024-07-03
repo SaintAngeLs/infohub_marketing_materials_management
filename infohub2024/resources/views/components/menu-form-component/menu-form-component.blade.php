@@ -37,20 +37,18 @@
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>
-
-
             </div>
 
             <div class="col">
                 <div class="form-group">
                     <label for="start">Zakładka widoczna od:</label>
-                    <input type="date" id="start" name="start" value="{{ $isEdit && $menuItem->start ? $menuItem->start->format('Y-m-d') : '' }}">
+                    <input type="date" id="start" name="visibility_start" value="{{ $isEdit && $menuItem->start ? $menuItem->start->format('Y-m-d') : '' }}">
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group">
                     <label for="end">Zakładka widoczna do:</label>
-                    <input type="date" id="end" name="end" value="{{ $isEdit && $menuItem->end ? $menuItem->end->format('Y-m-d') : '' }}">
+                    <input type="date" id="end" name="visibility_end" value="{{ $isEdit && $menuItem->end ? $menuItem->end->format('Y-m-d') : '' }}">
                     <div class="invalid-feedback"></div>
                 </div>
 
@@ -82,11 +80,11 @@
                     <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
                 </div>
                 <div class="picklist">
-                    <h5>Opiekuny/Administratorzy</h5>
+                    <h5>Opiekun(y)/Administrator(zy)</h5>
                     <ul id="selected-owners" class="picklist-list">
                         @foreach($users as $user)
                             @if(in_array($user->id, $currentOwners ?? []))
-                                <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
+                                <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }} {{ $user->surname }} ({{ $user->usersGroup->name ?? 'brank grupy' }} ) -- {{ $user->branch->name ?? 'brak koncesji'}}</li>
                             @endif
                         @endforeach
                     </ul>
@@ -95,15 +93,17 @@
             <input type="hidden" name="owners" id="owners-input">
         </div>
 
-        
-        <div class="form-actions d-flex justify-content-end">
-            <div class="mr-auto">
+
+        <div class="form-actions d-flex justify-content-between">
+            <div>
                 <div class="table-button">
                     <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="btn">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</a>
                 </div>
+            </div>
+            <div class="d-flex">
                 @if($isEdit)
                     <div class="table-button-2 ml-2">
-                        <a href="#" id="delete-menu-item" data-menu-item-id="{{ $menuItem->id }}" class="btn ">Usuń zakładkę</a>
+                        <a href="#" id="delete-menu-item" data-menu-item-id="{{ $menuItem->id }}" class="btn">Usuń zakładkę</a>
                     </div>
                 @endif
                 <div class="table-button-2 ml-2">

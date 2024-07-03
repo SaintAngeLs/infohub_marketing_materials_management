@@ -76,9 +76,15 @@ class MenuController extends Controller
         Log::debug($menuItem->toArray());
 
         $validatedData = $this->validateMenuItem($request);
+        Log::debug('Validated_data:', $validatedData);
 
-        // Update owners
         $this->menuItemService->updateMenuItemOwners($menuItem, $request->input('owners', '[]'));
+
+        $menuItem->start = $validatedData['visibility_start'];
+        $menuItem->end = $validatedData['visibility_end'];
+
+        unset($validatedData['visibility_start']);
+        unset($validatedData['visibility_end']);
 
         $menuItem->fill($validatedData);
         $menuItem->save();
