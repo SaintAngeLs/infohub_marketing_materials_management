@@ -28,6 +28,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="slug">Tagi (oddzielone przecinkami):</label>
+                    <input type="text" id="slug" name="slug" value="{{ $isEdit ? $menuItem->slug : '' }}" required>
+                </div>
+
+                <div class="form-group">
                     <label for="parent_id">Element nadrzędny:</label>
                     <select id="parent_id" name="parent_id">
                         <option value="">Brak (jest to element nadrzędny)</option>
@@ -57,6 +62,15 @@
                     <select id="menu_banner" name="banner">
                         <option value="random_banner" @if($isEdit && $menuItem->banner == 'random_banner') selected @endif>Baner losowy</option>
                         <option value="dedicated_banner" @if($isEdit && $menuItem->banner == 'dedicated_banner') selected @endif>Baner dedykowany</option>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" name="status" required>
+                        <option value="1" @if($isEdit && $menuItem->status == 1) selected @endif>Aktywny</option>
+                        <option value="0" @if($isEdit && $menuItem->status == 0) selected @endif>Nieaktywny</option>
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>

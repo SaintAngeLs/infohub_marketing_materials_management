@@ -107,6 +107,8 @@ class MenuController extends Controller
             'visibility_end' => 'nullable|date',
             'banner' => 'required|string',
             'menu_permissions' => 'nullable|array',
+            'slug' => 'required|string|max:255',
+            'status' => 'required|boolean',
         ]);
     }
 
