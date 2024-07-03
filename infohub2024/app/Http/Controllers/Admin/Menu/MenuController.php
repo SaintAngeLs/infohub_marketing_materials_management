@@ -47,10 +47,10 @@ class MenuController extends Controller
     public function create()
     {
         $menuItemsToSelect = $this->menuItemService->getMenuItemsToSelect();
-        $users = User::where('active', 1)->get();
+        $users = User::with(['usersGroup', 'branch'])->where('active', 1)->get();
         $currentOwners = [];
 
-        $nonOwners = User::where('active', 1)->whereNotIn('id', $currentOwners)->get();
+        $nonOwners = User::with(['usersGroup', 'branch'])->where('active', 1)->whereNotIn('id', $currentOwners)->get();
 
         return view('admin.menu.create', compact('menuItemsToSelect', 'users', 'nonOwners', 'currentOwners'));
     }

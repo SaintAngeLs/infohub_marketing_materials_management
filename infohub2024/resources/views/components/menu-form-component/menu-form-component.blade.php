@@ -38,35 +38,7 @@
                     <div class="invalid-feedback"></div>
                 </div>
 
-                <div class="form-group">
-                    <label for="owners">Opiekuny/Administratorzy:</label>
-                    <div class="picklist-container">
-                        <div class="picklist">
-                            <h5>Wszyscy użytkownicy</h5>
-                            <ul id="all-users" class="picklist-list">
-                                @foreach($nonOwners as $user)
-                                    <pre>{{ json_encode($user, JSON_PRETTY_PRINT) }}</pre>
-                                    <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }} {{ $user->surname }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <div class="picklist-buttons">
-                            <button type="button" id="add-button" class="btn btn-secondary">&gt;</button>
-                            <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
-                        </div>
-                        <div class="picklist">
-                            <h5>Opiekuny/Administratorzy</h5>
-                            <ul id="selected-owners" class="picklist-list">
-                                @foreach($users as $user)
-                                    @if(in_array($user->id, $currentOwners ?? []))
-                                        <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
-                                    @endif
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <input type="hidden" name="owners" id="owners-input">
-                </div>
+
             </div>
 
             <div class="col">
@@ -92,6 +64,38 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-group">
+            <label for="owners">Opiekuny/Administratorzy:</label>
+            <div class="picklist-container">
+                <div class="picklist">
+                    <h5>Wszyscy użytkownicy</h5>
+                    <ul id="all-users" class="picklist-list">
+                        @foreach($nonOwners as $user)
+                            {{--                                    <pre>{{ json_encode($user, JSON_PRETTY_PRINT) }}</pre>--}}
+                            <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }} {{ $user->surname }} ({{ $user->usersGroup->name ?? 'brank grupy' }} ) -- {{ $user->branch->name ?? 'brak koncesji'}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="picklist-buttons">
+                    <button type="button" id="add-button" class="btn btn-secondary">&gt;</button>
+                    <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
+                </div>
+                <div class="picklist">
+                    <h5>Opiekuny/Administratorzy</h5>
+                    <ul id="selected-owners" class="picklist-list">
+                        @foreach($users as $user)
+                            @if(in_array($user->id, $currentOwners ?? []))
+                                <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <input type="hidden" name="owners" id="owners-input">
+        </div>
+
+        
         <div class="form-actions d-flex justify-content-end">
             <div class="mr-auto">
                 <div class="table-button">
