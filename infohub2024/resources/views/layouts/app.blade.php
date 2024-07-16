@@ -39,47 +39,7 @@
     </style>
 
 <style>
-    .search-col {
-        display: flex;
-        justify-content: flex-end;
-        padding: 20px 0;
-    }
 
-    .search-box {
-        display: flex;
-        align-items: center;
-        border-radius: 4px;
-        overflow: hidden;
-        max-width: 400px;
-        width: 100%;
-        background-color: #fff;
-    }
-
-    .search-box input[type="text"] {
-        border: none;
-        padding: 10px;
-        flex: 1;
-        outline: none;
-    }
-
-    .search-box button.submit {
-        border: none;
-        color: rgb(0, 0, 0);
-        padding: 10px 20px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .search-box button.submit:hover {
-        background-color: #0056b3;
-    }
-
-    .search-box button.submit i {
-        font-size: 16px;
-    }
 </style>
 
 
@@ -134,6 +94,13 @@
                 @endif
             </div>
 
+
+
+
+            <div class="right-col">
+                @yield('content')
+            </div>
+
             @auth
                 <div class="search-col">
                     <form id="searchbox" action="{{ route('search') }}" method="GET" class="search-box">
@@ -142,11 +109,6 @@
                     </form>
                 </div>
             @endauth
-
-
-            <div class="right-col">
-                @yield('content')
-            </div>
 
             <div class="clearfix"></div>
         </div>

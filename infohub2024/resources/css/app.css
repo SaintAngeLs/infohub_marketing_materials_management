@@ -146,7 +146,7 @@ h1, h2{
 	font-size: 20px;
 }
 
-h2{
+.left-col h2{
 	border-bottom: 1px solid #594A41;
     margin-bottom: unset !important;
 }
@@ -632,7 +632,7 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 }
 
 #content .right-col{
-	width: 1400px;
+	max-width: 1100px;
 	/* float: right; */
 	margin-top: 25px;
 }
@@ -1964,20 +1964,9 @@ input[type="submit"].table-button-2{
     align-items: flex-start;
 }
 .left-col, .search-col, .right-col {
-    margin: 10px;
+    margin: 5px;
 }
-.search-col {
-    order: 3;
-    flex-grow: 1;
-}
-.right-col {
-    order: 2;
-    flex-basis: 60%;
-}
-.left-col {
-    order: 1;
-    flex-basis: 20%;
-}
+
 
 .menu-container h2, .menu-container h2 a {
     display: block;
@@ -2139,4 +2128,73 @@ input[type="submit"].table-button-2{
 
 .search-box input[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+
+
+.search-col {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 0;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 400px;
+    width: 100%;
+    background-color: #fff;
+}
+
+.search-box input[type="text"] {
+    border: none;
+    padding: 10px;
+    flex: 1;
+    outline: none;
+}
+
+.search-box button.submit {
+    border: none;
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-box button.submit:hover {
+    background-color: #0056b3;
+}
+
+.search-box button.submit i {
+    font-size: 16px;
+}
+
+#content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.left-col, .search-col, .right-col {
+    margin: 5px;
+}
+
+.search-col {
+    flex-grow: 1;
+    order: 3;
+}
+
+.right-col {
+    flex-basis: 60%;
+    order: 2;
+}
+
+.left-col {
+    flex-basis: 20%;
+    order: 1;
 }
