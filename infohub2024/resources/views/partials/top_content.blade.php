@@ -5,9 +5,15 @@
                 <a href="/dashboard"></a>
             </div>
             <div class="user-info">
+
+                <a href="{{ route('user.my-account') }}">
+                    <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Icon" />
+                    Moje konto
+                </a>
+
                 <p>
 
-                    Zalogowany jako: <span>{{ Auth::user()->name }}</span>
+                    Zalogowany jako: <span>{{ Auth::user()->email }}</span>
                 </p>
                  @if (Auth::user()->isAdmin())
                     @if (request()->routeIs('menu'))
@@ -23,10 +29,6 @@
                     @endif
                 @endif
 
-                <a href="{{ route('user.my-account') }}">
-                    <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Icon" />
-                    Moje konto
-                </a>
 
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <img src="{{ asset('img/icons/log-out.svg') }}" alt="Log Out Icon" />
