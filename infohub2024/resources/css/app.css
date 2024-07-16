@@ -156,7 +156,6 @@ h2, h2 a{
 	font-family: 'CitroenLight', 'Arial', sans-serif;
 	font-weight: normal;
 	color: #594A41;
-	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
@@ -659,6 +658,10 @@ form#searchbox input[type="submit"].submit:hover, form#searchbox input[type="sub
 .left-col ul ul{
 	border-top: none;
 	padding: 5px 0 5px 10px;
+}
+
+.left-col h2{
+	margin-bottom: unset !important;
 }
 
 #content .left-col ul li a span{
