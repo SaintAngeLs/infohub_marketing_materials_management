@@ -2049,6 +2049,7 @@ input[type="submit"].table-button-2{
 .picklist-list {
     border: 1px solid #ccc;
     min-height: 200px;
+    min-width: 300px;
     list-style: none;
     padding: 10px;
 }

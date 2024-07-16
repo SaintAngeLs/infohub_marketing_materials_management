@@ -5,9 +5,15 @@
                 <a href="/dashboard"></a>
             </div>
             <div class="user-info">
+
+                <a href="{{ route('user.my-account') }}">
+                    <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Icon" />
+                    Moje konto
+                </a>
+
                 <p>
 
-                    Zalogowany jako: <span>{{ Auth::user()->name }}</span>
+                    Zalogowany jako: <span>{{ Auth::user()->email }}</span>
                 </p>
                  @if (Auth::user()->isAdmin())
                     @if (request()->routeIs('menu'))
@@ -22,11 +28,6 @@
                         </a>
                     @endif
                 @endif
-
-                <a href="{{ route('user.my-account') }}">
-                    <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Icon" />
-                    Moje konto
-                </a>
 
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <img src="{{ asset('img/icons/log-out.svg') }}" alt="Log Out Icon" />
@@ -53,70 +54,3 @@ function searchMe() {
 }
 </script>
 
-
-
-{{--
-<div class="navigation">
-    @auth
-        <div class="navigation-logo flex">
-            <div id="logo">
-                <a href="/dashboard"></a>
-            </div>
-
-            <div id="user-panel">
-                <p id="log-out">
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Wyloguj</a>
-                </p>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
-
-                <p id="my-account"><a href="/user/notification">Moje konto</a></p>
-
-                @if (Auth::user()->isAdmin())
-                    <p class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <a id="my-account" href="{{ route('menu') }}" class="{{ request()->routeIs('menu') ? 'active' : '' }}">
-                            {{ __('Panel Administracyjny') }}
-                        </a>
-                    </p>
-                @endif
-
-                <p>Zalogowany jako: <span>{{ Auth::user()->name }}</span></p>
-
-                <div class="clearfix"></div>
-            </div>
-
-
-        </div>
-    @else
-        <!-- For unauthenticated users, display the logo centrally -->
-        <div id="logo-center" class="center-logo">
-            <a href="/"></a>
-        </div>
-    @endauth
-
-    <!-- Always display the logo -->
-
-
-    <!-- Display the rest of the content only if authenticated -->
-    @auth
-        <h1>MATERIAŁY REKLAMOWE DS</h1>
-        <div class="clearfix"></div>
-
-        <form id="searchbox" onsubmit="return false;">
-            <input id="search" name="query" type="text" placeholder="szukaj" value="">
-            <input class="submit" type="submit" value="Szukaj" onclick="searchMe();">
-            <div class="clearfix"></div>
-        </form>
-    @endauth
-</div>
-<script>
-function searchMe() {
-    var q = $.trim($('#search').val());
-    if(q.length < 2) {
-        alert('Proszę wpisać co najmniej 2 znaki');
-        return false;
-    }
-    window.location.href = '/search/' + q;
-    return false;
-}
-</script> --}}

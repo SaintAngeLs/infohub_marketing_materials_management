@@ -25,6 +25,12 @@
                 <div class="form-group">
                     <label for="name">Nazwa zakładki:</label>
                     <input type="text" id="name" name="name" value="{{ $isEdit ? $menuItem->name : '' }}" required>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="slug">Tagi (oddzielone przecinkami):</label>
+                    <input type="text" id="slug" name="slug" value="{{ $isEdit ? $menuItem->slug : '' }}" required>
                 </div>
 
                 <div class="form-group">
@@ -37,47 +43,18 @@
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>
-
-                <div class="form-group">
-                    <label for="owners">Opiekuny/Administratorzy:</label>
-                    <div class="picklist-container">
-                        <div class="picklist">
-                            <h5>Wszyscy użytkownicy</h5>
-                            <ul id="all-users" class="picklist-list">
-                                @foreach($nonOwners as $user)
-                                    <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <div class="picklist-buttons">
-                            <button type="button" id="add-button" class="btn btn-secondary">&gt;</button>
-                            <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
-                        </div>
-                        <div class="picklist">
-                            <h5>Selected Owners</h5>
-                            <ul id="selected-owners" class="picklist-list">
-                                @foreach($users as $user)
-                                    @if(in_array($user->id, $currentOwners ?? []))
-                                        <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }}</li>
-                                    @endif
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    <input type="hidden" name="owners" id="owners-input">
-                </div>
             </div>
 
             <div class="col">
                 <div class="form-group">
                     <label for="start">Zakładka widoczna od:</label>
-                    <input type="date" id="start" name="start" value="{{ $isEdit && $menuItem->start ? $menuItem->start->format('Y-m-d') : '' }}">
+                    <input type="date" id="start" name="visibility_start" value="{{ $isEdit && $menuItem->start ? $menuItem->start->format('Y-m-d') : '' }}">
                     <div class="invalid-feedback"></div>
                 </div>
 
                 <div class="form-group">
                     <label for="end">Zakładka widoczna do:</label>
-                    <input type="date" id="end" name="end" value="{{ $isEdit && $menuItem->end ? $menuItem->end->format('Y-m-d') : '' }}">
+                    <input type="date" id="end" name="visibility_end" value="{{ $isEdit && $menuItem->end ? $menuItem->end->format('Y-m-d') : '' }}">
                     <div class="invalid-feedback"></div>
                 </div>
 
@@ -89,16 +66,59 @@
                     </select>
                     <div class="invalid-feedback"></div>
                 </div>
+
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" name="status" required>
+                        <option value="1" @if($isEdit && $menuItem->status == 1) selected @endif>Aktywny</option>
+                        <option value="0" @if($isEdit && $menuItem->status == 0) selected @endif>Nieaktywny</option>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
             </div>
         </div>
-        <div class="form-actions d-flex justify-content-end">
-            <div class="mr-auto">
-                <div class="table-button">
-                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="btn">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</a>
+
+        <div class="form-group">
+            <label for="owners">Opiekuny/Administratorzy:</label>
+            <div class="picklist-container">
+                <div class="picklist">
+                    <h5>Wszyscy użytkownicy</h5>
+                    <ul id="all-users" class="picklist-list">
+                        @foreach($nonOwners as $user)
+                            {{--                                    <pre>{{ json_encode($user, JSON_PRETTY_PRINT) }}</pre>--}}
+                            <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }} {{ $user->surname }} ({{ $user->usersGroup->name ?? 'brank grupy' }} ) -- {{ $user->branch->name ?? 'brak koncesji'}}</li>
+                        @endforeach
+                    </ul>
                 </div>
+                <div class="picklist-buttons">
+                    <button type="button" id="add-button" class="btn btn-secondary">&gt;</button>
+                    <button type="button" id="remove-button" class="btn btn-secondary">&lt;</button>
+                </div>
+                <div class="picklist">
+                    <h5>Opiekun(y)/Administrator(zy)</h5>
+                    <ul id="selected-owners" class="picklist-list">
+                        @foreach($users as $user)
+                            @if(in_array($user->id, $currentOwners ?? []))
+                                <li class="picklist-item" data-user-id="{{ $user->id }}">{{ $user->name }} {{ $user->surname }} ({{ $user->usersGroup->name ?? 'brank grupy' }} ) -- {{ $user->branch->name ?? 'brak koncesji'}}</li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <input type="hidden" name="owners" id="owners-input">
+        </div>
+
+
+        <div class="form-actions d-flex justify-content-between">
+            <div>
+                <div class="table-button">
+                    <a href="#" id="submit-form-button" class="btn">{{ $isEdit ? 'Aktualizuj' : 'Dodaj' }}</a>
+                </div>
+            </div>
+            <div class="d-flex">
                 @if($isEdit)
                     <div class="table-button-2 ml-2">
-                        <a href="#" id="delete-menu-item" data-menu-item-id="{{ $menuItem->id }}" class="btn ">Usuń zakładkę</a>
+                        <a href="#" id="delete-menu-item" data-menu-item-id="{{ $menuItem->id }}" class="btn">Usuń zakładkę</a>
                     </div>
                 @endif
                 <div class="table-button-2 ml-2">

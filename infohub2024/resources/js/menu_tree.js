@@ -13,15 +13,12 @@ $(document).ready(function() {
     }).on('ready.jstree', function (e, data) {
         updateNodePadding(data.instance);
         data.instance.open_all();
-    }).on('ready.jstree', function (e, data) {
-        updateNodePadding(data.instance);
     }).on('open_node.jstree', function (e, data) {
         updateNodePadding(data.instance, data.node.id);
     }).on("move_node.jstree", function (e, data) {
         var newParent = data.parent;
         var nodeId = data.node.id;
         var newPosition = data.position;
-
 
         var postData = {
             id: nodeId,
@@ -46,7 +43,6 @@ $(document).ready(function() {
         var selector = nodeId ? '#' + nodeId + ' > .jstree-children' : '#menu-tree .jstree-node';
         $(selector).each(function() {
             var depth = instance.get_node($(this).closest('.jstree-node')).parents.length;
-             // Base padding + 5px for each level
             var paddingLeft = 5 + depth * 3;
             $(this).css('padding-left', paddingLeft + 'px');
         });
@@ -58,4 +54,3 @@ $(document).on('click', '.node-name', function(e) {
     var nodeId = $(this).closest('.jstree-node').attr('id');
     window.location.href = '/menu/edit/' + nodeId;
 });
-

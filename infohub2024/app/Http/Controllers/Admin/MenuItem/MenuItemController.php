@@ -236,14 +236,12 @@ class MenuItemController extends Controller
 
     }
 
-
     public function hasSubItems($id)
     {
         $menuItem = MenuItem::with('children')->find($id);
         $hasSubItems = $menuItem && $menuItem->children->isNotEmpty();
         return response()->json(['hasSubItems' => $hasSubItems]);
     }
-
 
     /**
      * Remove the specified menuItem

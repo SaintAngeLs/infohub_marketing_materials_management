@@ -47,9 +47,14 @@ class MenuController extends Controller
     public function create()
     {
         $menuItemsToSelect = $this->menuItemService->getMenuItemsToSelect();
-        $users = User::where('active', 1)->get();
-        return view('admin.menu.create', compact('menuItemsToSelect', 'users'));
+        $users = User::with(['usersGroup', 'branch'])->where('active', 1)->get();
+        $currentOwners = [];
+
+        $nonOwners = User::with(['usersGroup', 'branch'])->where('active', 1)->whereNotIn('id', $currentOwners)->get();
+
+        return view('admin.menu.create', compact('menuItemsToSelect', 'users', 'nonOwners', 'currentOwners'));
     }
+
 
     public function edit(MenuItem $menuItem)
     {
@@ -65,15 +70,50 @@ class MenuController extends Controller
         return response()->json(['success' => 'Menu item and all associated data have been deleted.']);
     }
 
+    public function store(Request $request)
+    {
+        Log::debug('Store function', $request->all());
+
+        $validatedData = $this->validateMenuItem($request);
+        Log::debug('Validated_data:', $validatedData);
+
+        $menuItem = new MenuItem();
+        $menuItem->start = $validatedData['visibility_start'];
+        $menuItem->end = $validatedData['visibility_end'];
+
+        unset($validatedData['visibility_start']);
+        unset($validatedData['visibility_end']);
+
+        $menuItem->fill($validatedData);
+        $menuItem->save();
+
+        $this->menuItemService->updateMenuItemOwners($menuItem, $request->input('owners', '[]'));
+
+        $this->updateMenuItemPermissions($menuItem, $request->input('menu_permissions', []));
+        $this->menuItemService->updateTreeStructure($menuItem, $validatedData['parent_id']);
+
+        $this->logUserActivity($request);
+
+        return redirect()->route('menu.structure')->with('success', 'Menu item created successfully.');
+    }
+
+
+
     public function update(Request $request, MenuItem $menuItem)
     {
         Log::debug('Update function', $request->all());
         Log::debug($menuItem->toArray());
 
         $validatedData = $this->validateMenuItem($request);
+        Log::debug('Validated_data:', $validatedData);
 
-        // Update owners
         $this->menuItemService->updateMenuItemOwners($menuItem, $request->input('owners', '[]'));
+
+        $menuItem->start = $validatedData['visibility_start'];
+        $menuItem->end = $validatedData['visibility_end'];
+
+        unset($validatedData['visibility_start']);
+        unset($validatedData['visibility_end']);
 
         $menuItem->fill($validatedData);
         $menuItem->save();
@@ -96,6 +136,8 @@ class MenuController extends Controller
             'visibility_end' => 'nullable|date',
             'banner' => 'required|string',
             'menu_permissions' => 'nullable|array',
+            'slug' => 'required|string|max:255',
+            'status' => 'required|boolean',
         ]);
     }
 
@@ -185,10 +227,15 @@ class MenuController extends Controller
         $formatted = [];
         foreach ($menuItems as $item) {
             $status = $item->status ? 'Aktywny' : 'Nieaktywny';
-            $ownerNames = $item->owners->pluck('name')->implode('<br>');
+            $ownerNames = $item->owners->map(function($owner) {
+                $userGroup = $owner->usersGroup->name ?? 'brak grupy';
+                $branch = $owner->branch->name ?? 'brak koncesji';
+                return "{$owner->name} {$owner->surname} ({$userGroup}) -- {$branch}";
+            })->implode('<br>');
+
             $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
             $visibilityTime = $item->start && $item->end
-                ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
+                ? $item->start->format('d.m.y') . ' do ' . $item->end->format('d.m.Y')
                 : 'N/A';
 
             $nodeContent = <<<HTML

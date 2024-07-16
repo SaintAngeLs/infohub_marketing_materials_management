@@ -8,16 +8,26 @@ $(document).ready(function() {
                 required: true,
                 maxlength: 255
             },
-            parent_id: {},
+            slug: {
+                required: true
+            },
+            parent_id: {
+                required: function(element) {
+                    return $("#type").val() === "sub";
+                }
+            },
             'owners[]': {},
-            start: {
+            visibility_start: {
                 date: true
             },
-            end: {
+            visibility_end: {
                 date: true,
                 greaterThan: "#start"
             },
             banner: {
+                required: true
+            },
+            status: {
                 required: true
             }
         },
@@ -29,15 +39,24 @@ $(document).ready(function() {
                 required: "Proszę wprowadzić nazwę zakładki",
                 maxlength: "Nazwa musi być krótsza niż 255 znaków"
             },
+            slug: {
+                required: "Proszę wprowadzić tagi zakładki"
+            },
+            parent_id: {
+                required: "Proszę wybrać element nadrzędny dla podrzędnej zakładki"
+            },
             banner: {
                 required: "Proszę wybrać przypisanie banera"
             },
-            start: {
+            visibility_start: {
                 date: "Proszę wprowadzić prawidłową datę"
             },
-            end: {
+            visibility_end: {
                 date: "Proszę wprowadzić prawidłową datę",
                 greaterThan: "Data końca musi być późniejsza niż data początku"
+            },
+            status: {
+                required: "Proszę wybrać status"
             }
         },
         errorElement: "div",
@@ -49,10 +68,11 @@ $(document).ready(function() {
             $(element).removeClass("is-invalid").addClass("is-valid");
         },
         errorPlacement: function(error, element) {
-            if (element.next(".invalid-feedback").length) {
-                element.next(".invalid-feedback").replaceWith(error);
+            var errorPlaceholder = element.closest('.form-group').find('.error-placeholder');
+            if (errorPlaceholder.length) {
+                errorPlaceholder.html(error);
             } else {
-                error.insertAfter(element);
+                error.insertAfter(element.closest('.form-group').find('label'));
             }
         },
         submitHandler: function(form) {
@@ -61,7 +81,6 @@ $(document).ready(function() {
                 type: $(form).attr('method'),
                 data: $(form).serialize(),
                 success: function(response) {
-
                     console.log('Formularz został pomyślnie przesłany.');
                     window.location.href = '/menu/structure';
                 },
@@ -86,4 +105,12 @@ $(document).ready(function() {
 
         return Date.parse(endDateValue) > Date.parse(startDateValue);
     }, "Data końca musi być późniejsza niż data początku.");
+
+    $('#submit-form-button').click(function(event) {
+        event.preventDefault();
+        if($('#create-menu-item-form').valid()) {
+            $('#create-menu-item-form').submit();
+        }
+    });
+
 });
