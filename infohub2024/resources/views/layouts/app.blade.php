@@ -38,44 +38,50 @@
 
     </style>
 
-    <style>
-        .search-col {
-            display: flex;
-            justify-content: flex-end;
-            padding: 20px 0;
-        }
+<style>
+    .search-col {
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px 0;
+    }
 
-        .search-box {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            overflow: hidden;
-            max-width: 400px;
-            width: 100%;
-            background-color: #fff;
-        }
+    .search-box {
+        display: flex;
+        align-items: center;
+        border-radius: 4px;
+        overflow: hidden;
+        max-width: 400px;
+        width: 100%;
+        background-color: #fff;
+    }
 
-        .search-box input[type="text"] {
-            border: none;
-            padding: 10px;
-            flex: 1;
-            outline: none;
-        }
+    .search-box input[type="text"] {
+        border: none;
+        padding: 10px;
+        flex: 1;
+        outline: none;
+    }
 
-        .search-box input[type="submit"] {
-            border: none;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .search-box button.submit {
+        border: none;
+        color: rgb(0, 0, 0);
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        .search-box input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .search-box button.submit:hover {
+        background-color: #0056b3;
+    }
+
+    .search-box button.submit i {
+        font-size: 16px;
+    }
+</style>
+
 
 
     <script src="https://unpkg.com/nprogress/nprogress.js"></script>
@@ -132,10 +138,11 @@
                 <div class="search-col">
                     <form id="searchbox" action="{{ route('search') }}" method="GET" class="search-box">
                         <input id="search" name="query" type="text" placeholder="szukaj" value="">
-                        <input class="submit" type="submit" value="Szukaj">
+                        <button type="submit" class="submit"></button>
                     </form>
                 </div>
             @endauth
+
 
             <div class="right-col">
                 @yield('content')
