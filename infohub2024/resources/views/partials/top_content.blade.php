@@ -6,10 +6,7 @@
             </div>
             <div class="user-info">
 
-                <a href="{{ route('user.my-account') }}">
-                    <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Icon" />
-                    Moje konto
-                </a>
+
 
                 <p>
 
@@ -28,6 +25,11 @@
                         </a>
                     @endif
                 @endif
+
+                <a href="{{ route('user.my-account') }}">
+                    <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Icon" />
+                    Moje konto
+                </a>
 
 
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

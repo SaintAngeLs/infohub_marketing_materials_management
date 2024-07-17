@@ -83,20 +83,19 @@
         <div id="content">
             <div class="clearfix"></div>
             <div class="left-col">
+                @auth
                 @php
-                    $isAdminPanel = Auth::check() && Auth::user()->isAdmin() && (Str::startsWith(Route::currentRouteName(), 'menu.') || request()->routeIs('menu')  || session('isAdminPanel'));
+                    $isAdminPanel = Auth::check() && Auth::user()->isAdmin() && (session('isAdminPanel') || request()->routeIs('menu') || request()->routeIs('menu.*'));
+                    session(['isAdminPanel' => $isAdminPanel]);
                 @endphp
 
-                @if($isAdminPanel)
+                @if ($isAdminPanel)
                     @include('partials.admin_menu')
                 @else
                     @include('partials.user_menu')
                 @endif
+                @endauth
             </div>
-
-
-
-
             <div class="right-col">
                 @yield('content')
             </div>
