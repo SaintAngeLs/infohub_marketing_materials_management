@@ -83,9 +83,11 @@
         <div id="content">
             <div class="clearfix"></div>
             <div class="left-col">
-                @auth
                 @php
-                    $isAdminPanel = Auth::check() && Auth::user()->isAdmin() && (session('isAdminPanel') || request()->routeIs('menu') || request()->routeIs('menu.*'));
+                    $isAdmin = Auth::check() && Auth::user()->isAdmin();
+
+                    $isAdminPanel = $isAdmin && (request()->routeIs('menu') || request()->routeIs('menu.*'));
+
                     session(['isAdminPanel' => $isAdminPanel]);
                 @endphp
 
@@ -94,8 +96,12 @@
                 @else
                     @include('partials.user_menu')
                 @endif
-                @endauth
             </div>
+
+
+
+
+
             <div class="right-col">
                 @yield('content')
             </div>

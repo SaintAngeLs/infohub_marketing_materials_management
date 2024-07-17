@@ -2197,4 +2197,5 @@ input[type="submit"].table-button-2{
 .left-col {
     flex-basis: 20%;
     order: 1;
+    margin-right: 20px;
 }
