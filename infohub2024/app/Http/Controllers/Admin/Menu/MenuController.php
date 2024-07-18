@@ -400,6 +400,7 @@ class MenuController extends Controller
     }
 
 
+
     protected function formatMenuItemsForPermissionsTable($menuItems, $permissions)
     {
         $formatted = [];

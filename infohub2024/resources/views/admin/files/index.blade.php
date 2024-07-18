@@ -17,11 +17,11 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Nazwa</th>
-                                <th>Status</th>
-                                <th>Właściciele</th>
-                                <th>Widoczność</th>
-                                <th>Pliki</th>
+                                <th class="py-4">Nazwa</th>
+                                <th class="py-4">Status</th>
+                                <th class="py-4">Właściciele</th>
+                                <th class="py-4">Widoczność</th>
+                                <th class="py-4">Pliki</th>
                             </tr>
                             </thead>
                             <tbody>
