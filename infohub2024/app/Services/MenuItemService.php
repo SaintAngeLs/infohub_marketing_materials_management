@@ -18,11 +18,12 @@ class MenuItemService implements IMenuItemService
     public function getUsersWithOwners(MenuItem $menuItem = null)
     {
         $users = User::where('active', 1)->get();
-        $currentOwners = optional($menuItem)->owners->pluck('id')->toArray() ?? [];
+        $currentOwners = $menuItem ? $menuItem->owners->pluck('id')->toArray() : [];
         $nonOwners = $users->whereNotIn('id', $currentOwners);
 
         return compact('users', 'currentOwners', 'nonOwners');
     }
+
 
     public function updateMenuItemOwners(MenuItem $menuItem, $ownerIds)
     {

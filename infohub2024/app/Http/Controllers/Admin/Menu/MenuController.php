@@ -47,9 +47,11 @@ class MenuController extends Controller
     public function create()
     {
         $menuItemsToSelect = $this->menuItemService->getMenuItemsToSelect();
-        $users = User::where('active', 1)->get();
-        return view('admin.menu.create', compact('menuItemsToSelect', 'users'));
+        $usersData = $this->menuItemService->getUsersWithOwners();
+
+        return view('admin.menu.create', array_merge(['menuItemsToSelect' => $menuItemsToSelect], $usersData));
     }
+
 
     public function edit(MenuItem $menuItem)
     {
@@ -181,34 +183,41 @@ class MenuController extends Controller
 
 
     protected function formatForJsTree($menuItems)
-    {
-        $formatted = [];
-        foreach ($menuItems as $item) {
-            $status = $item->status ? 'Aktywny' : 'Nieaktywny';
-            $ownerNames = $item->owners->pluck('name')->implode('<br>');
-            $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
-            $visibilityTime = $item->start && $item->end
-                ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
-                : 'N/A';
+{
+    $formatted = [];
+    foreach ($menuItems as $item) {
+        $status = $item->status ? 'Aktywny' : 'Nieaktywny';
 
-            $nodeContent = <<<HTML
-                <span class='js-tree-node-content' data-node-id="{$item->id}">
-                    <span class='node-name'>{$item->name}</span>
-                    <span class='node-details-status'>($status)</span>
-                    <span class='node-details-ownerName'>{$ownerNameDisplay}</span>
-                    <span class='node-details-visibilityTime'>{$visibilityTime}</span>
-                </span>
-            HTML;
+        $ownerNames = $item->owners->map(function($owner) {
+            $userGroup = $owner->usersGroup ? $owner->usersGroup->name : 'N/A';
+            $branch = $owner->branch ? $owner->branch->name : 'N/A';
+            return "{$owner->name} {$owner->surname} ({$userGroup} - {$branch})";
+        })->implode('<br>');
 
-            $formattedItem = [
-                'id' => $item->id,
-                'text' => $nodeContent,
-                'children' => $item->children->isEmpty() ? [] : $this->formatForJsTree($item->children),
-            ];
-            $formatted[] = $formattedItem;
-        }
-        return $formatted;
+        $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
+        $visibilityTime = $item->start && $item->end
+            ? $item->start->format('d.m.Y') . ' do ' . $item->end->format('d.m.Y')
+            : 'N/A';
+
+        $nodeContent = <<<HTML
+            <span class='js-tree-node-content' data-node-id="{$item->id}">
+                <span class='node-name'>{$item->name}</span>
+                <span class='node-details-status'>($status)</span>
+                <span class='node-details-ownerName'>{$ownerNameDisplay}</span>
+                <span class='node-details-visibilityTime'>{$visibilityTime}</span>
+            </span>
+        HTML;
+
+        $formattedItem = [
+            'id' => $item->id,
+            'text' => $nodeContent,
+            'children' => $item->children->isEmpty() ? [] : $this->formatForJsTree($item->children),
+        ];
+        $formatted[] = $formattedItem;
     }
+    return $formatted;
+}
+
 
     public function formatForJsTreeGroupPermissions($menuItems, $groupId = null)
     {
@@ -344,11 +353,18 @@ class MenuController extends Controller
         $formatted = [];
         foreach ($menuItems as $item) {
             $status = $item->status ? 'Aktywny' : 'Nieaktywny';
-            $ownerNames = $item->owners->pluck('name')->implode(',');
-            $ownerNameDisplay = !empty($ownerNames) ? $ownerNames : 'N/A';
+
+            $ownerDetails = $item->owners->map(function($owner) {
+                $userGroup = $owner->usersGroup ? $owner->usersGroup->name : 'N/A';
+                $branch = $owner->branch ? $owner->branch->name : 'N/A';
+                return "{$owner->name} {$owner->surname} ({$userGroup} - {$branch})";
+            })->implode('<br>');
+
+            $ownerDisplay = !empty($ownerDetails) ? $ownerDetails : 'N/A';
             $visibilityTime = $item->start && $item->end
                 ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
                 : 'N/A';
+
             $files = $item->files;
             $fileDetails = [];
             foreach ($files as $file) {
@@ -369,11 +385,12 @@ class MenuController extends Controller
                     'id' => $file->id,
                 ];
             }
+
             $formatted[] = [
                 'id' => $item->id,
                 'name' => $item->name,
                 'status' => $status,
-                'owners' => $ownerNameDisplay,
+                'owners' => $ownerDisplay,
                 'visibility' => $visibilityTime,
                 'files' => $fileDetails,
                 'children' => $item->children->isEmpty() ? [] : $this->formatMenuItemsWithFilesForTable($item->children),
@@ -381,6 +398,7 @@ class MenuController extends Controller
         }
         return $formatted;
     }
+
 
     protected function formatMenuItemsForPermissionsTable($menuItems, $permissions)
     {
