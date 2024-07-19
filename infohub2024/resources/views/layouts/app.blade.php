@@ -4,17 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>{{ config('app.name', 'DS - materiały reklamowe') }}</title>
     <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     @if(app()->environment('production'))
         <link rel="stylesheet" href="{{ App\Helpers\AssetHelper::asset('resources/css/app.css') }}">
         <script src="{{ App\Helpers\AssetHelper::asset('resources/js/app.js') }}" defer></script>
     @else
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
+
     @stack('scripts')
 
     <style type="text/css">
@@ -35,42 +36,25 @@
             height: 4px;
             background: #ccc;
         }
-
     </style>
-
-<style>
-
-</style>
-
-
-
     <script src="https://unpkg.com/nprogress/nprogress.js"></script>
     <script>
-        NProgress.configure({
-            showSpinner: false,
-            trickleSpeed: 200,
-            easing: 'ease',
-            parent: '#custom-progress-bar',
-            speed: 500
+        document.addEventListener('DOMContentLoaded', function() {
+            NProgress.configure({
+                showSpinner: false,
+                trickleSpeed: 200,
+                easing: 'ease',
+                parent: '#custom-progress-bar',
+                speed: 500
+            });
+            NProgress.start();
+            document.body.onload = function() {
+                NProgress.done();
+            }
         });
     </script>
 </head>
-<body onload="NProgress.done();">
-<script>
-    NProgress.start();
-</script>
-
-<script>
-    function searchMe() {
-        var query = document.getElementById('search').value;
-        if(query.length < 2) {
-            alert('Please enter at least 2 characters');
-            return false;
-        }
-        window.location.href = `/search?query=${encodeURIComponent(query)}`;
-        return false;
-    }
-</script>
+<body>
 <div id="main-wrapper">
     <div id="top-wrapper">
         <div id="top">
@@ -85,9 +69,7 @@
             <div class="left-col">
                 @php
                     $isAdmin = Auth::check() && Auth::user()->isAdmin();
-
                     $isAdminPanel = $isAdmin && (request()->routeIs('menu') || request()->routeIs('menu.*'));
-
                     session(['isAdminPanel' => $isAdminPanel]);
                 @endphp
 
@@ -97,15 +79,9 @@
                     @include('partials.user_menu')
                 @endif
             </div>
-
-
-
-
-
-            <div class="right-col">
+            <div class="right-col" id="ajax-content">
                 @yield('content')
             </div>
-
             @auth
                 <div class="search-col">
                     <form id="searchbox" action="{{ route('search') }}" method="GET" class="search-box">
@@ -114,7 +90,6 @@
                     </form>
                 </div>
             @endauth
-
             <div class="clearfix"></div>
         </div>
     </div>
@@ -125,15 +100,44 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('a.ajax-link').on('click', function(e) {
+        function loadContent(url) {
+            NProgress.start();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    var newContent = $(data).find('#ajax-content').html();
+                    $('#ajax-content').html(newContent);
+                    NProgress.done();
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error loading content: " + xhr.status + " " + xhr.statusText);
+                    NProgress.done();
+                }
+            });
+        }
+
+        $(document).on('click', 'a.ajax-link', function(e) {
             e.preventDefault();
             var url = $(this).attr('href');
-            $('#content').load(url + ' #content > *');
+            loadContent(url);
             history.pushState(null, '', url);
         });
 
         $(window).on('popstate', function() {
-            location.reload();
+            loadContent(location.href);
+        });
+
+        $('#searchbox').on('submit', function(e) {
+            e.preventDefault();
+            var query = $('#search').val();
+            if(query.length < 2) {
+                alert('Proszę wpisać co najmniej 2 znaki');
+                return false;
+            }
+            var url = $(this).attr('action') + '?query=' + encodeURIComponent(query);
+            loadContent(url);
+            history.pushState(null, '', url);
         });
     });
 </script>

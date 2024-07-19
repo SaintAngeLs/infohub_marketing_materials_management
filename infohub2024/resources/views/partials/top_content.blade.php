@@ -5,15 +5,11 @@
                 <a href="/dashboard"></a>
             </div>
             <div class="user-info">
-
-
-
                 <p>
-
                     Zalogowany jako: <span>{{ Auth::user()->email }}</span>
                 </p>
                  @if (Auth::user()->isAdmin())
-                    @if (request()->routeIs('menu'))
+                    @if (request()->routeIs('menu') || request()->routeIs('menu.*'))
                         <a href="{{ route('dashboard') }}" class="active">
                             <img src="{{ asset('img/icons/user-logo.svg') }}" alt="User Panel Icon" />
                             Panel Użytkownika

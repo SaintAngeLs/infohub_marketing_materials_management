@@ -362,7 +362,7 @@ class MenuController extends Controller
 
             $ownerDisplay = !empty($ownerDetails) ? $ownerDetails : 'N/A';
             $visibilityTime = $item->start && $item->end
-                ? $item->start->format('Y-m-d') . ' do ' . $item->end->format('Y-m-d')
+                ? $item->start->format('d.m.Y') . ' do ' . $item->end->format('d.m.Y')
                 : 'N/A';
 
             $files = $item->files;
